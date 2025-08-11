@@ -62,6 +62,10 @@ namespace TestApp
         double startFreq = -1;
         double stopFreq = -1;
         int pointCount = -1;
+        double ch1_vol = -1;
+        double ch1_cur = -1;
+        double ch2_vol = -1;
+        double ch2_cur = -1;
 
 
         static ushort srcPort = 8080;
@@ -99,6 +103,9 @@ namespace TestApp
         }
         private void Main_New_Load(object sender, EventArgs e)
         {
+            testType_comboBox.SelectedIndex = 0;
+            person_textBox.Text = "操作员";
+            componentName_textBox.Text = "DBF";
             GetAddress();
             GetDeviceFilesJson();
             GetTestSetNewJson();
@@ -306,43 +313,38 @@ namespace TestApp
                 data.TryGetValue("power_textBox", out object _power);
                 if (_power != null)
                 {
-                    power = int.Parse(_power.ToString());
-                }
+                    power = double.Parse(_power.ToString());
             }
+
+                data.TryGetValue("ch1_vol_textBox", out object ch1v);
+                if (ch1v != null)
+                {
+                    ch1_vol = double.Parse(ch1v.ToString());
+                }
+
+                data.TryGetValue("ch1_cur_textBox", out object ch1c);
+                if (ch1c != null)
+                {
+                    ch1_cur = double.Parse(ch1c.ToString());
+                }
+
+                data.TryGetValue("ch2_vol_textBox", out object ch2v);
+                if (ch2v != null)
+                {
+                    ch2_vol = double.Parse(ch2v.ToString());
+                }
+
+                data.TryGetValue("ch2_cur_textBox", out object ch2c);
+                if (ch2c != null)
+                {
+                    ch2_cur = double.Parse(ch2c.ToString());
+                }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show("加载TestSetNew.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-        /*        private void InitializeDSO()
-                {
-                    try
-                    {
-                        _axFramerControl = new AxFramerControl();
-                        _axFramerControl.Dock = DockStyle.Fill;
-
-                        this.splitContainer2.Panel2.Controls.Add(_axFramerControl);
-
-                        _axFramerControl.CreateControl(); // 强制初始化
-
-                        _axFramerControl.Titlebar = false;
-
-                        //string excelPath = "C:\\Users\\Administrator\\Desktop\\test.xlsx";
-                        excelPath = Path.Combine(excelPath, "高低温模板.xls");
-                        if (File.Exists(excelPath))
-                        {
-                            _axFramerControl.Open(excelPath, false, "Excel.Sheet", "", "");
-                        }
-                        else
-                        {
-                            MessageBox.Show($"找不到 Excel 文件：{excelPath}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("初始化 DSOFramer 出错：" + ex.ToString());
-                    }
-                }*/
+}
         private void ClearExcelContentBelowRow(Excel.Worksheet sheet, int startRow)
         {
             try
@@ -1466,7 +1468,7 @@ namespace TestApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void start_fasheceshi_gonglv_Click(object sender, EventArgs e)
+        private async void button4_Click(object sender, EventArgs e)
         {
 /*            if(testFlag == 0)
             {
@@ -2210,9 +2212,9 @@ namespace TestApp
             try
             {
                 await signalGen.EnableOutput(); // 打开信号源输出
-                await signalGen.ModON(); // 打开调制输出
+                //await signalGen.ModON(); // 打开调制输出
                 rf_checkBox.Checked = true;
-                mod_checkBox.Checked = true;
+                //mod_checkBox.Checked = true;
 
                 LogToConsole("获取功率计数据");
                 double step = 0;
@@ -2235,10 +2237,11 @@ namespace TestApp
                 for (int i = 0; i < pointCount; i++)
                 {
                     double freqHz = startFreq + step * i;
+                    double benzhenFreq = freqHz - 175 * 1e6;
                     double freqGHz = freqHz / 1e9;
                     freqArray[i] = freqGHz.ToString("F6");
 
-                    await signalGen.SetFrequency(freqHz);
+                    await signalGen.SetFrequency(benzhenFreq);
                     await signalGen.QueryOpc();
                     await signalGen.SetPower(power);
                     await signalGen.QueryOpc();
@@ -2281,9 +2284,9 @@ namespace TestApp
             finally
             {
                 await signalGen.DisableOutput(); // 安全关闭输出
-                await signalGen.ModOFF();
+                //await signalGen.ModOFF();
                 rf_checkBox.Checked = false;
-                mod_checkBox.Checked = false;
+                //mod_checkBox.Checked = false;
                 signalGen.Disconnect();
                 powerMeter.Disconnect();
                 await CloseFPGA();
@@ -2368,9 +2371,11 @@ namespace TestApp
 
             var signalGen = new ScpiDevice();
             var powerMeter = new ScpiDevice();
+            var vnaDevice = new ScpiDevice();
 
             bool sgConnected = await signalGen.ConnectAsync(sgAddress);
             bool pmConnected = await powerMeter.ConnectAsync(pmAddress);
+            bool vnaConnected = await vnaDevice.ConnectAsync(vnaAddress);
 
             if (!sgConnected || !pmConnected)
             {
@@ -2381,9 +2386,9 @@ namespace TestApp
             try
             {
                 await signalGen.EnableOutput(); // 打开信号源输出
-                await signalGen.ModON(); // 打开调制输出
+                //await signalGen.ModON(); // 打开调制输出
                 rf_checkBox.Checked = true;
-                mod_checkBox.Checked = true;
+                //mod_checkBox.Checked = true;
 
                 LogToConsole("获取功率计数据");
                 freqArray = GetFilterFreqArray(pointCount);
@@ -2394,8 +2399,9 @@ namespace TestApp
                 {
                     double freqHz = double.Parse(freqArray[i])*1e9;
                     double freqGHz = double.Parse(freqArray[i]);
+                    double benzhenFreq = freqHz - 175 * 1e6;
 
-                    await signalGen.SetFrequency(freqHz);
+                    await signalGen.SetFrequency(benzhenFreq);
                     await signalGen.QueryOpc();
                     await signalGen.SetPower(power);
                     await signalGen.QueryOpc();
@@ -2411,6 +2417,8 @@ namespace TestApp
 
                     // 读取功率计峰值功率（dBm）
                     double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
+                    double positiveDur = await powerMeter.GetPositiveDuration() ?? 0;
+                    double negativeDur = await powerMeter.GetNegativeDuration() ?? 0;
                     //await powerMeter.GetDingjiang();//预读取一次丢弃
                     //double dingJiangPower = await powerMeter.GetDingjiang() ?? 0;
                     //dingJiang[i] = dingJiangPower.ToString(); // 顶降
@@ -2423,9 +2431,9 @@ namespace TestApp
                     I_T85 = await GetCurrent(1);
                     I_T5 = await GetCurrent(2);
 
-                    double fenmu1 = 8.5 * I_T85;
-                    double fenmu2 = 5 * (I_T5 - 0.75 * I_DQ5);
-                    double fenmu3 = 0.8 * 5 * (I_R5 - 0.75 * I_DQ5);
+                    double fenmu1 = ch1_vol * I_T85;
+                    double fenmu2 = ch2_vol * (I_T5 - 0.75 * I_DQ5);
+                    double fenmu3 = 0.8 * ch2_vol * (I_R5 - 0.75 * I_DQ5);
 
                     double chargePower = fenmu1 + fenmu2 + fenmu3;
                     xiaolvString[i] = PowerWatt * 0.2 / chargePower * 10 + "%"; // 计算效率百分比
@@ -2462,9 +2470,9 @@ namespace TestApp
             finally
             {
                 await signalGen.DisableOutput(); // 安全关闭输出
-                await signalGen.ModOFF();
+                //await signalGen.ModOFF();
                 rf_checkBox.Checked = false;
-                mod_checkBox.Checked = false;
+                //mod_checkBox.Checked = false;
                 signalGen.Disconnect();
                 powerMeter.Disconnect();
                 await CloseFPGA();
@@ -2499,10 +2507,14 @@ namespace TestApp
                     LogToConsole("连接失败");
                     return;
                 }
+                if (ch2_vol <= 0 || ch2_cur <= 0)
+                {
+                    MessageBox.Show("电压或电流值设置有误，请检查测试设置。");
+                }
                 await scpiDevice.SelectChannel(2);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(5);
-                await scpiDevice.SetCurrent(1.5);
+                await scpiDevice.SetVoltage(ch2_vol);
+                await scpiDevice.SetCurrent(ch2_cur);
                 LogToConsole("接收加电");
                 scpiDevice.Disconnect();
             }
@@ -2527,10 +2539,14 @@ namespace TestApp
                     LogToConsole("连接失败");
                     return;
                 }
+                if (ch2_vol <= 0 || ch2_cur <= 0)
+                {
+                    MessageBox.Show("电压或电流值设置有误，请检查测试设置。");
+                }
                 await scpiDevice.SelectChannel(2);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(5);
-                await scpiDevice.SetCurrent(1.5);
+                await scpiDevice.SetVoltage(ch2_vol);
+                await scpiDevice.SetCurrent(ch2_cur);
                 LogToConsole("接收加电...");
                 scpiDevice.Disconnect();
             }
@@ -2560,15 +2576,19 @@ namespace TestApp
                     LogToConsole("连接失败");
                     return;
                 }
+                if (ch1_vol <= 0 || ch1_cur <= 0 || ch2_vol <= 0 || ch2_cur <= 0)
+                {
+                    MessageBox.Show("电压或电流值设置有误，请检查测试设置。");
+                }
                 await scpiDevice.SelectChannel(1);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(8.5);
-                await scpiDevice.SetCurrent(3);
+                await scpiDevice.SetVoltage(ch1_vol);
+                await scpiDevice.SetCurrent(ch1_cur);
 
                 await scpiDevice.SelectChannel(2);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(5);
-                await scpiDevice.SetCurrent(1.5);
+                await scpiDevice.SetVoltage(ch2_vol);
+                await scpiDevice.SetCurrent(ch2_cur);
 
                 scpiDevice.Disconnect();
             }
@@ -2594,15 +2614,19 @@ namespace TestApp
                     LogToConsole("连接失败");
                     return;
                 }
+                if(ch1_vol <= 0 || ch1_cur <=0 || ch2_vol <= 0 || ch2_cur <= 0)
+                {
+                    MessageBox.Show("电压或电流值设置有误，请检查测试设置。");
+                }
                 await scpiDevice.SelectChannel(1);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(8.5);
-                await scpiDevice.SetCurrent(3);
+                await scpiDevice.SetVoltage(ch1_vol);
+                await scpiDevice.SetCurrent(ch1_cur);
 
                 await scpiDevice.SelectChannel(2);
                 await scpiDevice.EnableOutput();
-                await scpiDevice.SetVoltage(5);
-                await scpiDevice.SetCurrent(1.5);
+                await scpiDevice.SetVoltage(ch2_vol);
+                await scpiDevice.SetCurrent(ch2_cur);
 
 
                 scpiDevice.Disconnect();
@@ -3186,7 +3210,7 @@ namespace TestApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void button4_Click(object sender, EventArgs e)
+        private async void start_fasheceshi_gonglv_Click(object sender, EventArgs e)
         {
             /*            if (testFlag == 0)
                         {
@@ -3296,9 +3320,9 @@ namespace TestApp
                     double compensatedPower = pulsePower[0] - compensation;
                     double PowerWatt = dBmToWatt(compensatedPower); // dBm 转 W
 
-                    double fenmu1 = 8.5 * I_T85;
-                    double fenmu2 = 5 * (I_T5 - 0.75 * I_DQ5);
-                    double fenmu3 = 0.8 * 5 * (I_R5 - 0.75 * I_DQ5);
+                    double fenmu1 = ch1_vol * I_T85;
+                    double fenmu2 = ch2_vol * (I_T5 - 0.75 * I_DQ5);
+                    double fenmu3 = 0.8 * ch2_vol * (I_R5 - 0.75 * I_DQ5);
 
                     double chargePower = fenmu1 + fenmu2 + fenmu3;
                     xiaolvString[i] = PowerWatt * 0.2 / chargePower * 100.0 + "%"; // 计算效率百分比

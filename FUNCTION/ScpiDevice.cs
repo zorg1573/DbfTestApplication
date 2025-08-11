@@ -552,7 +552,16 @@ namespace TestApp.FUNCTION
 
             return val;
         }
-
+        public async Task<double?> GetPositiveDuration()
+        {
+            string result = await QueryAsync(":TRAC1:MEAS:TRAN:POS:DUR?");
+            return double.TryParse(result?.Trim(), out double val) ? (double?)val : null;
+        }
+        public async Task<double?> GetNegativeDuration()
+        {
+            string result = await QueryAsync(":TRAC1:MEAS:TRAN:NEG:DUR?");
+            return double.TryParse(result?.Trim(), out double val) ? (double?)val : null;
+        }
         // 设置频率
         public async Task<bool> SetFreq(double freq)
         {
@@ -617,11 +626,11 @@ namespace TestApp.FUNCTION
         }
         public async Task<bool> LoadGonglvState()
         {
-            return await SendCommandAsync("*RCL 2");
+            return await SendCommandAsync("*RCL 1");
         }
         public async Task<bool> SaveGonglvState()
         {
-            return await SendCommandAsync("*SAV 2");
+            return await SendCommandAsync("*SAV 1");
         }
         public async Task<double[]> ReadPulsePowerArrayAsync()
         {
