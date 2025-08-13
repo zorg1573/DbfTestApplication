@@ -83,11 +83,11 @@ namespace TestApp.DAL
 
         public int InsertTestBatch_DT(MeasurementBatch model)
         {
-            string sql = $@"insert test_batch
-                 ([Operator],[Description],[UpdateTime])  
-                values('{model.Operator}','{model.Description}','{model.UpdateTime}')";
-            return Dapper.DbHelper.UpdateBySql(sql);
-            //return 1;
+            //string sql = $@"insert test_batch
+            //     ([Operator],[Description],[UpdateTime])  
+            //    values('{model.Operator}','{model.Description}','{model.UpdateTime}')";
+            //return Dapper.DbHelper.UpdateBySql(sql);
+            return 1;
         }
 
 

@@ -986,6 +986,49 @@ namespace TestApp
                 MessageBox.Show("写入三阶交调失败：" + ex.Message);
             }
         }
+        private void WriteToMatchingFrequencyRows(string[] freqArray, string[] dataArray, string sheetName, int writeColumn)
+        {
+            try
+            {
+                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                var workbook = excelApp.ActiveWorkbook;
+                Excel.Worksheet worksheet = workbook.Sheets[sheetName];
+
+                int startRow = 8;
+                int freqColumn = 1;   // A列
+
+                int usedRowCount = worksheet.UsedRange.Rows.Count;
+
+                for (int i = 0; i < freqArray.Length; i++)
+                {
+                    // 保留三位小数进行对比
+                    string targetFreq = double.Parse(freqArray[i]).ToString("F3");
+
+                    for (int row = startRow; row <= usedRowCount; row++)
+                    {
+                        var cellValue = worksheet.Cells[row, freqColumn].Text.ToString().Trim();
+
+                        // Excel单元格内容保留三位小数进行对比
+                        if (double.TryParse(cellValue, out double cellFreq))
+                        {
+                            string formattedCellFreq = cellFreq.ToString("F3");
+
+                            if (formattedCellFreq == targetFreq)
+                            {
+                                worksheet.Cells[row, writeColumn] = dataArray[i]; ;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                workbook.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"函数WriteToMatchingFrequencyRows写入失败：" + ex.Message);
+            }
+        }
         private void WriteFasheyizhiToMatchingFrequencyRows(string[] freqArray, string[] fasheYizhi, string sheetName)
         {
             try
@@ -1922,7 +1965,8 @@ namespace TestApp
                 LogToConsole("矢网连接失败");
                 return;
             }
-
+            await scpiDevice.SendCommandAsync(":SENS4:SWE:MODE CONTinuous");
+            await scpiDevice.SendCommandAsync(":TRIG:SEQ:SOUR IMMediate");
             await scpiDevice.ScanOnce();
             await Task.Delay(500);
             string[] gain = await scpiDevice.GetGainStringAsync();               // 增益（dB）
@@ -2137,6 +2181,7 @@ namespace TestApp
             }
             finally
             {
+                await scpiDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
                 scpiDevice.Disconnect(); // 释放资源
                 await CloseFPGA();
                 await CloseCharge(); // 电源关电
@@ -2377,15 +2422,17 @@ namespace TestApp
             bool pmConnected = await powerMeter.ConnectAsync(pmAddress);
             bool vnaConnected = await vnaDevice.ConnectAsync(vnaAddress);
 
-            if (!sgConnected || !pmConnected)
+            if (!sgConnected || !pmConnected|| !vnaConnected)
             {
-                LogToConsole("连接失败：信号源或功率计无法连接");
+                LogToConsole("连接失败：信号源或功率计或矢网无法连接");
                 return;
             }
 
             try
             {
                 await signalGen.EnableOutput(); // 打开信号源输出
+                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE CONTinuous");
+                await vnaDevice.SendCommandAsync(":TRIG:SEQ:SOUR IMMediate");
                 //await signalGen.ModON(); // 打开调制输出
                 rf_checkBox.Checked = true;
                 //mod_checkBox.Checked = true;
@@ -2401,7 +2448,10 @@ namespace TestApp
                     double freqGHz = double.Parse(freqArray[i]);
                     double benzhenFreq = freqHz - 175 * 1e6;
 
-                    await signalGen.SetFrequency(benzhenFreq);
+                    await vnaDevice.SetVNAStartFreq(benzhenFreq);
+                    await vnaDevice.SetVNAStopFreq(benzhenFreq);
+
+                    await signalGen.SetFrequency(freqHz);
                     await signalGen.QueryOpc();
                     await signalGen.SetPower(power);
                     await signalGen.QueryOpc();
@@ -2417,8 +2467,8 @@ namespace TestApp
 
                     // 读取功率计峰值功率（dBm）
                     double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
-                    double positiveDur = await powerMeter.GetPositiveDuration() ?? 0;
-                    double negativeDur = await powerMeter.GetNegativeDuration() ?? 0;
+                    double positiveDur = await powerMeter.GetPositiveDuration() ?? -1;
+                    double negativeDur = await powerMeter.GetNegativeDuration() ?? -1;
                     //await powerMeter.GetDingjiang();//预读取一次丢弃
                     //double dingJiangPower = await powerMeter.GetDingjiang() ?? 0;
                     //dingJiang[i] = dingJiangPower.ToString(); // 顶降
@@ -2427,6 +2477,7 @@ namespace TestApp
                     double compensation = InterpolateCompensation(freqGHz, compensationTable);
                     double compensatedPower = pulsePower[0] - compensation;
                     double PowerWatt = dBmToWatt(compensatedPower); // dBm 转 W
+                    compensatedPowerString[i] = compensatedPower.ToString();
 
                     I_T85 = await GetCurrent(1);
                     I_T5 = await GetCurrent(2);
@@ -2437,14 +2488,6 @@ namespace TestApp
 
                     double chargePower = fenmu1 + fenmu2 + fenmu3;
                     xiaolvString[i] = PowerWatt * 0.2 / chargePower * 10 + "%"; // 计算效率百分比
-                    //if(compensatedPower > 40)
-                    //{
-                    //    LogToConsole("");
-                    //}
-                    compensatedPowerString[i] = compensatedPower.ToString();
-                    //compensatedPowerString[i] = compensatedPower.ToString("F3");
-
-                    //pulsePowerString[i] = pulsePower[0].ToString("F3"); // 保留两位小数（dBm）
 
                     await Task.Delay(500);
                     num++;
@@ -2469,6 +2512,7 @@ namespace TestApp
             }
             finally
             {
+                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
                 await signalGen.DisableOutput(); // 安全关闭输出
                 //await signalGen.ModOFF();
                 rf_checkBox.Checked = false;
@@ -3315,6 +3359,9 @@ namespace TestApp
 
                     // 读取功率计峰值功率（dBm）
                     double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
+                    double postiveDur = await powerMeter.GetPositiveDuration() ?? -1;
+                    double negativeDur = await powerMeter.GetNegativeDuration() ?? -1;
+
 
                     double compensation = InterpolateCompensation(freqGHz, compensationTable);
                     double compensatedPower = pulsePower[0] - compensation;
@@ -4303,9 +4350,8 @@ namespace TestApp
                 LogToConsole("压缩点测试");
 
                 var scpiDevice = new ScpiDevice();
-                string deviceAddress = vnaAddress;
 
-                bool deviceConnected = await scpiDevice.ConnectAsync(deviceAddress);
+                bool deviceConnected = await scpiDevice.ConnectAsync(vnaAddress);
 
                 if (!deviceConnected)
                 {
@@ -4575,10 +4621,9 @@ namespace TestApp
                 ch = $"通道4-{testType}";
             }
 
-            string visaAddress = vnaAddress;
             ScpiDevice scpiDevice = new ScpiDevice();
 
-            bool connected = await scpiDevice.ConnectAsync(visaAddress);
+            bool connected = await scpiDevice.ConnectAsync(vnaAddress);
             if (!connected)
             {
                 LogToConsole("矢网连接失败");
@@ -4936,73 +4981,72 @@ namespace TestApp
             return new string(reversed);
         }
         /// <summary>
-        /// 衰减精度
+        /// 镜频抑制
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void start_shuaijian_test_Click(object sender, EventArgs e)
+        private async void start_jingpin_test_Click(object sender, EventArgs e)
         {
-            if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked)
+            var signalGen = new ScpiDevice();
+            var vnaDevice = new ScpiDevice();
+            try
             {
-                MessageBox.Show("请选择一个通道", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            LogToConsole("开始衰减精度测试...");
-            WritePersonToAllSheets();
-            LoadVNAState(); // 调用矢网文件
-            await ChargeRecievePowerON(); // 接收加电
+                await ChargeSendPowerON(); // 发射加电
+                await SendTestUDP(); //FPGA发包
+                await Task.Delay(500); // 延时保证设备稳定
+                await WriteFreqArray();
+                string[] freqArray = GetFilterFreqArray(pointCount);
+                string[] jingpinYizhi = new string[pointCount]; //发射抑制
 
-            string ch = "";
-            string testType = testType_comboBox.Text;
-            string componentName = componentName_textBox.Text;
-            if (ch1_checkBox.Checked)
-            {
-                ch = $"通道1-{testType}";
-            }
-            if (ch2_checkBox.Checked)
-            {
-                ch = $"通道2-{testType}";
-            }
-            if (ch3_checkBox.Checked)
-            {
-                ch = $"通道3-{testType}";
-            }
-            if (ch4_checkBox.Checked)
-            {
-                ch = $"通道4-{testType}";
-            }
+                bool sgConnected = await signalGen.ConnectAsync(xinhaoAddress);
+                bool vnaConnected = await vnaDevice.ConnectAsync(vnaAddress);
+                if (!sgConnected || !vnaConnected)
+                {
+                    LogToConsole("连接失败：信号源或矢网无法连接");
+                    return;
+                }
+                await signalGen.EnableOutput(); // 打开信号源输出
+                rf_checkBox.Checked = true;
+                //await signalGen.ModON(); // 打开调制输出
+                //mod_checkBox.Checked = true;
+                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE CONTinuous");
+                await vnaDevice.SendCommandAsync(":TRIG:SEQ:SOUR IMMediate");
+                for (int i = 0; i < pointCount; i++)
+                {
+                    double freqHz = double.Parse(freqArray[i]) * 1e9;
+                    double freqGHz = double.Parse(freqArray[i]);
+                    double benzhenFreq = freqHz + 175 * 1e6;
 
-            string visaAddress = vnaAddress;
-            ScpiDevice scpiDevice = new ScpiDevice();
+                    await vnaDevice.SetVNAStartFreq(benzhenFreq);
+                    await vnaDevice.SetVNAStopFreq(benzhenFreq);
 
-            bool connected = await scpiDevice.ConnectAsync(visaAddress);
-            if (!connected)
-            {
-                LogToConsole("矢网连接失败");
-                return;
+                    await signalGen.SetFrequency(freqHz);
+                    await signalGen.QueryOpc();
+                    await signalGen.SetPower(power);
+                    await signalGen.QueryOpc();
+                    await Task.Delay(2000); // 延时保证设备稳定
+                    jingpinYizhi[i] = (await GetFasheyizhi(freqHz)).ToString();
+                }
+
+                //fasheYizhi = await GetFasheyizhiAsync(freqArray);
+                WriteToMatchingFrequencyRows(freqArray, jingpinYizhi, "测试结果", 13);
             }
-            await RecieveTestUDP(0, "移相"); // FPGA发码
-            await Task.Delay(1000);           // 等待设备稳定
-            await scpiDevice.SetNormalize();
-
-            for (int i = 0; i <= 63; i++)
+            catch (Exception ex)
             {
-                await RecieveTestUDP(i, "衰减"); //FPGA发包
-                await Task.Delay(1000); // 延时保证设备稳定
-                await scpiDevice.ScanOnce(2);
-                string[] gain = await scpiDevice.GetGainStringAsync_New();               // 增益（dB）
-                string[] initial = await scpiDevice.GetInitialPhaseStringAsync_New();    // 初相（°）
-
-                WriteArrayToExcelColumn_New(gain, i + 2, "接收通道衰减精度测试结果");
-                WriteArrayToExcelColumn_New(initial, i + 2, "接收寄生调相");
+                MessageBox.Show($"镜频抑制测试失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                operateLog_DAL.InsertOperateLog_DT("镜频抑制测试失败", ex.ToString(), person_textBox.Text);
             }
-
-            scpiDevice.Disconnect(); // 释放资源
-            await CloseFPGA();
-            await CloseCharge(); // 电源关电
-            SubtractStandardAndWriteResult("接收通道衰减精度测试结果");
-            CalculatePhaseAccuracyAndWriteToExcel("接收通道衰减精度测试结果");
-            CalculatePhaseAccuracyAndWriteToExcel_Jisheng("接收寄生调相");
+            finally
+            {
+                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
+                await signalGen.DisableOutput(); // 安全关闭输出
+                //await signalGen.ModOFF();
+                rf_checkBox.Checked = false;
+                //mod_checkBox.Checked = false;
+                signalGen.Disconnect();
+                await CloseFPGA();
+                await CloseCharge(); // 电源关电
+            }
         }
 
         /// <summary>
@@ -5336,7 +5380,6 @@ namespace TestApp
         {
             this.Close();
         }
-
 
     }
 }
