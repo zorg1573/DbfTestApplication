@@ -1,6 +1,7 @@
 ﻿using AxDSOFramer;
 using ExcelDataReader;
 using MetroFramework.Forms;
+using Org.BouncyCastle.Ocsp;
 using PacketDotNet;
 using SharpPcap;
 using System;
@@ -45,6 +46,7 @@ namespace TestApp
         string vnaAddress = "";
         string gonglvAddress = "";
         string xinhaoAddress = "";
+        string xinhaoBenzhenAddress = "";
         string pinpuAddress = "";
         string ifaceName = "";
         //string ifaceName = @"\Device\NPF_{3A0CA248-4796-4CBA-B275-E9C8E0A766CF}"; // 注意：需要和系统中接口名称完全匹配
@@ -59,6 +61,7 @@ namespace TestApp
 
     //TestSetNew.json
         double power = -1;
+        double powerBenzhen = -1;
         double startFreq = -1;
         double stopFreq = -1;
         int pointCount = -1;
@@ -176,6 +179,12 @@ namespace TestApp
                 if (xinhao != null)
                 {
                     xinhaoAddress = xinhao.ToString();
+                }
+
+                data.TryGetValue("xinhaoBenzhen_textBox", out object xinhaoBenzhen);
+                if (xinhaoBenzhen != null)
+                {
+                    xinhaoBenzhenAddress = xinhaoBenzhen.ToString();
                 }
 
                 data.TryGetValue("pinpu_textBox", out object pinpu);
@@ -314,7 +323,13 @@ namespace TestApp
                 if (_power != null)
                 {
                     power = double.Parse(_power.ToString());
-            }
+                }
+
+                data.TryGetValue("power2_textBox", out object _power2);
+                if (_power2 != null)
+                {
+                    powerBenzhen = double.Parse(_power2.ToString());
+                }
 
                 data.TryGetValue("ch1_vol_textBox", out object ch1v);
                 if (ch1v != null)
@@ -1927,272 +1942,100 @@ namespace TestApp
             }
 
         }
-        private async Task LoadVNAData_New()
+        private async Task GetGainData_New()
         {
-            //jieshouChargePower = await GetRecieveChargePower();// 获取接收电源功率
-
-            recieveWaitForm.ChangeLabelText("step4_label", "进行中...");
-            string ch = "";
-            string testType = testType_comboBox.Text;
-            string componentName = componentName_textBox.Text;
-            string sheetName = "测试结果";
-            if (ch1_checkBox.Checked)
-            {
-                ch = $"通道1-{testType}";
-            }
-            if (ch2_checkBox.Checked)
-            {
-                ch = $"通道2-{testType}";
-            }
-            if (ch3_checkBox.Checked)
-            {
-                ch = $"通道3-{testType}";
-            }
-            if (ch4_checkBox.Checked)
-            {
-                ch = $"通道4-{testType}";
-            }
-
-            string visaAddress = vnaAddress;
-            string pmAddress = gonglvAddress;
-            ScpiDevice scpiDevice = new ScpiDevice();
-            var powerMeter = new ScpiDevice();
-
-            //bool pmConnected = await powerMeter.ConnectAsync(pmAddress);
-            bool connected = await scpiDevice.ConnectAsync(visaAddress);
-            if (!connected)
-            {
-                LogToConsole("矢网连接失败");
-                return;
-            }
-            await scpiDevice.SendCommandAsync(":SENS4:SWE:MODE CONTinuous");
-            await scpiDevice.SendCommandAsync(":TRIG:SEQ:SOUR IMMediate");
-            await scpiDevice.ScanOnce();
-            await Task.Delay(500);
-            string[] gain = await scpiDevice.GetGainStringAsync();               // 增益（dB）
-            string[] initial = await scpiDevice.GetInitialPhaseStringAsync();    // 初相（°）
-            string[] inputVswr = await scpiDevice.GetInputVSWRStringAsync();     // 输入驻波比
-            string[] outputVswr = await scpiDevice.GetOutputVSWRStringAsync();   // 输出驻波比
-
-            recieveWaitForm.ChangeLabelText("step4_label", "已完成");
-
-            recieveWaitForm.ChangeLabelText("step5_label", "进行中...");
-
-            if (chasun_checkBox.Checked)
-            {
-                string[] gainPlusChasun = null;
-                string[] gainChasun = null;
-                if (ch.Contains("通道1"))
-                {
-                    gainChasun = ReadChaSunData("Sheet1", 2);
-                }
-                if (ch.Contains("通道2"))
-                {
-                    gainChasun = ReadChaSunData("Sheet1", 3);
-                }
-                if (ch.Contains("通道3"))
-                {
-                    gainChasun = ReadChaSunData("Sheet1", 4);
-                }
-                if (ch.Contains("通道4"))
-                {
-                    gainChasun = ReadChaSunData("Sheet1", 5);
-                }
-
-                int len = gain.Length;
-
-                // 初始化差值数组
-                gainPlusChasun = new string[len];
-
-                for (int i = 0; i < len; i++)
-                {
-                    double g = Parse(gain[i]);
-                    double gN = Parse(gainChasun[i]);
-                    gainPlusChasun[i] = (g - gN).ToString();
-
-                    
-                    //await powerMeter.ReadPulsePowerArrayAsync(); // 预读取一次丢弃
-                    // 读取功率计峰值功率（dBm）
-                    //double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
-                    //jieshouGonglv[i] = pulsePower[0].ToString();
-                }
-                gain = gainPlusChasun; // 替换原有增益数据
-            }
-
-            WriteArrayToExcelColumn(gain, 2, sheetName);
-            WriteArrayToExcelColumn(initial, 3, sheetName);
-            WriteArrayToExcelColumn(inputVswr, 4, sheetName);
-            WriteArrayToExcelColumn(outputVswr, 5, sheetName);
-
-            //if (testType == "常温")
-            //{
-            //    WriteArrayToExcelColumn(gain, 2, "常温");
-            //    WriteArrayToExcelColumn(initial, 3, "常温");
-            //    WriteArrayToExcelColumn(inputVswr, 4, "常温");
-            //    WriteArrayToExcelColumn(outputVswr, 5, "常温");
-            //}
-
-            LogToConsole("数据读取完成");
-
-            // 写入测量数据
-            // 判断是否是差值计算模式
-            //bool isNormal = testType == "常温";
-            //bool isLow = testType == "低温";
-            //bool isHigh = testType == "高温";
-
-            // 需要写入的数据（可能被替换）
-            //string[] gainFinal = gain;
-            //string[] initialFinal = initial;
-            //string[] inputVswrFinal = inputVswr;
-            //string[] outputVswrFinal = outputVswr;
-
-            LogToConsole("开始写入数据...");
-            //if (isLow || isHigh)
-            //{
-            //    string[] gainNormal = ReadExcelColumnData("常温", 2);      // B列
-            //    string[] initialNormal = ReadExcelColumnData("常温", 3);   // C列
-            //    string[] inputVswrNormal = ReadExcelColumnData("常温", 4); // D列
-            //    string[] outputVswrNormal = ReadExcelColumnData("常温", 5);// E列
-
-            //    int len = gain.Length;
-
-            //    // 初始化差值数组
-            //    gainFinal = new string[len];
-            //    initialFinal = new string[len];
-            //    inputVswrFinal = new string[len];
-            //    outputVswrFinal = new string[len];
-
-            //    for (int i = 0; i < len; i++)
-            //    {
-            //        double g = Parse(gain[i]);
-            //        double gN = Parse(gainNormal[i]);
-            //        double p = Parse(initial[i]);
-            //        double pN = Parse(initialNormal[i]);
-            //        double vin = Parse(inputVswr[i]);
-            //        double vinN = Parse(inputVswrNormal[i]);
-            //        double vout = Parse(outputVswr[i]);
-            //        double voutN = Parse(outputVswrNormal[i]);
-
-            //        if (isLow)
-            //        {
-            //            sheetName = "低温-常温";
-            //            gainFinal[i] = (g - gN).ToString();
-            //            initialFinal[i] = (p - pN).ToString();
-            //            inputVswrFinal[i] = (vin - vinN).ToString();
-            //            outputVswrFinal[i] = (vout - voutN).ToString();
-            //        }
-            //        else if (isHigh)
-            //        {
-            //            sheetName = "常温-高温";
-            //            gainFinal[i] = (gN - g).ToString();
-            //            initialFinal[i] = (pN - p).ToString();
-            //            inputVswrFinal[i] = (vinN - vin).ToString();
-            //            outputVswrFinal[i] = (voutN - vout).ToString();
-            //        }
-            //    }
-            //}
-            //WriteArrayToExcelColumn(gainFinal, 2, sheetName);
-            //WriteArrayToExcelColumn(initialFinal, 3, sheetName);
-            //WriteArrayToExcelColumn(inputVswrFinal, 4, sheetName);
-            //WriteArrayToExcelColumn(outputVswrFinal, 5, sheetName);
-
-            /*            WriteArrayToExcelColumn(gain, 2, ch);       // B列
-                        WriteArrayToExcelColumn(initial, 3, ch);    // C列
-                        WriteArrayToExcelColumn(inputVswr, 4, ch);  // D列
-                        WriteArrayToExcelColumn(outputVswr, 5, ch);  // E列*/
-
-            // 写入频率（从 A8 开始）
-            double startFreq = await scpiDevice.GetFreqStart() ?? -1;  // 单位 Hz
-            double stopFreq = await scpiDevice.GetFreqStop() ?? -1;    // 单位 Hz
-            int _pointCount = await scpiDevice.GetPointCount() ?? -1;
-
-
-            if (startFreq < 0 || stopFreq < 0 || _pointCount <= 0)
-            {
-                LogToConsole("获取频率或点数失败，请检查设备连接或设置。");
-                scpiDevice.Disconnect();
-                return;
-            }
-
-            //进度条
-            int num = 0;
-            progressBar1.Maximum = _pointCount;
-            progressBar1.Value = 0;
-
-            double step = (stopFreq - startFreq) / (_pointCount - 1);
-            string[] freqArray = new string[_pointCount];
-            for (int i = 0; i < _pointCount; i++)
-            {
-                double freqGHz = (startFreq + step * i) / 1e9;
-                freqArray[i] = freqGHz.ToString("F6"); // 保留6位小数（GHz）
-            }
-
-            WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
-            //WriteArrayToExcelColumn(freqArray, 1, "常温");  // A列，从第8行开始
-            LogToConsole("写入Excel完成");
-            recieveWaitForm.ChangeLabelText("step5_label", "已完成");
-            recieveWaitForm.ChangeLabelText("step6_label", "进行中...");
-            // 写入数据库
+            ScpiDevice xinhaoDevice = new ScpiDevice();
+            ScpiDevice xinhaoBenzhenDevice = new ScpiDevice();
+            ScpiDevice pinpuDevice = new ScpiDevice();
             try
             {
-                int batchId = main_DAL.GetBatchId(ch, componentName);
-                string nowTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-                var batch = new MeasurementBatch
+                string ch = "";
+                string testType = testType_comboBox.Text;
+                string componentName = componentName_textBox.Text;
+                string sheetName = "测试结果";
+                if (ch1_checkBox.Checked)
                 {
-                    TestType = ch,
-                    ComponentName = componentName,
-                    Operator = person_textBox.Text,
-                    Description = "自动测试批次",
-                    UpdateTime = nowTime
-                };
-                main_DAL.InsertTestBatch_DT(batch);
-
-                for (int i = 0; i < gain.Length; i++)
-                {
-                    //var result = new MeasurementResult
-                    //{
-                    //    TestType = ch,
-                    //    ComponentName = componentName,
-                    //    BatchId = batchId + 1,
-                    //    PointIndex = i,
-                    //    PointFreq = double.Parse(freqArray[i]),
-                    //    Gain = double.Parse(gainFinal[i]),
-                    //    InitialPhase = double.Parse(initialFinal[i]),
-                    //    InputSWR = double.Parse(inputVswrFinal[i]),
-                    //    OutputSWR = double.Parse(outputVswrFinal[i]),
-                    //    Person = person_textBox.Text,
-                    //    UpdateTime = nowTime
-                    //};
-
-                    //main_DAL.InsertTestData_DT(result);
-
-                    num++;
-                    progressBar1.Value += 1;
-                    label1.Text = ((double)num / _pointCount * 100).ToString("f2") + "%";
-                    label1.Refresh();
+                    ch = $"通道1-{testType}";
                 }
-                LogToConsole("写入数据库完成");
-                recieveWaitForm.ChangeLabelText("step6_label", "已完成");
+                if (ch2_checkBox.Checked)
+                {
+                    ch = $"通道2-{testType}";
+                }
+                if (ch3_checkBox.Checked)
+                {
+                    ch = $"通道3-{testType}";
+                }
+                if (ch4_checkBox.Checked)
+                {
+                    ch = $"通道4-{testType}";
+                }
+
+                string[] gain = new string[pointCount];
+
+                bool connected = await xinhaoDevice.ConnectAsync(xinhaoAddress);
+                bool connected2 = await xinhaoBenzhenDevice.ConnectAsync(xinhaoBenzhenAddress);
+                bool connected3 = await pinpuDevice.ConnectAsync(pinpuAddress);
+                if (!connected || !connected2 || !connected3)
+                {
+                    LogToConsole("设备连接失败");
+                    return;
+                }
+
+                await xinhaoBenzhenDevice.SetPower(powerBenzhen);
+                await xinhaoBenzhenDevice.QueryOpc();
+
+
+                //进度条
+                int num = 0;
+                progressBar1.Maximum = pointCount;
+                progressBar1.Value = 0;
+
+                double step = (stopFreq - startFreq) / (pointCount - 1);
+                string[] freqArray = new string[pointCount];
+                for (int i = 0; i < pointCount; i++)
+                {
+                    double freqHz = startFreq + step * i;
+                    double freqGHz = Math.Round(freqHz / 1e9, 3);
+                    freqArray[i] = freqGHz.ToString(); // 保留6位小数（GHz）
+                    await xinhaoDevice.SetFrequency(freqHz);
+                    await xinhaoDevice.QueryOpc();
+                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
+                    await xinhaoBenzhenDevice.QueryOpc();
+
+                    double center = 175 * 1e6;
+                    double start = center - (100 * 1e6);
+                    double stop = center + (100 * 1e9);
+
+                    await pinpuDevice.SetStartFrequencyAsync(start);
+                    await pinpuDevice.SetStopFrequencyAsync(stop);
+                    await pinpuDevice.SetCenterFrequencyAsync(center);
+
+                    await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
+
+                    double markPower = double.NaN;
+
+                    await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
+                    await Task.Delay(200); // 让设备处理
+                                           // 读取 Marker 的功率值
+                    markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+                    gain[i] = markPower.ToString();
+                }
+                WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
+                WriteArrayToExcelColumn(gain, 2, sheetName);  // B列，从第9行开始
+                LogToConsole("写入Excel完成");
             }
             catch (Exception ex)
             {
-                LogToConsole("写入数据库出错: " + ex.Message);
+                LogToConsole("接收测试出错: " + ex.Message);
             }
             finally
             {
-                await scpiDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
-                scpiDevice.Disconnect(); // 释放资源
+                xinhaoDevice.Disconnect(); // 释放资源
+                xinhaoBenzhenDevice.Disconnect();
+                pinpuDevice.Disconnect();
                 await CloseFPGA();
                 await CloseCharge(); // 电源关电
                 LogToConsole("接收测试已完成");
-                recieveWaitForm.ChangeLabelText("step1_label", "未完成");
-                recieveWaitForm.ChangeLabelText("step2_label", "未完成");
-                recieveWaitForm.ChangeLabelText("step3_label", "未完成");
-                recieveWaitForm.ChangeLabelText("step4_label", "未完成");
-                recieveWaitForm.ChangeLabelText("step5_label", "未完成");
-                recieveWaitForm.ChangeLabelText("step6_label", "未完成");
-                recieveWaitForm.Hide(); // 关闭等待界面
             }
 
         }
@@ -2736,42 +2579,7 @@ namespace TestApp
                 operateLog_DAL.InsertOperateLog_DT("读取电源数据失败", ex.ToString(), person_textBox.Text);
                 return -1;
             }
-        }
-        private async Task<double> GetSendChargePower()
-        {
-            try
-            {
-                string visaAddress = chargeAddress;
-
-                ScpiDevice scpiDevice = new ScpiDevice();
-
-                bool connected = await scpiDevice.ConnectAsync(visaAddress);
-                if (!connected)
-                {
-                    LogToConsole("连接失败");
-                    return -1;
-                }
-                await scpiDevice.SelectChannel(1);
-                double vol = await scpiDevice.ReadVoltage() ?? 0;
-                double cur = await scpiDevice.ReadCurrent() ?? 0;
-                double chargePower = vol * cur; // 计算电源功率
-                await scpiDevice.SelectChannel(2);
-                double vol2 = await scpiDevice.ReadVoltage() ?? 0;
-                double cur2 = await scpiDevice.ReadCurrent() ?? 0;
-                double chargePower2 = vol2 * cur2; // 计算电源功率
-
-                double chargePowerSum = chargePower + chargePower2; // 总功率
-
-                scpiDevice.Disconnect();
-                return chargePowerSum;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"读取电源数据失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                operateLog_DAL.InsertOperateLog_DT("读取电源数据失败", ex.ToString(), person_textBox.Text);
-                return -1;
-            }
-        }
+        } 
         /// <summary>
         /// 电源关电
         /// </summary>
@@ -3159,8 +2967,6 @@ namespace TestApp
 
         }
 
-
-
         private async void loadState_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -3196,7 +3002,7 @@ namespace TestApp
 
                 bool connected = await scpiDevice.ConnectAsync(visaAddress);
                 if (!connected)
-                {
+                { 
                     LogToConsole("连接失败");
                     return;
                 }
@@ -3234,16 +3040,12 @@ namespace TestApp
             }
             LogToConsole("开始接收测试...");
             WritePersonToAllSheets();
-            recieveWaitForm.Show(); // 显示等待界面
             if (vnaFlag == 0)
             {
                 LoadVNAState(); // 调用矢网文件
             }
-            recieveWaitForm.ChangeLabelText("step1_label", "已完成");
             await ChargeRecievePowerON(); // 接收加电
-            recieveWaitForm.ChangeLabelText("step2_label", "已完成");
             await RecieveTestUDP(); //FPGA发包
-            recieveWaitForm.ChangeLabelText("step3_label", "已完成");
             await Task.Delay(500); // 延时保证设备稳定
             await LoadVNAData_New(); // 获取矢网数据
             //testFlag = 1;
@@ -4549,38 +4351,6 @@ namespace TestApp
         }
         #endregion
 
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-
-        }
-        public static string[] UnwrapPhase(string[] wrappedPhaseStrings)
-        {
-            List<double> result = new List<double>();
-            double previous = 0;
-            double offset = 0;
-
-            for (int i = 0; i < wrappedPhaseStrings.Length; i++)
-            {
-                if (!double.TryParse(wrappedPhaseStrings[i], out double current))
-                {
-                    result.Add(0); // 无法解析，记为 0
-                    continue;
-                }
-
-                if (i > 0)
-                {
-                    // 只要当前值比前一个值大，就视为“跳跃”（针对单调递减数据）
-                    if (current > previous)
-                        offset -= 360;
-                }
-
-                double unwrapped = current + offset;
-                result.Add(unwrapped);
-                previous = current;
-            }
-
-            return result.Select(x => x.ToString("F3")).ToArray();
-        }
         /// <summary>
         /// 移相精度
         /// </summary>
@@ -5074,7 +4844,7 @@ namespace TestApp
             LogToConsole("开始发射测试|增益...");
             WritePersonToAllSheets();
             LoadVNAState(); // 调用矢网文件
-            //await ChargeSendPowerON(); // 发射加电
+            await ChargeSendPowerON(); // 发射加电
             //await SendTestUDP(); //FPGA发包
             //await Task.Delay(500); // 延时保证设备稳定
             await LoadSendTestVNAData(); // 获取矢网数据
@@ -5211,20 +4981,10 @@ namespace TestApp
                 await scpiDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
                 scpiDevice.Disconnect(); // 释放资源
                 await CloseFPGA();
-                //await CloseCharge(); // 电源关电
+                await CloseCharge(); // 电源关电
                 LogToConsole("发射测试|增益已完成");
             }
 
-        }
-
-        private void button5_Click_1(object sender, EventArgs e)
-        {
-            NationalInstruments.Visa.ResourceManager rm = new NationalInstruments.Visa.ResourceManager();
-            string[] resources = (string[])rm.Find("?*INSTER");
-            foreach(string resource in resources)
-            {
-                LogToConsole(resource);
-            }
         }
 
         private async void start_fasheyixiang_test_Click(object sender, EventArgs e)

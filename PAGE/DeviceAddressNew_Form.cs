@@ -130,11 +130,15 @@ namespace TestApp.PAGE
             {
                 xinhaoName_textBox.Text = await TryConnectAndGetIdnAsync(xinhao_textBox.Text);
             }
+            if (!string.IsNullOrEmpty(xinhao2_textBox.Text))
+            {
+                xinhao2Name_textBox.Text = await TryConnectAndGetIdnAsync(xinhao2_textBox.Text)      ;
+            }
             if (!string.IsNullOrEmpty(pinpu_textBox.Text))
             {
-                pinpuName_textBox.Text = await TryConnectAndGetIdnAsync(pinpu_textBox.Text);
-            }
-        }
+                pinpuName_textBox.Text = await TryConnectAndGetIdnAsync(pinpu_textBox.Text); 
+            }  
+        }  
 
         private void button3_Click(object sender, EventArgs e)
         {

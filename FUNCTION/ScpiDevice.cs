@@ -113,17 +113,17 @@ namespace TestApp.FUNCTION
         }
 
         #region 通用命令
-        public async Task SelectChannel(int ch) => await SendCommandAsync($"INST:NSEL {ch}");
+        public async Task SelectChannel(int ch) => await SendCommandAsync($":INST:NSEL {ch}");
         public async Task<string> GetInfo() => await QueryAsync("*IDN?");
         public async Task ClearInfo() => await SendCommandAsync("*CLS");
-        public async Task SetVoltage(double voltage) => await SendCommandAsync($"VOLT {voltage}");
-        public async Task SetCurrent(double current) => await SendCommandAsync($"CURR {current}");
-        public async Task SetFrequency(double freq) => await SendCommandAsync($"FREQ {freq}");
-        public async Task SetPower(double power) => await SendCommandAsync($"POW {power}");
-        public async Task EnableOutput() => await SendCommandAsync("OUTP ON");
-        public async Task DisableOutput() => await SendCommandAsync("OUTP OFF");
-        public async Task ModON() => await SendCommandAsync("OUTP:MOD ON");
-        public async Task ModOFF() => await SendCommandAsync("OUTP:MOD OFF");
+        public async Task SetVoltage(double voltage) => await SendCommandAsync($":VOLT {voltage}");
+        public async Task SetCurrent(double current) => await SendCommandAsync($":CURR {current}");
+        public async Task SetFrequency(double freq) => await SendCommandAsync($":FREQ {freq}");
+        public async Task SetPower(double power) => await SendCommandAsync($":POW {power}");
+        public async Task EnableOutput() => await SendCommandAsync(":OUTP ON");
+        public async Task DisableOutput() => await SendCommandAsync(":OUTP OFF");
+        public async Task ModON() => await SendCommandAsync(":OUTP:MOD ON");
+        public async Task ModOFF() => await SendCommandAsync(":OUTP:MOD OFF");
         public async Task QueryOpc()
         {
             // 发出操作完成查询命令，直到设备响应
