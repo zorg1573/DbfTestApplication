@@ -1,4 +1,4 @@
-﻿namespace TestApp.PAGE
+﻿namespace DbfTest.PAGE
 {
     partial class GonglvSet_Form
     {

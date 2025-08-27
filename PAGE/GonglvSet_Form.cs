@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class GonglvSet_Form : Form
     {

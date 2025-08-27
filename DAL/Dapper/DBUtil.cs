@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 
-namespace TestApp.DAL.Dapper
+namespace DbfTest.DAL.Dapper
 {
     class DBUtil
     {

@@ -1,4 +1,4 @@
-﻿namespace TestApp
+﻿namespace DbfTest
 {
     partial class SerialSet_Form
     {

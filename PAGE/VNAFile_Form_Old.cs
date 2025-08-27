@@ -9,9 +9,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
+using DbfTest.FUNCTION;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class VNAFile_Form_Old : Form
     {

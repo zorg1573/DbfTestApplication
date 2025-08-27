@@ -12,10 +12,10 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.DAL;
-using TestApp.MODEL;
+using DbfTest.DAL;
+using DbfTest.MODEL;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class TestData_Form : MetroForm
     {

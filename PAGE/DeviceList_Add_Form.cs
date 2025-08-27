@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp
+namespace DbfTest
 {
     public partial class DeviceList_Add_Form : Form
     {

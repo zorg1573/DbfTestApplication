@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace TestApp.ViewControl
+namespace DbfTest.ViewControl
 {
     partial class SpectrumControl
     {

@@ -8,9 +8,9 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp.DAL.Dapper
+namespace DbfTest.DAL.Dapper
 {
     /// <summary>
     /// 数据库处理底层封装

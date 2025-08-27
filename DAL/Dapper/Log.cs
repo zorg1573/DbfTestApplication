@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-namespace TestApp.DAL.Dapper
+namespace DbfTest.DAL.Dapper
 {
     public static class Log
     {

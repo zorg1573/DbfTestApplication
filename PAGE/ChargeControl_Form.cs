@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
+using DbfTest.FUNCTION;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class ChargeControl_Form : MetroForm
     {

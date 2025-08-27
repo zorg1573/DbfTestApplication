@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("TestApp")]
+[assembly: AssemblyTitle("DbfTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Home")]
-[assembly: AssemblyProduct("TestApp")]
+[assembly: AssemblyProduct("DbfTest")]
 [assembly: AssemblyCopyright("Copyright © Home 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

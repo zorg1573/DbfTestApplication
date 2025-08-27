@@ -6,9 +6,9 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Reflection;
 using System.Diagnostics;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp.DAL.Dapper
+namespace DbfTest.DAL.Dapper
 {
     /// <summary>
     /// 

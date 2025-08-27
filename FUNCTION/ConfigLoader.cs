@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestApp.FUNCTION
+namespace DbfTest.FUNCTION
 {
     internal class ConfigLoader
     {

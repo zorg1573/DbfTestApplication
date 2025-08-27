@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestApp.MODEL
+namespace DbfTest.MODEL
 {
     [Table("operate_log")] // 数据库中的表名
     public class OperateLog

@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using TestApp.FUNCTION;
+using DbfTest.FUNCTION;
 
-namespace TestApp.ViewControl
+namespace DbfTest.ViewControl
 {
     public partial class PsgControl : UserControl
     {

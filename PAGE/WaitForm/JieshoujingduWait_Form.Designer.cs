@@ -1,4 +1,4 @@
-﻿namespace TestApp.PAGE.WaitForm
+﻿namespace DbfTest.PAGE.WaitForm
 {
     partial class JieshoujingduWait_Form
     {

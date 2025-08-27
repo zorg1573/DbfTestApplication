@@ -9,10 +9,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
 
-namespace TestApp
+namespace DbfTest
 {
     public partial class LANSet_Form : Form
     {

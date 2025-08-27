@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
 
-namespace TestApp.ViewControl
+namespace DbfTest.ViewControl
 {
     public partial class SpectrumControl : UserControl
     {

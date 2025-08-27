@@ -14,9 +14,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.DAL;
+using DbfTest.DAL;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class ManualSend_Form : MetroForm
     {

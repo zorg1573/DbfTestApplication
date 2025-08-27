@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class TestSet_Form : Form
     {

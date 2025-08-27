@@ -7,9 +7,9 @@ using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp.FUNCTION
+namespace DbfTest.FUNCTION
 {
     public class ScpiDevice
     {

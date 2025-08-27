@@ -9,11 +9,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
-using TestApp.ViewControl;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
+using DbfTest.ViewControl;
 
-namespace TestApp
+namespace DbfTest
 {
     public partial class DeviceListControl : UserControl
     {

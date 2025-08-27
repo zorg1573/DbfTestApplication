@@ -11,10 +11,10 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class PinpuControl_Form : MetroForm
     {

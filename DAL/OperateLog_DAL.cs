@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp.DAL
+namespace DbfTest.DAL
 {
     public class OperateLog_DAL
     {

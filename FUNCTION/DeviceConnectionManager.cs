@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 using NationalInstruments.Visa;
-using TestApp.FUNCTION;
+using DbfTest.FUNCTION;
 
 public class DeviceConnectionManager
 {

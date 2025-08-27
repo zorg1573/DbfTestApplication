@@ -1,7 +1,6 @@
 ﻿using AxDSOFramer;
 using ExcelDataReader;
 using MetroFramework.Forms;
-using Org.BouncyCastle.Ocsp;
 using PacketDotNet;
 using SharpPcap;
 using System;
@@ -14,14 +13,14 @@ using System.Net.NetworkInformation;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.DAL;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
-using TestApp.PAGE;
-using TestApp.PAGE.WaitForm;
+using DbfTest.DAL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
+using DbfTest.PAGE;
+using DbfTest.PAGE.WaitForm;
 
 
-namespace TestApp
+namespace DbfTest
 {
     public partial class Main_New : MetroForm
     {
@@ -757,6 +756,72 @@ namespace TestApp
                 MessageBox.Show("写入 Excel 失败：" + ex.Message);
             }
         }
+        private void WriteArrayToExcelColumn(string[] data, int columnIndex, int targetColumnIndex, string sheetName)
+        {
+            try
+            {
+                // 去除换行符
+                string[] cleanedData = data.Select(s => s.Replace("\n", "")).ToArray();
+
+                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                Excel.Workbook workbook = excelApp.ActiveWorkbook;
+
+                // 根据名称获取指定的工作表
+                Excel.Worksheet worksheet = null;
+                foreach (Excel.Worksheet sheet in workbook.Sheets)
+                {
+                    if (sheet.Name == sheetName)
+                    {
+                        worksheet = sheet;
+                        break;
+                    }
+                }
+
+                if (worksheet == null)
+                {
+                    MessageBox.Show($"未找到名为“{sheetName}”的工作表。");
+                    return;
+                }
+
+                // 清空 columnIndex 的 8行以下数据
+                ClearExcelColumnBelowRow(worksheet, columnIndex, 8);
+
+                // 写入数据 (仅 8–20 行)
+                for (int i = 0; i < cleanedData.Length && i < 13; i++) // 8~20 共 13 行
+                {
+                    int row = 8 + i;
+
+                    // 从目标列取值
+                    var targetCell = worksheet.Cells[row, targetColumnIndex];
+                    double targetVal = 0;
+                    if (targetCell != null)
+                    {
+                        targetVal = double.Parse(targetCell.Value.ToString());
+                    }
+                    else
+                    {
+                        targetVal = 0;
+                    }
+
+                    // 当前数据转 double
+                    if (double.TryParse(cleanedData[i], out double currentVal))
+                    {
+                        worksheet.Cells[row, columnIndex] = currentVal - targetVal;
+                    }
+                    else
+                    {
+                        worksheet.Cells[row, columnIndex] = cleanedData[i]; // 如果不是数值，就原样写入
+                    }
+                }
+
+                workbook.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("写入 Excel 失败：" + ex.Message);
+            }
+        }
+
         private void WriteArrayToExcelColumn_New(string[] data, int columnIndex, string sheetName)
         {
             try
@@ -879,7 +944,7 @@ namespace TestApp
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
-                int yasuodianColumn = 15;  // L列
+                int yasuodianColumn = 4;  // D列
 
                 int usedRowCount = worksheet.UsedRange.Rows.Count;
 
@@ -1984,6 +2049,8 @@ namespace TestApp
                 await xinhaoBenzhenDevice.SetPower(powerBenzhen);
                 await xinhaoBenzhenDevice.QueryOpc();
 
+                await xinhaoDevice.EnableOutput();
+                await xinhaoBenzhenDevice.EnableOutput();
 
                 //进度条
                 int num = 0;
@@ -2030,6 +2097,8 @@ namespace TestApp
             }
             finally
             {
+                await xinhaoDevice.DisableOutput();
+                await xinhaoBenzhenDevice.DisableOutput();
                 xinhaoDevice.Disconnect(); // 释放资源
                 xinhaoBenzhenDevice.Disconnect();
                 pinpuDevice.Disconnect();
@@ -2037,6 +2106,11 @@ namespace TestApp
                 await CloseCharge(); // 电源关电
                 LogToConsole("接收测试已完成");
             }
+
+        }
+        private async Task GetDWYZData()
+        {
+
 
         }
         private async Task GetSendData()
@@ -2211,7 +2285,6 @@ namespace TestApp
         }
         private async Task GetSendData_New()
         {
-            sendWaitForm.ChangeLabelText("step4_label", "进行中...");
             string ch = "";
             string testType = testType_comboBox.Text;
             string componentName = componentName_textBox.Text;
@@ -2234,8 +2307,6 @@ namespace TestApp
             }
 
             GetTestSetNewJson();
-            string sgAddress = xinhaoAddress;   // 信号源地址
-            string pmAddress = gonglvAddress; // 功率计地址
             if (pointCount <= 0)
             {
                 MessageBox.Show("请先设置点数", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -2249,59 +2320,46 @@ namespace TestApp
             string[] pulsePowerString = new string[pointCount];
             string[] xiaolvString = new string[pointCount];
             string[] dingJiang = new string[pointCount]; //顶降
+            string[] shangshengyan = new string[pointCount];
+            string[] xiajiangyan = new string[pointCount];
 
             string[] compensatedPowerString = new string[pointCount];
             var compensationTable = LoadCompensationTable(buchangFilePath);
 
-            sendWaitForm.ChangeLabelText("step4_label", "已完成");
 
-            sendWaitForm.ChangeLabelText("step5_label", "进行中...");
-
-            var signalGen = new ScpiDevice();
+            var xinhaoDevice = new ScpiDevice();
             var powerMeter = new ScpiDevice();
-            var vnaDevice = new ScpiDevice();
+            var xinhaoBenzhenDevice = new ScpiDevice();
 
-            bool sgConnected = await signalGen.ConnectAsync(sgAddress);
-            bool pmConnected = await powerMeter.ConnectAsync(pmAddress);
-            bool vnaConnected = await vnaDevice.ConnectAsync(vnaAddress);
+            bool deviceConnected = await xinhaoDevice.ConnectAsync(xinhaoAddress);
+            bool deviceConnected2 = await xinhaoBenzhenDevice.ConnectAsync(xinhaoBenzhenAddress);
+            bool pmConnected = await powerMeter.ConnectAsync(gonglvAddress);
 
-            if (!sgConnected || !pmConnected|| !vnaConnected)
+            if (!deviceConnected || !deviceConnected2 || !pmConnected)
             {
-                LogToConsole("连接失败：信号源或功率计或矢网无法连接");
+                LogToConsole("设备连接失败");
                 return;
             }
 
             try
             {
-                await signalGen.EnableOutput(); // 打开信号源输出
-                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE CONTinuous");
-                await vnaDevice.SendCommandAsync(":TRIG:SEQ:SOUR IMMediate");
-                //await signalGen.ModON(); // 打开调制输出
-                rf_checkBox.Checked = true;
-                //mod_checkBox.Checked = true;
+                await xinhaoDevice.EnableOutput();
+                await xinhaoBenzhenDevice.EnableOutput();
 
                 LogToConsole("获取功率计数据");
                 freqArray = GetFilterFreqArray(pointCount);
-                LogToConsole("开始写入数据...");
-                //var results = new List<(double freqGHz, double power)>();
-                sendWaitForm.ChangeLabelText("step6_label", "进行中...");
+                double step = (stopFreq - startFreq) / (pointCount - 1);
                 for (int i = 0; i < pointCount; i++)
                 {
-                    double freqHz = double.Parse(freqArray[i])*1e9;
-                    double freqGHz = double.Parse(freqArray[i]);
-                    double benzhenFreq = freqHz - 175 * 1e6;
+                    double freqHz = startFreq + step * i;
+                    double freqGHz = Math.Round(freqHz / 1e9, 3);
+                    freqArray[i] = freqGHz.ToString(); // 保留6位小数（GHz）
+                    await xinhaoDevice.SetFrequency(freqHz);
+                    await xinhaoDevice.QueryOpc();
+                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
+                    await xinhaoBenzhenDevice.QueryOpc();
 
-                    await vnaDevice.SetVNAStartFreq(benzhenFreq);
-                    await vnaDevice.SetVNAStopFreq(benzhenFreq);
-
-                    await signalGen.SetFrequency(freqHz);
-                    await signalGen.QueryOpc();
-                    await signalGen.SetPower(power);
-                    await signalGen.QueryOpc();
                     await Task.Delay(500); // 延时保证设备稳定
-                    /*                    await powerMeter.SendCommandAsync(":TIM:SCAL 10e-6");   // 设置水平时基
-                                        await powerMeter.SendCommandAsync(":TRIG:SOUR EXT");    // 使用外部触发
-                                        await powerMeter.SendCommandAsync(":TRIG:LEV -10");     // 设置触发电平*/
                     await powerMeter.SendCommandAsync($":SENS:FREQ {freqHz}");
                     await powerMeter.SendCommandAsync(":INIT:IMM");         // 开始测量
                     await powerMeter.SendCommandAsync("*WAI");              // 等待测量完成
@@ -2312,10 +2370,9 @@ namespace TestApp
                     double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
                     double positiveDur = await powerMeter.GetPositiveDuration() ?? -1;
                     double negativeDur = await powerMeter.GetNegativeDuration() ?? -1;
-                    //await powerMeter.GetDingjiang();//预读取一次丢弃
-                    //double dingJiangPower = await powerMeter.GetDingjiang() ?? 0;
-                    //dingJiang[i] = dingJiangPower.ToString(); // 顶降
                     dingJiang[i] = pulsePower[6].ToString();
+                    shangshengyan[i] = positiveDur.ToString();
+                    xiajiangyan[i] = negativeDur.ToString();
 
                     double compensation = InterpolateCompensation(freqGHz, compensationTable);
                     double compensatedPower = pulsePower[0] - compensation;
@@ -2344,10 +2401,10 @@ namespace TestApp
                 //WriteArrayToExcelColumn(freqArray, 7, ch);
                 //WriteArrayToExcelColumn(compensatedPowerString, 8, ch);
                 WritePeakPowerToMatchingFrequencyRows_New(freqArray, compensatedPowerString, xiaolvString, dingJiang, "测试结果");
+                WriteArrayToExcelColumn(shangshengyan, 11, "测试结果");
+                WriteArrayToExcelColumn(xiajiangyan, 12, "测试结果");
 
                 LogToConsole("Excel写入完成");
-                sendWaitForm.ChangeLabelText("step5_label", "已完成");
-                sendWaitForm.ChangeLabelText("step6_label", "已完成");
             }
             catch (Exception ex)
             {
@@ -2355,23 +2412,17 @@ namespace TestApp
             }
             finally
             {
-                await vnaDevice.SendCommandAsync(":SENS4:SWE:MODE HOLD");
-                await signalGen.DisableOutput(); // 安全关闭输出
+                await xinhaoDevice.DisableOutput(); // 安全关闭输出
+                await xinhaoBenzhenDevice.DisableOutput();
                 //await signalGen.ModOFF();
                 rf_checkBox.Checked = false;
                 //mod_checkBox.Checked = false;
-                signalGen.Disconnect();
+                xinhaoDevice.Disconnect();
+                xinhaoBenzhenDevice.Disconnect();
                 powerMeter.Disconnect();
                 await CloseFPGA();
                 await CloseCharge(); // 电源关电
                 LogToConsole("发射测试已完成");
-                sendWaitForm.ChangeLabelText("step1_label", "未完成");
-                sendWaitForm.ChangeLabelText("step2_label", "未完成");
-                sendWaitForm.ChangeLabelText("step3_label", "未完成");
-                sendWaitForm.ChangeLabelText("step4_label", "未完成");
-                sendWaitForm.ChangeLabelText("step5_label", "未完成");
-                sendWaitForm.ChangeLabelText("step6_label", "未完成");
-                sendWaitForm.Hide(); // 关闭等待界面
             }
         }
         /// <summary>
@@ -3017,7 +3068,7 @@ namespace TestApp
             }
         }
         /// <summary>
-        /// 接收测试（多指标）
+        /// 接收测试|增益
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -3079,10 +3130,8 @@ namespace TestApp
                 return;
             }
             WritePersonToAllSheets();
-            sendWaitForm.Show(); // 显示等待界面
             LogToConsole("开始发射测试...");
             await ChargeSendPowerON(); // 发射加电
-            sendWaitForm.ChangeLabelText("step1_label", "已完成");
 
             await changeToFuZaiTai();
             await Task.Delay(500);
@@ -3093,8 +3142,6 @@ namespace TestApp
 
             await LoadGonglvState(); // 调用功率计文件
             await SendTestUDP(); //FPGA发包
-            sendWaitForm.ChangeLabelText("step2_label", "已完成");
-            sendWaitForm.ChangeLabelText("step3_label", "已完成");
             await Task.Delay(500); // 延时保证设备稳定
             //await WriteFreqArray();
             await GetSendData_New(); // 获取发射数据
@@ -4163,8 +4210,8 @@ namespace TestApp
 
                 await scpiDevice.LoadStateFile(vnaFilePath);
 
-                double startPower = -35;
-                double stopPower = -8;
+                double startPower = -65;
+                double stopPower = -40;
                 double stepPower = 1;
 
                 double[] refGains = new double[pointCount];
@@ -4207,7 +4254,8 @@ namespace TestApp
                 scpiDevice.Disconnect();
                 await CloseCharge();
 
-                WriteYasuodianToMatchingFrequencyRows(freqArray, yasuodian, "测试结果");
+                //WriteYasuodianToMatchingFrequencyRows(freqArray, yasuodian, "测试结果");
+                WriteArrayToExcelColumn(yasuodian, 4, "测试结果");  // B列，从第9行开始
                 LogToConsole("压缩点测试完成");
             }
             catch (Exception ex)
@@ -4775,9 +4823,9 @@ namespace TestApp
 
 
                 //进度条
-                int num = 0;
+/*                int num = 0;
                 progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;
+                progressBar1.Value = 0;*/
 
                 double step = (stopFreq - startFreq) / (pointCount - 1);
                 string[] freqArray = new string[pointCount];
@@ -4792,8 +4840,8 @@ namespace TestApp
                     await xinhaoBenzhenDevice.QueryOpc();
 
                     double center = 175 * 1e6;
-                    double start = center - (100 * 1e6);
-                    double stop = center + (100 * 1e9);
+                    double start = 0;
+                    double stop = 350 * 1e6;
 
                     await pinpuDevice.SetStartFrequencyAsync(start);
                     await pinpuDevice.SetStopFrequencyAsync(stop);
@@ -4809,13 +4857,13 @@ namespace TestApp
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     gain[i] = markPower.ToString();
                 }
-                WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
-                WriteArrayToExcelColumn(gain, 2, sheetName);  // B列，从第9行开始
+                //WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
+                WriteArrayToExcelColumn(gain, 6, 2, sheetName);  // B列，从第9行开始
                 LogToConsole("写入Excel完成");
             }
             catch (Exception ex)
             {
-                LogToConsole("接收测试出错: " + ex.Message);
+                LogToConsole("镜频测试出错: " + ex.Message);
             }
             finally
             {
@@ -4824,7 +4872,7 @@ namespace TestApp
                 pinpuDevice.Disconnect();
                 await CloseFPGA();
                 await CloseCharge(); // 电源关电
-                LogToConsole("接收测试已完成");
+                LogToConsole("镜频测试已完成");
             }
         }
 
@@ -4896,7 +4944,6 @@ namespace TestApp
             await Task.Delay(500); // 延时保证设备稳定
 
             string[] gain = await scpiDevice.GetGain_Send();               // 增益（dB）
-            string[] initial = await scpiDevice.GetPhase_Send();    // 初相（°）
 
             if (chasun_checkBox.Checked)
             {
@@ -4933,8 +4980,7 @@ namespace TestApp
                 //gain = gainPlusChasun; // 替换原有增益数据
             }
 
-            WriteArrayToExcelColumn(gain, 17, sheetName);
-            WriteArrayToExcelColumn(initial, 18, sheetName);
+            WriteArrayToExcelColumn(gain, 8, sheetName);
 
             LogToConsole("数据读取完成");
 
@@ -5003,13 +5049,10 @@ namespace TestApp
                 MessageBox.Show("请选择一个通道", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            fashejingduWaitForm.Show();
             LogToConsole("开始移相精度测试...");
             WritePersonToAllSheets();
             LoadVNAState(); // 调用矢网文件
             await ChargeSendPowerON(); // 发射加电
-            fashejingduWaitForm.ChangeLabelText("step1_label", "已完成");
-            fashejingduWaitForm.ChangeLabelText("step2_label", "已完成");
 
             string ch = "";
             string testType = testType_comboBox.Text;
@@ -5049,14 +5092,10 @@ namespace TestApp
 
             for (int i = 1; i <= 63; i++)
             {
-                fashejingduWaitForm.ChangeLabelText("step3_label", "(" + i + "/63)");
-                fashejingduWaitForm.ChangeLabelText("step4_label", "(" + i + "/63)");
-
                 await SendTestUDP(i, "移相"); // FPGA发码
                 await Task.Delay(500);           // 等待设备稳定
                 await scpiDevice.ScanOnce(4);
 
-                string[] gain = await scpiDevice.GetGain_Send();               // 增益（dB）
                 string[] initial = await scpiDevice.GetPhase_Send();    // 初相（°）
 
                 // 转换为 double[]
@@ -5091,9 +5130,6 @@ namespace TestApp
                     unwrappedPhases.Add(unwrapped);
                     previousPhase = currentPhase;
                 }
-
-                // 写入增益
-                WriteArrayToExcelColumn_New(gain, i + 3, "发射寄生调幅");
             }
 
             scpiDevice.Disconnect(); // 释放资源
@@ -5106,26 +5142,7 @@ namespace TestApp
                 string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
                 WriteArrayToExcelColumn_New(phaseStrings, i + 3, "发射通道相移精度测试结果");
             }
-            fashejingduWaitForm.ChangeLabelText("step3_label", "已完成");
-            fashejingduWaitForm.ChangeLabelText("step4_label", "已完成");
-
             SubtractStandardAndWriteResult("发射通道相移精度测试结果");
-
-            fashejingduWaitForm.ChangeLabelText("step5_label", "进行中");
-            CalculatePhaseAccuracyAndWriteToExcel("发射通道相移精度测试结果");
-            fashejingduWaitForm.ChangeLabelText("step5_label", "已完成");
-
-            fashejingduWaitForm.ChangeLabelText("step6_label", "进行中");
-            CalculatePhaseAccuracyAndWriteToExcel_Jisheng("发射寄生调幅");
-            fashejingduWaitForm.ChangeLabelText("step6_label", "已完成");
-
-            fashejingduWaitForm.Hide();
-            fashejingduWaitForm.ChangeLabelText("step1_label", "等待中");
-            fashejingduWaitForm.ChangeLabelText("step2_label", "等待中");
-            fashejingduWaitForm.ChangeLabelText("step3_label", "等待中");
-            fashejingduWaitForm.ChangeLabelText("step4_label", "等待中");
-            fashejingduWaitForm.ChangeLabelText("step5_label", "等待中");
-            fashejingduWaitForm.ChangeLabelText("step6_label", "等待中");
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -5148,6 +5165,201 @@ namespace TestApp
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// 衰减误差
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked)
+            {
+                MessageBox.Show("请选择一个通道", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            LogToConsole("开始衰减精度测试...");
+            WritePersonToAllSheets();
+            LoadVNAState(); // 调用矢网文件
+            await ChargeRecievePowerON(); // 接收加电
+
+            string ch = "";
+            string testType = testType_comboBox.Text;
+            string componentName = componentName_textBox.Text;
+            if (ch1_checkBox.Checked)
+            {
+                ch = $"通道1-{testType}";
+            }
+            if (ch2_checkBox.Checked)
+            {
+                ch = $"通道2-{testType}";
+            }
+            if (ch3_checkBox.Checked)
+            {
+                ch = $"通道3-{testType}";
+            }
+            if (ch4_checkBox.Checked)
+            {
+                ch = $"通道4-{testType}";
+            }
+
+            string visaAddress = vnaAddress;
+            ScpiDevice scpiDevice = new ScpiDevice();
+
+            bool connected = await scpiDevice.ConnectAsync(visaAddress);
+            if (!connected)
+            {
+                LogToConsole("矢网连接失败");
+                return;
+            }
+            await RecieveTestUDP(0, "衰减"); // FPGA发码
+            await Task.Delay(1000);           // 等待设备稳定
+            await scpiDevice.SetNormalize();
+
+            for (int i = 0; i <= 63; i++)
+            {
+                await RecieveTestUDP(i, "衰减"); //FPGA发包
+                await Task.Delay(1000); // 延时保证设备稳定
+                await scpiDevice.ScanOnce(2);
+                string[] gain = await scpiDevice.GetGainStringAsync_New();               // 增益（dB）
+                string[] initial = await scpiDevice.GetInitialPhaseStringAsync_New();    // 初相（°）
+
+                WriteArrayToExcelColumn_New(gain, i + 2, "接收通道衰减精度测试结果");
+                //WriteArrayToExcelColumn_New(initial, i + 2, "接收寄生调相");
+            }
+
+            scpiDevice.Disconnect(); // 释放资源
+            await CloseFPGA();
+            await CloseCharge(); // 电源关电
+            SubtractStandardAndWriteResult("接收通道衰减精度测试结果");
+            //CalculatePhaseAccuracyAndWriteToExcel("接收通道衰减精度测试结果");
+            //CalculatePhaseAccuracyAndWriteToExcel_Jisheng("接收寄生调相");
+        }
+        /// <summary>
+        /// 带外抑制
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            ScpiDevice xinhaoDevice = new ScpiDevice();
+            ScpiDevice xinhaoBenzhenDevice = new ScpiDevice();
+            ScpiDevice pinpuDevice = new ScpiDevice();
+            try
+            {
+                string ch = "";
+                string testType = testType_comboBox.Text;
+                string componentName = componentName_textBox.Text;
+                string sheetName = "测试结果";
+                if (ch1_checkBox.Checked)
+                {
+                    ch = $"通道1-{testType}";
+                }
+                if (ch2_checkBox.Checked)
+                {
+                    ch = $"通道2-{testType}";
+                }
+                if (ch3_checkBox.Checked)
+                {
+                    ch = $"通道3-{testType}";
+                }
+                if (ch4_checkBox.Checked)
+                {
+                    ch = $"通道4-{testType}";
+                }
+
+                string[] dwyz = new string[pointCount];
+
+                bool connected = await xinhaoDevice.ConnectAsync(xinhaoAddress);
+                bool connected2 = await xinhaoBenzhenDevice.ConnectAsync(xinhaoBenzhenAddress);
+                bool connected3 = await pinpuDevice.ConnectAsync(pinpuAddress);
+                if (!connected || !connected2 || !connected3)
+                {
+                    LogToConsole("设备连接失败");
+                    return;
+                }
+                await ChargeRecievePowerON(); // 接收加电
+                await RecieveTestUDP(); //FPGA发包
+                await Task.Delay(500); // 延时保证设备稳定
+
+                await xinhaoBenzhenDevice.SetPower(powerBenzhen);
+                await xinhaoBenzhenDevice.QueryOpc();
+
+
+                //进度条
+                int num = 0;
+                progressBar1.Maximum = pointCount;
+                progressBar1.Value = 0;
+
+                double step = (stopFreq - startFreq) / (pointCount - 1);
+                string[] freqArray = new string[pointCount];
+                for (int i = 0; i < pointCount; i++)
+                {
+                    double freqHz = startFreq + step * i;
+                    double freqGHz = Math.Round(freqHz / 1e9, 3);
+                    freqArray[i] = freqGHz.ToString(); // 保留6位小数（GHz）
+                    await xinhaoDevice.SetFrequency(freqHz);
+                    await xinhaoDevice.QueryOpc();
+                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
+                    await xinhaoBenzhenDevice.QueryOpc();
+
+                    double center = 175 * 1e6;
+                    double start = 130 * 1e6;
+                    double stop = 220 * 1e6;
+
+                    await pinpuDevice.SetStartFrequencyAsync(start);
+                    await pinpuDevice.SetStopFrequencyAsync(stop);
+                    await pinpuDevice.SetCenterFrequencyAsync(center);
+
+                    await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
+
+                    double markPower = double.NaN;
+
+                    await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
+                    await Task.Delay(200); // 让设备处理
+                                           // 读取 Marker 的功率值
+                    markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+
+                    await pinpuDevice.SendCommandAsync(":CALC:MARK2:STATE ON");
+
+                    double markPower1 = double.NaN;
+
+                    await pinpuDevice.SendCommandAsync($":CALC:MARK2:X {start}");
+                    await Task.Delay(200); // 让设备处理
+                                           // 读取 Marker 的功率值
+                    markPower1 = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+
+                    await pinpuDevice.SendCommandAsync(":CALC:MARK3:STATE ON");
+
+                    double markPower3 = double.NaN;
+
+                    await pinpuDevice.SendCommandAsync($":CALC:MARK3:X {stop}");
+                    await Task.Delay(200); // 让设备处理
+                                           // 读取 Marker 的功率值
+                    markPower3 = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+
+                    double gainValue = markPower - Math.Max(markPower1, markPower3);
+
+                    dwyz[i] = markPower.ToString();
+                }
+                WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
+                WriteArrayToExcelColumn(dwyz, 7, sheetName);  // B列，从第9行开始
+                LogToConsole("写入Excel完成");
+            }
+            catch (Exception ex)
+            {
+                LogToConsole("带外抑制测试出错: " + ex.Message);
+            }
+            finally
+            {
+                xinhaoDevice.Disconnect(); // 释放资源
+                xinhaoBenzhenDevice.Disconnect();
+                pinpuDevice.Disconnect();
+                await CloseFPGA();
+                await CloseCharge(); // 电源关电
+                LogToConsole("带外抑制测试已完成");
+            }
         }
 
     }

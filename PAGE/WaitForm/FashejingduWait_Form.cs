@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace TestApp.PAGE.WaitForm
+namespace DbfTest.PAGE.WaitForm
 {
     public partial class FashejingduWait_Form : Form
     {

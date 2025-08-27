@@ -1,4 +1,4 @@
-﻿namespace TestApp.PAGE
+﻿namespace DbfTest.PAGE
 {
     partial class TestData_Form
     {
@@ -153,7 +153,7 @@
             // 
             this.button2.BackColor = System.Drawing.Color.White;
             this.button2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Image = global::TestApp.Properties.Resources.savefile;
+            this.button2.Image = global::DbfTest.Properties.Resources.savefile;
             this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.Location = new System.Drawing.Point(11, 10);
             this.button2.Name = "button2";
@@ -169,7 +169,7 @@
             // 
             this.button1.BackColor = System.Drawing.Color.White;
             this.button1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Image = global::TestApp.Properties.Resources.search;
+            this.button1.Image = global::DbfTest.Properties.Resources.search;
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(929, 11);
             this.button1.Name = "button1";

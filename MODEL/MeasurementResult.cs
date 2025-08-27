@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestApp.MODEL
+namespace DbfTest.MODEL
 {
     [Table("test_data")] // 数据库中的表名
     public class MeasurementResult

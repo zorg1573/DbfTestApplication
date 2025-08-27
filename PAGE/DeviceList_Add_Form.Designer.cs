@@ -1,5 +1,5 @@
 ﻿
-namespace TestApp
+namespace DbfTest
 {
     partial class DeviceList_Add_Form
     {

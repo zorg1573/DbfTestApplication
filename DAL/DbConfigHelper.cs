@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using System.Text.Json;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 
-namespace TestApp.DAL
+namespace DbfTest.DAL
 {
     public static class DbConfigHelper
     {

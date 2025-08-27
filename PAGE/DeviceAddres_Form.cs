@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
 using System.Text.Json;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class DeviceAddres_Form : Form
     {

@@ -2,10 +2,10 @@
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using TestApp.DAL;
-using TestApp.MODEL;
+using DbfTest.DAL;
+using DbfTest.MODEL;
 
-namespace TestApp.PAGE
+namespace DbfTest.PAGE
 {
     public partial class SqlSet_Form : MetroForm
     {

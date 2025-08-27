@@ -1,4 +1,4 @@
-﻿namespace TestApp.ViewControl
+﻿namespace DbfTest.ViewControl
 {
     partial class ChargeControl
     {

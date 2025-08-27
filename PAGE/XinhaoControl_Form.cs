@@ -10,8 +10,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-namespace TestApp.PAGE
+using DbfTest.FUNCTION;
+namespace DbfTest.PAGE
 {
     public partial class XinhaoControl_Form : MetroForm
     {

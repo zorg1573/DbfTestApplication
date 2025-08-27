@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json; // .NET Core / .NET 5+ 推荐用System.Text.Json
 using System.Windows.Forms;
-using TestApp.MODEL;
+using DbfTest.MODEL;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
 using NationalInstruments.Visa;
 using System.Collections.Concurrent;
 
-namespace TestApp.FUNCTION
+namespace DbfTest.FUNCTION
 {
     public class LanScanFunc
     {

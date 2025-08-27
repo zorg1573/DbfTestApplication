@@ -7,10 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using TestApp.FUNCTION;
-using TestApp.MODEL;
+using DbfTest.FUNCTION;
+using DbfTest.MODEL;
 
-namespace TestApp
+namespace DbfTest
 {
     public partial class SerialSet_Form : Form
     {

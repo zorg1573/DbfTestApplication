@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestApp.DAL;
+using DbfTest.DAL;
 
-namespace TestApp.MODEL
+namespace DbfTest.MODEL
 {
     public class DbConfig
     {
