@@ -289,7 +289,7 @@ namespace DbfTest.FUNCTION
         public async Task<string> FetchCorrectedNoiseFigureAsync() =>
             await QueryAsync(":FETCH:CORR:NFIG?DB");
 
-        public async Task<string[]> GetZaoshengData()
+        public async Task<string[]> GetZaoshengData(double freq)
         {
             /*            await SendCommandAsync(":INST:SEL NFIGURE");
                         await SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/1517.sta'");
@@ -302,8 +302,11 @@ namespace DbfTest.FUNCTION
 
                         string[] parts = data.Split(',');
                         return parts;*/
-            await SendCommandAsync(":MMEM:LOAD:STAT 1,'C:/R_S/Instr/user/QuickSave/zaosheng.dfl'");
+            await SendCommandAsync(":MMEM:LOAD:STAT 1,'C:/R_S/Instr/user/QuickSave/dbfzaosheng.dfl'");
             await SendCommandAsync("*OPC");
+            double benZhen = freq - 175 * 1e6;
+            await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
+            await SendCommandAsync($":SENS:FREQ:CENT {freq}");
             await SendCommandAsync("INIT:IMM");
             await Task.Delay(10000);
 

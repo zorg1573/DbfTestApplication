@@ -1214,7 +1214,7 @@ namespace DbfTest
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
-                int zaoshengColumn = 8;  // G列
+                int zaoshengColumn = 3;  // G列
 
                 int usedRowCount = worksheet.UsedRange.Rows.Count;
 
@@ -2976,36 +2976,19 @@ namespace DbfTest
                 }
                 int testPoint = 11; // 采集点数
                 string[] freqArray = new string[testPoint];
-                string[] data = await scpiDevice.GetZaoshengData();
+                string[] NFData = new string[testPoint];
                 double step = 0;
                 step = (stopFreq - startFreq) / (testPoint - 1);
 
-                /*                for (int i = 0; i < testPoint; i++)
-                                {
-                                    double freqHz = startFreq + step * i;
-                                    double freqGHz = freqHz / 1e9;
-                                    freqArray[i] = freqGHz.ToString("F6");
-                                    main_DAL.UpdateTestDataZaosheng_DT(ch, componentName, double.Parse(freqArray[i]), double.Parse(data[i]));
-                                }*/
                 for (int i = 0; i < testPoint; i++)
                 {
                     double freqHz = startFreq + step * i;
                     double freqGHz = freqHz / 1e9;
                     freqArray[i] = freqGHz.ToString("F6");
-
-                    // 判断是否为仪表无效值或无法解析
-                    if (data[i] == "NaN" || data[i] == null)
-                    {
-                        // 插入 NULL
-                        main_DAL.UpdateTestDataZaosheng_DT(ch, componentName, freqGHz, null);
-                    }
-                    else
-                    {
-                        // 正常插入数值
-                        main_DAL.UpdateTestDataZaosheng_DT(ch, componentName, double.Parse(freqArray[i]), double.Parse(data[i]));
-                    }
+                    string[] data = await scpiDevice.GetZaoshengData(freqHz);
+                    NFData[i] = data[5];
                 }
-                WriteZaoshengToMatchingFrequencyRows(freqArray, data, "测试结果");
+                WriteZaoshengToMatchingFrequencyRows(freqArray, NFData, "测试结果");
                 LogToConsole("噪声采集");
 
                 scpiDevice.Disconnect();
@@ -5362,5 +5345,22 @@ namespace DbfTest
             }
         }
 
+        private async void button4_Click_1(object sender, EventArgs e)
+        {
+            string visaAddress = vnaAddress;
+            ScpiDevice scpiDevice = new ScpiDevice();
+
+            bool connected = await scpiDevice.ConnectAsync(visaAddress);
+            if (!connected)
+            {
+                LogToConsole("连接失败");
+                return;
+            }
+            GetDeviceFilesJson();
+            await scpiDevice.LoadStateFile("0728.csa");
+            LogToConsole("调用矢网文件");
+            vnaFlag = 1;
+            scpiDevice.Disconnect(); // 释放资源
+        }
     }
 }

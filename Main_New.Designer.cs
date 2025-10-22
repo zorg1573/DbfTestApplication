@@ -81,22 +81,23 @@
             this.console_textBox = new System.Windows.Forms.TextBox();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.button11 = new System.Windows.Forms.Button();
-            this.button17 = new System.Windows.Forms.Button();
             this.button19 = new System.Windows.Forms.Button();
-            this.button21 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
+            this.button17 = new System.Windows.Forms.Button();
+            this.button21 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.button4 = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -444,6 +445,7 @@
             this.flowLayoutPanel2.Controls.Add(this.mod_checkBox);
             this.flowLayoutPanel2.Controls.Add(this.button1);
             this.flowLayoutPanel2.Controls.Add(this.chasun_checkBox);
+            this.flowLayoutPanel2.Controls.Add(this.button4);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -690,34 +692,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 257);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.White;
-            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button3.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button3.Location = new System.Drawing.Point(4, 114);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(76, 31);
-            this.button3.TabIndex = 85;
-            this.button3.Text = "带外抑制";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.White;
-            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(87, 114);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(77, 31);
-            this.button2.TabIndex = 84;
-            this.button2.Text = "衰减误差";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // label5
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -744,20 +718,6 @@
             this.button11.UseVisualStyleBackColor = false;
             this.button11.Click += new System.EventHandler(this.start_recieve_test_Click);
             // 
-            // button17
-            // 
-            this.button17.BackColor = System.Drawing.Color.White;
-            this.button17.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button17.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button17.Location = new System.Drawing.Point(4, 73);
-            this.button17.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(76, 31);
-            this.button17.TabIndex = 78;
-            this.button17.Text = "压缩点";
-            this.button17.UseVisualStyleBackColor = false;
-            this.button17.Click += new System.EventHandler(this.start_yasuodian_test_Click);
-            // 
             // button19
             // 
             this.button19.BackColor = System.Drawing.Color.White;
@@ -771,19 +731,6 @@
             this.button19.Text = "镜频抑制";
             this.button19.UseVisualStyleBackColor = false;
             this.button19.Click += new System.EventHandler(this.start_jingpin_test_Click);
-            // 
-            // button21
-            // 
-            this.button21.BackColor = System.Drawing.Color.White;
-            this.button21.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button21.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button21.Location = new System.Drawing.Point(87, 29);
-            this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(77, 34);
-            this.button21.TabIndex = 73;
-            this.button21.Text = "噪声采集";
-            this.button21.UseVisualStyleBackColor = false;
-            this.button21.Click += new System.EventHandler(this.start_zaosheng_test_Click);
             // 
             // button10
             // 
@@ -853,6 +800,61 @@
             this.label6.TabIndex = 83;
             this.label6.Text = "发射";
             // 
+            // button17
+            // 
+            this.button17.BackColor = System.Drawing.Color.White;
+            this.button17.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button17.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button17.Location = new System.Drawing.Point(4, 73);
+            this.button17.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button17.Name = "button17";
+            this.button17.Size = new System.Drawing.Size(76, 31);
+            this.button17.TabIndex = 78;
+            this.button17.Text = "压缩点";
+            this.button17.UseVisualStyleBackColor = false;
+            this.button17.Click += new System.EventHandler(this.start_yasuodian_test_Click);
+            // 
+            // button21
+            // 
+            this.button21.BackColor = System.Drawing.Color.White;
+            this.button21.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button21.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button21.Location = new System.Drawing.Point(87, 29);
+            this.button21.Name = "button21";
+            this.button21.Size = new System.Drawing.Size(77, 34);
+            this.button21.TabIndex = 73;
+            this.button21.Text = "噪声采集";
+            this.button21.UseVisualStyleBackColor = false;
+            this.button21.Click += new System.EventHandler(this.start_zaosheng_test_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button3.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button3.Location = new System.Drawing.Point(4, 114);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(76, 31);
+            this.button3.TabIndex = 85;
+            this.button3.Text = "带外抑制";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.White;
+            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.Location = new System.Drawing.Point(87, 114);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(77, 31);
+            this.button2.TabIndex = 84;
+            this.button2.Text = "衰减误差";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -897,6 +899,16 @@
             this.pictureBox3.TabIndex = 2;
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(258, 46);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(75, 23);
+            this.button4.TabIndex = 71;
+            this.button4.Text = "button4";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
             // Main_New
             // 
@@ -1010,5 +1022,6 @@
         private System.Windows.Forms.CheckBox chasun_checkBox;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
