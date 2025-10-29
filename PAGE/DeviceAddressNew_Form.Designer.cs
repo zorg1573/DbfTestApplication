@@ -166,6 +166,7 @@
             // 
             // xinhao2Name_textBox
             // 
+            this.xinhao2Name_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xinhao2Name_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.xinhao2Name_textBox.Location = new System.Drawing.Point(206, 223);
             this.xinhao2Name_textBox.Name = "xinhao2Name_textBox";
@@ -408,6 +409,7 @@
             // 
             // pinpuName_textBox
             // 
+            this.pinpuName_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pinpuName_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.pinpuName_textBox.Location = new System.Drawing.Point(206, 267);
             this.pinpuName_textBox.Name = "pinpuName_textBox";

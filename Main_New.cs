@@ -1485,13 +1485,21 @@ namespace DbfTest
                     string ch2send = ch2_checkBox.Checked ? "0" : "1";
                     string ch3send = ch3_checkBox.Checked ? "0" : "1";
                     string ch4send = ch4_checkBox.Checked ? "0" : "1";
-                    string ch1 = "1" + new string('0', 24) + ch1send;
-                    string ch2 = "1" + new string('0', 24) + ch2send;
-                    string ch3 = "1" + new string('0', 24) + ch3send;
-                    string ch4 = "1" + new string('0', 24) + ch4send;
-                    string ch5 = new string('0', 16);
+                    string ch5send = ch5_checkBox.Checked ? "0" : "1";
+                    string ch6send = ch6_checkBox.Checked ? "0" : "1";
+                    string ch7send = ch7_checkBox.Checked ? "0" : "1";
+                    string ch8send = ch8_checkBox.Checked ? "0" : "1";
+                    string ch1 = ch1send + new string('0', 6);
+                    string ch2 = ch2send + new string('0', 6);
+                    string ch3 = ch3send + new string('0', 6);
+                    string ch4 = ch4send + new string('0', 6);
+                    string ch5 = ch5send + new string('0', 6);
+                    string ch6 = ch6send + new string('0', 6);
+                    string ch7 = ch7send + new string('0', 6);
+                    string ch8 = ch8send + new string('0', 6);
+                    string model_stc = "00" + "000000+" + "0";
                     byte[] modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc });
                     string chSum = "";
                     if (ch1_checkBox.Checked)
                     {
@@ -1509,7 +1517,23 @@ namespace DbfTest
                     {
                         chSum += " 通道4 ";
                     }
-                    if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked)
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
+                    }
+                    if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
                     {
                         MessageBox.Show("请至少选择一个通道进行发射测试", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -1671,13 +1695,21 @@ namespace DbfTest
                     string ch2recive = ch2_checkBox.Checked ? "0" : "1";
                     string ch3recive = ch3_checkBox.Checked ? "0" : "1";
                     string ch4recive = ch4_checkBox.Checked ? "0" : "1";
-                    string ch1 = ch1recive + new string('0', 24) + "1";
-                    string ch2 = ch2recive + new string('0', 24) + "1";
-                    string ch3 = ch3recive + new string('0', 24) + "1";
-                    string ch4 = ch4recive + new string('0', 24) + "1";
-                    string ch5 = new string('0', 16);
+                    string ch5recive = ch5_checkBox.Checked ? "0" : "1";
+                    string ch6recive = ch6_checkBox.Checked ? "0" : "1";
+                    string ch7recive = ch7_checkBox.Checked ? "0" : "1";
+                    string ch8recive = ch8_checkBox.Checked ? "0" : "1";
+                    string ch1 = ch1recive + new string('0', 6);
+                    string ch2 = ch2recive + new string('0', 6);
+                    string ch3 = ch3recive + new string('0', 6);
+                    string ch4 = ch4recive + new string('0', 6);
+                    string ch5 = ch5recive + new string('0', 6);
+                    string ch6 = ch6recive + new string('0', 6);
+                    string ch7 = ch7recive + new string('0', 6);
+                    string ch8 = ch8recive + new string('0', 6);
+                    string model_stc = "10" + "000000+" + "0";
                     byte[] modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc });
                     string chSum = "";
                     if (ch1_checkBox.Checked)
                     {
@@ -1694,6 +1726,22 @@ namespace DbfTest
                     if (ch4_checkBox.Checked)
                     {
                         chSum += " 通道4 ";
+                    }
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
                     }
 
                     LogToConsole("FPGA发包:" + chSum);
@@ -2071,8 +2119,8 @@ namespace DbfTest
 
                     double center = 175 * 1e6;
                     double start = center - (100 * 1e6);
-                    double stop = center + (100 * 1e9);
-
+                    double stop = center + (100 * 1e6);
+                    
                     await pinpuDevice.SetStartFrequencyAsync(start);
                     await pinpuDevice.SetStopFrequencyAsync(stop);
                     await pinpuDevice.SetCenterFrequencyAsync(center);
@@ -4107,13 +4155,17 @@ namespace DbfTest
         {
             await Task.Run(() =>
             {
-                string ch1 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                string ch2 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                string ch3 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                string ch4 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                string ch5 = new string('0', 16);
+                string ch1 = "1" + "000000";
+                string ch2 = "1" + "000000";
+                string ch3 = "1" + "000000";
+                string ch4 = "1" + "000000";
+                string ch5 = "1" + "000000";
+                string ch6 = "1" + "000000";
+                string ch7 = "1" + "000000";
+                string ch8 = "1" + "000000";
+                string model_stc = "01" + "000000+" + "0";
                 modelValue = StringToByteArray("01 03 03 00");
-                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc });
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
             });
@@ -4804,11 +4856,12 @@ namespace DbfTest
                 await xinhaoBenzhenDevice.SetPower(powerBenzhen);
                 await xinhaoBenzhenDevice.QueryOpc();
 
-
+                await xinhaoBenzhenDevice.EnableOutput();
+                await xinhaoDevice.EnableOutput();
                 //进度条
-/*                int num = 0;
-                progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;*/
+                /*                int num = 0;
+                                progressBar1.Maximum = pointCount;
+                                progressBar1.Value = 0;*/
 
                 double step = (stopFreq - startFreq) / (pointCount - 1);
                 string[] freqArray = new string[pointCount];
@@ -5357,10 +5410,13 @@ namespace DbfTest
                 return;
             }
             GetDeviceFilesJson();
-            await scpiDevice.LoadStateFile("0728.csa");
+            //await scpiDevice.LoadStateFile("0728.csa");
+            await scpiDevice.SendCommandAsync(":CALC:MEAS1:MATH:NORM");
             LogToConsole("调用矢网文件");
             vnaFlag = 1;
             scpiDevice.Disconnect(); // 释放资源
         }
+
+
     }
 }

@@ -43,6 +43,10 @@ namespace DbfTest.PAGE
         string ch2Yixiang = "000000";
         string ch3Yixiang = "000000";
         string ch4Yixiang = "000000";
+        string ch5Yixiang = "000000";
+        string ch6Yixiang = "000000";
+        string ch7Yixiang = "000000";
+        string ch8Yixiang = "000000";
         string ch1Shuaijian = "000000";
         string ch2Shuaijian = "000000";
         string ch3Shuaijian = "000000";
@@ -62,6 +66,7 @@ namespace DbfTest.PAGE
             this.Load += ManualSend_Form_Load;
             radioButton4.Checked = true;
             radioButton6.Checked = true;
+            comboBox_mgc.SelectedIndex = 0;
         }
         private void ManualSend_Form_Load(object sender, EventArgs e)
         {
@@ -140,37 +145,51 @@ namespace DbfTest.PAGE
                 {
                     ch4Yixiang = GetBinaryFromTextBox(int.Parse(ch4_yixiang_textBox.Text));
                 }
+                if (ch5_yixiang_textBox.Text != "")
+                {
+                    ch5Yixiang = GetBinaryFromTextBox(int.Parse(ch5_yixiang_textBox.Text));
+                }
+                if (ch6_yixiang_textBox.Text != "")
+                {
+                    ch6Yixiang = GetBinaryFromTextBox(int.Parse(ch6_yixiang_textBox.Text));
+                }
+                if (ch7_yixiang_textBox.Text != "")
+                {
+                    ch7Yixiang = GetBinaryFromTextBox(int.Parse(ch7_yixiang_textBox.Text));
+                }
+                if (ch8_yixiang_textBox.Text != "")
+                {
+                    ch8Yixiang = GetBinaryFromTextBox(int.Parse(ch8_yixiang_textBox.Text));
+                }
                 if (ch1_shuaijian_textBox.Text != "")
                 {
                     ch1Shuaijian = GetBinaryFromTextBox(int.Parse(ch1_shuaijian_textBox.Text));
-                }
-                if (ch2_shuaijian_textBox.Text != "")
-                {
-                    ch2Shuaijian = GetBinaryFromTextBox(int.Parse(ch2_shuaijian_textBox.Text));
-                }
-                if (ch3_shuaijian_textBox.Text != "")
-                {
-                    ch3Shuaijian = GetBinaryFromTextBox(int.Parse(ch3_shuaijian_textBox.Text));
-                }
-                if (ch4_shuaijian_textBox.Text != "")
-                {
-                    ch4Shuaijian = GetBinaryFromTextBox(int.Parse(ch4_shuaijian_textBox.Text));
                 }
 
                 if (radioButton2.Checked)
                 {
                     mainForm.LogToConsole("开始发射测试"); //接收开关 发射移相 接收移相 发射衰减 接收衰减 发射开关
-                    string ch1send = checkBox1.Checked ? "0" : "1";
-                    string ch2send = checkBox2.Checked ? "0" : "1";
-                    string ch3send = checkBox3.Checked ? "0" : "1";
-                    string ch4send = checkBox4.Checked ? "0" : "1";
-                    string ch1 = "1" + ch1Yixiang + "000000" + ch1Shuaijian + "000000" + ch1send;
-                    string ch2 = "1" + ch2Yixiang + "000000" + ch2Shuaijian + "000000" + ch2send;
-                    string ch3 = "1" + ch3Yixiang + "000000" + ch3Shuaijian + "000000" + ch3send;
-                    string ch4 = "1" + ch4Yixiang + "000000" + ch4Shuaijian + "000000" + ch4send;
-                    string ch5 = new string('0', 16);
+                    string ch1send = checkBox_ch1.Checked ? "1" : "0";
+                    string ch2send = checkBox_ch2.Checked ? "1" : "0";
+                    string ch3send = checkBox_ch3.Checked ? "1" : "0";
+                    string ch4send = checkBox_ch4.Checked ? "1" : "0";
+                    string ch5send = checkBox_ch5.Checked ? "1" : "0";
+                    string ch6send = checkBox_ch6.Checked ? "1" : "0";
+                    string ch7send = checkBox_ch7.Checked ? "1" : "0";
+                    string ch8send = checkBox_ch8.Checked ? "1" : "0";
+                    string ch1 = ch1send + ch1Yixiang;
+                    string ch2 = ch2send + ch2Yixiang;
+                    string ch3 = ch3send + ch3Yixiang;
+                    string ch4 = ch4send + ch4Yixiang;
+                    string ch5 = ch5send + ch5Yixiang;
+                    string ch6 = ch6send + ch6Yixiang;
+                    string ch7 = ch7send + ch7Yixiang;
+                    string ch8 = ch8send + ch8Yixiang;
+                    string model = "00";
+                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedText;
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}");
@@ -178,17 +197,27 @@ namespace DbfTest.PAGE
                 else if (radioButton1.Checked)
                 {
                     mainForm.LogToConsole("开始接收测试");
-                    string ch1recive = checkBox1.Checked ? "0" : "1";
-                    string ch2recive = checkBox2.Checked ? "0" : "1";
-                    string ch3recive = checkBox3.Checked ? "0" : "1";
-                    string ch4recive = checkBox4.Checked ? "0" : "1";
-                    string ch1 = ch1recive + "000000" + ch1Yixiang + "000000" + ch1Shuaijian + "1";
-                    string ch2 = ch2recive + "000000" + ch2Yixiang + "000000" + ch2Shuaijian + "1";
-                    string ch3 = ch3recive + "000000" + ch3Yixiang + "000000" + ch3Shuaijian + "1";
-                    string ch4 = ch4recive + "000000" + ch4Yixiang + "000000" + ch4Shuaijian + "1";
-                    string ch5 = new string('0', 16);
+                    string ch1recive = checkBox_ch1.Checked ? "1" : "0";
+                    string ch2recive = checkBox_ch2.Checked ? "1" : "0";
+                    string ch3recive = checkBox_ch3.Checked ? "1" : "0";
+                    string ch4recive = checkBox_ch4.Checked ? "1" : "0";
+                    string ch5recive = checkBox_ch5.Checked ? "1" : "0";
+                    string ch6recive = checkBox_ch6.Checked ? "1" : "0";
+                    string ch7recive = checkBox_ch7.Checked ? "1" : "0";
+                    string ch8recive = checkBox_ch8.Checked ? "1" : "0";
+                    string ch1 = ch1recive + ch1Yixiang;
+                    string ch2 = ch2recive + ch2Yixiang;
+                    string ch3 = ch3recive + ch3Yixiang;
+                    string ch4 = ch4recive + ch4Yixiang;
+                    string ch5 = ch5recive + ch5Yixiang;
+                    string ch6 = ch6recive + ch6Yixiang;
+                    string ch7 = ch7recive + ch7Yixiang;
+                    string ch8 = ch8recive + ch8Yixiang;
+                    string model = "10";
+                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedText;
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}");
@@ -196,13 +225,18 @@ namespace DbfTest.PAGE
                 else if (radioButton3.Checked)
                 {
                     mainForm.LogToConsole("负载模式");
-                    string ch1 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                    string ch2 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                    string ch3 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                    string ch4 = "1" + "000000" + "000000" + "000000" + "000000" + "1";
-                    string ch5 = new string('0', 16);
+                    string ch1 = "0" + "000000";
+                    string ch2 = "0" + "000000";
+                    string ch3 = "0" + "000000";
+                    string ch4 = "0" + "000000";
+                    string ch5 = "0" + "000000";
+                    string ch6 = "0" + "000000";
+                    string ch7 = "0" + "000000";
+                    string ch8 = "0" + "000000";
+                    string model_stc = "01"+"000000"+ comboBox_mgc.SelectedText;
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5 });
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("负载模式","");
@@ -210,7 +244,7 @@ namespace DbfTest.PAGE
             }
             catch(Exception ex)
             {
-                MessageBox.Show("手动发码失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("手动发码失败: " + ex.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //operateLog_DAL.InsertOperateLog_DT("手动发码失败", ex.ToString());
             }
 
@@ -286,32 +320,35 @@ namespace DbfTest.PAGE
 
         static byte[] GenerateCodeValueFromBits(string[] bitStrings)
         {
-            if (bitStrings.Length != 5)
-                throw new ArgumentException("应包含5个通道的比特串");
+/*            if (bitStrings.Length != 10)
+                throw new ArgumentException("应包含10个通道的比特串");*/
 
-            int[] expectedLengths = { 26, 26, 26, 26, 16 };
+            int[] expectedLengths = { 7, 7, 7, 7, 7, 7, 7, 7, 9, 55 };
             string allBits = "";
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
-                var bits = bitStrings[i].Replace(" ", "");
+                string bits = bitStrings[i].Replace(" ", "");
                 if (bits.Length != expectedLengths[i])
-                    throw new ArgumentException($"通道{i + 1} 应为 {expectedLengths[i]} 位，但提供了 {bits.Length} 位");
+                    throw new ArgumentException($"通道 {i + 1} 应为 {expectedLengths[i]} 位，但提供了 {bits.Length} 位");
 
                 allBits += bits;
             }
 
             if (allBits.Length != 120)
-                throw new ArgumentException("总位数应为120");
+                throw new ArgumentException($"总位数应为120，但现在是 {allBits.Length}");
 
+            // 输出 15 字节（120 位）
             byte[] codeBytes = new byte[15];
             for (int i = 0; i < 15; i++)
             {
-                codeBytes[i] = Convert.ToByte(allBits.Substring(i * 8, 8), 2);
+                string byteStr = allBits.Substring(i * 8, 8);
+                codeBytes[i] = Convert.ToByte(byteStr, 2);
             }
 
             return codeBytes;
         }
+
 
         static byte[] StringToByteArray(string hex)
         {
