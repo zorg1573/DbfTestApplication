@@ -159,7 +159,8 @@ namespace DbfTest.FUNCTION
 
         #region 频谱
         // 设置频谱分析相关参数
-        public async Task SetCenterFrequencyAsync(double freqHz) => await SendCommandAsync($"FREQ:CENT {freqHz}");
+        //public async Task SetCenterFrequencyAsync(double freqHz) => await SendCommandAsync($"FREQ:CENT {freqHz}");
+        public async Task SetCenterFrequencyAsync(double freqHz) => await SendCommandAsync($":SENS:FREQ:CENT {freqHz}");
         public async Task SetSpanAsync(double spanHz) => await SendCommandAsync($"FREQ:SPAN {spanHz}");
         public async Task SetStartFrequencyAsync(double startHz) => await SendCommandAsync($"FREQ:STAR {startHz}");
         public async Task SetStopFrequencyAsync(double stopHz) => await SendCommandAsync($"FREQ:STOP {stopHz}");
@@ -357,7 +358,7 @@ namespace DbfTest.FUNCTION
             return await SendCommandAsync($"CALC:PAR:SEL '{name}'");
         }
 
-        // 读取某格式下的 S 参数数据（返回第一点，或者你可以扩展为返回数组）
+        // 读取某格式下的 S 参数数据（返回第一点，或者你可以扩展为返回数组）:SENS:SWE:MODE SINGle
         public async Task ScanOnce()
         {
             //await SendCommandAsync(":SENS:SWE:MODE SINGle");
@@ -366,7 +367,11 @@ namespace DbfTest.FUNCTION
         }
         public async Task ScanOnce(int channel)
         {
-            await SendCommandAsync($":SENS{channel}:SWE:MODE SINGle");
+            await SendCommandAsync($":SENS{channel}:SWE:MODE SINGle"); 
+        }
+        public async Task ScanOnce0()
+        {
+            await SendCommandAsync($":SENS:SWE:MODE SINGle");
         }
         public async Task SendGainStart()
         {
@@ -399,15 +404,15 @@ namespace DbfTest.FUNCTION
         public async Task SetNormalize_Send()
         {
             // 触发单次测量
-            await ScanOnce(4);
+            await ScanOnce0();
             await Task.Delay(1000);
             // 选中 Trace 3 再 normalize
-            await SendCommandAsync(":CALC4:PAR:SEL 'TRC8'");
-            await SendCommandAsync(":CALC4:MEAS8:MATH:NORM");
+            await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_1'");
+            await SendCommandAsync(":CALC1:MATH:FUNC NORM");
 
             // 选中 Trace 4 再 normalize
-            await SendCommandAsync(":CALC4:PAR:SEL 'TRC9'");
-            await SendCommandAsync(":CALC4:MEAS9:MATH:NORM");
+            //await SendCommandAsync(":CALC4:PAR:SEL 'TRC9'");
+            //await SendCommandAsync(":CALC4:MEAS9:MATH:NORM");
         }
 
         // 获取 S12 增益（对数幅度，dB）
@@ -472,9 +477,10 @@ namespace DbfTest.FUNCTION
         }
         public async Task<string[]> GetPhase_Send()
         {
-            await SendCommandAsync(":CALC4:PAR:SEL 'TRC9'");
-            await SendCommandAsync(":CALC4:FORM UPH");
-            string data = await QueryAsync(":CALC4:DATA? FDATA");
+            await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_1'");
+            //await SendCommandAsync(":CALC1:FORM PHAS");
+            await SendCommandAsync(":CALC1:FORM UPH");
+            string data = await QueryAsync(":CALC1:DATA? FDATA");
             string[] parts = data?.Split(',');
             return parts;
         }

@@ -186,7 +186,7 @@ namespace DbfTest.PAGE
                     string ch7 = ch7send + ch7Yixiang;
                     string ch8 = ch8send + ch8Yixiang;
                     string model = "00";
-                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedText;
+                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -214,11 +214,11 @@ namespace DbfTest.PAGE
                     string ch7 = ch7recive + ch7Yixiang;
                     string ch8 = ch8recive + ch8Yixiang;
                     string model = "10";
-                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedText;
+                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
-
+                    mainForm.LogToConsole(ch1Yixiang);
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}");
                 }
@@ -233,7 +233,7 @@ namespace DbfTest.PAGE
                     string ch6 = "0" + "000000";
                     string ch7 = "0" + "000000";
                     string ch8 = "0" + "000000";
-                    string model_stc = "01"+"000000"+ comboBox_mgc.SelectedText;
+                    string model_stc = "01"+"000000"+ comboBox_mgc.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 03 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
