@@ -197,6 +197,12 @@ namespace DbfTest.FUNCTION
             string resp = await QueryAsync(":CALC:MARK:Y?");
             return double.TryParse(resp?.Trim(), out double val) ? (double?)val : null;
         }
+        public async Task<double?> ReadMarkerPowerAsync(int index)
+        {
+            //string resp = await QueryAsync(":CALC:MARK1:Y?");
+            string resp = await QueryAsync($":CALC:MARK{index}:Y?");
+            return double.TryParse(resp?.Trim(), out double val) ? (double?)val : null;
+        }
         public async Task<double?> ReadPowerAtFrequencyAsync(double freqHz)
         {
             await SendCommandAsync(":CALC:MARK1:STATE ON");
@@ -290,54 +296,167 @@ namespace DbfTest.FUNCTION
         public async Task<string> FetchCorrectedNoiseFigureAsync() =>
             await QueryAsync(":FETCH:CORR:NFIG?DB");
 
+        /*     public async Task<string[]> GetZaoshengData(double freq)
+             {
+                 *//*            await SendCommandAsync(":INST:SEL NFIGURE");
+                             await SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/1517.sta'");
+                             await SendCommandAsync(":INIT:CONT OFF");
+                             await SendCommandAsync(":INIT:REST");
+                             string opc = await QueryAsync("*OPC?");
+
+                             string data = await QueryAsync(":FETCH:CORR:NFIG? DB");
+                             if (string.IsNullOrWhiteSpace(data)) return null;
+
+                             string[] parts = data.Split(',');
+                             return parts;*//*
+
+                 double benZhen = freq - 175 * 1e6;
+                 await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
+                 await SendCommandAsync($":SENS:FREQ:CENT {freq}");
+                 await SendCommandAsync("INIT:IMM");
+                 await Task.Delay(10000);
+
+                 //string data = await QueryAsync("RESULTS:TRACe1:DATA? TRAC1,NOISe");
+                 string data = await QueryAsync("TRAC? TRACE1, NOISe");
+                 await SendCommandAsync("*OPC");
+                 if (string.IsNullOrWhiteSpace(data)) return null;
+
+                 string[] parts = data.Split(',');
+
+                 // 将每个字符串尝试转换为 double，否则设为 NaN
+                 string[] values = parts
+                     .Select(p =>
+                     {
+                         if (double.TryParse(p, out double val))
+                         {
+                             // 检查是否是无效的特殊值
+                             if (Math.Abs(val - 9.9099995E+37) < 1e30)
+                                 return double.NaN.ToString();
+                             else
+                                 return val.ToString();
+                         }
+                         else
+                         {
+                             return double.NaN.ToString();
+                         }
+                     })
+                     .ToArray();
+                 return values;
+             }*/
         public async Task<string[]> GetZaoshengData(double freq)
         {
-            /*            await SendCommandAsync(":INST:SEL NFIGURE");
-                        await SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/1517.sta'");
-                        await SendCommandAsync(":INIT:CONT OFF");
-                        await SendCommandAsync(":INIT:REST");
-                        string opc = await QueryAsync("*OPC?");
-
-                        string data = await QueryAsync(":FETCH:CORR:NFIG? DB");
-                        if (string.IsNullOrWhiteSpace(data)) return null;
-
-                        string[] parts = data.Split(',');
-                        return parts;*/
-            await SendCommandAsync(":MMEM:LOAD:STAT 1,'C:/R_S/Instr/user/QuickSave/dbfzaosheng.dfl'");
-            await SendCommandAsync("*OPC");
             double benZhen = freq - 175 * 1e6;
             await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
             await SendCommandAsync($":SENS:FREQ:CENT {freq}");
-            await SendCommandAsync("INIT:IMM");
-            await Task.Delay(10000);
 
-            //string data = await QueryAsync("RESULTS:TRACe1:DATA? TRAC1,NOISe");
-            string data = await QueryAsync("TRAC? TRACE1, NOISe");
-            await SendCommandAsync("*OPC");
-            if (string.IsNullOrWhiteSpace(data)) return null;
+            const int maxTries = 20; // 最多读取次数，防止死循环
+            string[] finalValues = null;
 
-            string[] parts = data.Split(',');
+            for (int attempt = 1; attempt <= maxTries; attempt++)
+            {
+                await SendCommandAsync("INIT:IMM");
+                await Task.Delay(500); // 可根据仪表响应速度调整
+                string data = await QueryAsync("TRAC? TRACE1, NOISe");
+                await SendCommandAsync("*OPC");
 
-            // 将每个字符串尝试转换为 double，否则设为 NaN
-            string[] values = parts
-                .Select(p =>
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    //LogToConsole($"第 {attempt} 次读取噪声数据为空，跳过...");
+                    continue;
+                }
+
+                string[] parts = data.Split(',');
+                double[] current = parts.Select(p =>
                 {
                     if (double.TryParse(p, out double val))
                     {
-                        // 检查是否是无效的特殊值
                         if (Math.Abs(val - 9.9099995E+37) < 1e30)
-                            return double.NaN.ToString();
+                            return double.NaN;
                         else
-                            return val.ToString();
+                            return val;
                     }
-                    else
-                    {
-                        return double.NaN.ToString();
-                    }
-                })
-                .ToArray();
-            return values;
+                    else return double.NaN;
+                }).ToArray();
+
+                // 第一次初始化 finalValues
+                if (finalValues == null)
+                    finalValues = current.Select(v => double.IsNaN(v) ? "NaN" : v.ToString()).ToArray();
+
+                // 逐点更新
+                for (int i = 0; i < current.Length; i++)
+                {
+                    if (double.TryParse(finalValues[i], out double existVal) && !double.IsNaN(existVal) && existVal > 0)
+                        continue; // 已有有效值，不更新
+
+                    if (!double.IsNaN(current[i]) && current[i] > 0)
+                        finalValues[i] = current[i].ToString(); // 更新为有效值
+                }
+
+                // 检查是否所有点都有效
+                bool allValid = finalValues.All(s =>
+                {
+                    return double.TryParse(s, out double v) && !double.IsNaN(v) && v > 0;
+                });
+
+                //LogToConsole($"第 {attempt} 次采集完成，有效点 {finalValues.Count(s => double.TryParse(s, out double v) && !double.IsNaN(v))}/{finalValues.Length}");
+
+                if (allValid)
+                {
+                    //LogToConsole($"✅ 已采集到完整有效噪声数据（共 {finalValues.Length} 点）");
+                    return finalValues;
+                }
+            }
+
+            //LogToConsole("⚠️ 达到最大尝试次数，仍有无效点，返回部分数据。");
+            return finalValues;
         }
+        /// <summary>
+        /// 获取噪声曲线中指定索引位置的有效值
+        /// </summary>
+        /// <param name="freq">测试频率</param>
+        /// <param name="pointIndex">目标点索引（从0开始）</param>
+        /// <returns>该点的有效值，若多次采样仍无效则返回 double.NaN</returns>
+        public async Task<double> GetZaoshengPointAsync(double freq, int pointIndex)
+        {
+            double benZhen = freq - 175 * 1e6;
+            await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
+            await SendCommandAsync($":SENS:FREQ:CENT {freq}");
+
+            const int maxTries = 10;
+            double validValue = double.NaN;
+
+            for (int attempt = 1; attempt <= maxTries; attempt++)
+            {
+                await SendCommandAsync("INIT:IMM");
+                await Task.Delay(500);
+                string data = await QueryAsync("TRAC? TRACE1, NOISe");
+                await SendCommandAsync("*OPC");
+
+                if (string.IsNullOrWhiteSpace(data))
+                    continue;
+
+                string[] parts = data.Split(',');
+                if (pointIndex >= parts.Length)
+                {
+                    //LogToConsole($"⚠️ 点位索引 {pointIndex} 超出范围（最大 {parts.Length - 1}）。");
+                    return double.NaN;
+                }
+
+                if (double.TryParse(parts[pointIndex], out double val))
+                {
+                    if (!double.IsNaN(val) && Math.Abs(val - 9.9099995E+37) > 1e30 && val > 0)
+                    {
+                        validValue = val;
+                        break;
+                    }
+                }
+
+                await Task.Delay(200);
+            }
+
+            return validValue;
+        }
+
         #endregion
         #region 三阶交调
         public async Task<double?> GetIP3()

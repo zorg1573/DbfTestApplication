@@ -130,9 +130,9 @@ namespace DbfTest.PAGE
             {
                 xinhaoName_textBox.Text = await TryConnectAndGetIdnAsync(xinhao_textBox.Text);
             }
-            if (!string.IsNullOrEmpty(xinhao2_textBox.Text))
+            if (!string.IsNullOrEmpty(xinhaoBenzhen_textBox.Text))
             {
-                xinhao2Name_textBox.Text = await TryConnectAndGetIdnAsync(xinhao2_textBox.Text)      ;
+                xinhao2Name_textBox.Text = await TryConnectAndGetIdnAsync(xinhaoBenzhen_textBox.Text)      ;
             }
             if (!string.IsNullOrEmpty(pinpu_textBox.Text))
             {

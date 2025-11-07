@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeviceAddressNew_Form));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.xinhao2_textBox = new System.Windows.Forms.TextBox();
+            this.xinhaoBenzhen_textBox = new System.Windows.Forms.TextBox();
             this.xinhao2Name_textBox = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.chargeName_textBox = new System.Windows.Forms.TextBox();
@@ -106,7 +106,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.92056F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.82926F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.25019F));
-            this.tableLayoutPanel1.Controls.Add(this.xinhao2_textBox, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.xinhaoBenzhen_textBox, 2, 5);
             this.tableLayoutPanel1.Controls.Add(this.xinhao2Name_textBox, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.label14, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.chargeName_textBox, 1, 2);
@@ -156,13 +156,13 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(929, 522);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // xinhao2_textBox
+            // xinhaoBenzhen_textBox
             // 
-            this.xinhao2_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xinhao2_textBox.Location = new System.Drawing.Point(501, 223);
-            this.xinhao2_textBox.Name = "xinhao2_textBox";
-            this.xinhao2_textBox.Size = new System.Drawing.Size(425, 26);
-            this.xinhao2_textBox.TabIndex = 35;
+            this.xinhaoBenzhen_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.xinhaoBenzhen_textBox.Location = new System.Drawing.Point(501, 223);
+            this.xinhaoBenzhen_textBox.Name = "xinhaoBenzhen_textBox";
+            this.xinhaoBenzhen_textBox.Size = new System.Drawing.Size(425, 26);
+            this.xinhaoBenzhen_textBox.TabIndex = 35;
             // 
             // xinhao2Name_textBox
             // 
@@ -610,7 +610,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.TextBox xinhao2_textBox;
+        private System.Windows.Forms.TextBox xinhaoBenzhen_textBox;
         private System.Windows.Forms.TextBox xinhao2Name_textBox;
         private System.Windows.Forms.Label label14;
     }

@@ -57,6 +57,7 @@
             this.testSet_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SqlSet_ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -100,7 +101,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -378,6 +380,16 @@
             this.toolStripButton6.Size = new System.Drawing.Size(77, 22);
             this.toolStripButton6.Text = "另存为Excel";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(65, 22);
+            this.toolStripButton2.Text = "清空Excel";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click_1);
             // 
             // toolStripButton9
             // 
@@ -718,29 +730,32 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.button6, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.button5, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button11, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.button19, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.button17, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.button21, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.button3, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button2, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.button18, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.button10, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.button16, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.button16, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.button18, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.button10, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label6, 0, 5);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.67742F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.12903F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.12903F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.12903F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.67742F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.12903F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.12903F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 257);
+            this.tableLayoutPanel1.RowCount = 8;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333265F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.88877F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.88877F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13.88877F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.666667F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.74359F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.10256F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(168, 313);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label5
@@ -751,7 +766,7 @@
             this.label5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.Location = new System.Drawing.Point(63, 1);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 24);
+            this.label5.Size = new System.Drawing.Size(42, 25);
             this.label5.TabIndex = 0;
             this.label5.Text = "接收";
             // 
@@ -760,10 +775,10 @@
             this.button11.BackColor = System.Drawing.Color.White;
             this.button11.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button11.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button11.Location = new System.Drawing.Point(4, 32);
+            this.button11.Location = new System.Drawing.Point(4, 33);
             this.button11.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(76, 31);
+            this.button11.Size = new System.Drawing.Size(76, 33);
             this.button11.TabIndex = 74;
             this.button11.Text = "接收增益";
             this.button11.UseVisualStyleBackColor = false;
@@ -774,10 +789,10 @@
             this.button19.BackColor = System.Drawing.Color.White;
             this.button19.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button19.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button19.Location = new System.Drawing.Point(87, 73);
+            this.button19.Location = new System.Drawing.Point(87, 76);
             this.button19.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button19.Name = "button19";
-            this.button19.Size = new System.Drawing.Size(77, 31);
+            this.button19.Size = new System.Drawing.Size(77, 33);
             this.button19.TabIndex = 80;
             this.button19.Text = "镜频抑制";
             this.button19.UseVisualStyleBackColor = false;
@@ -789,9 +804,9 @@
             this.label6.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label6, 2);
             this.label6.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(63, 149);
+            this.label6.Location = new System.Drawing.Point(63, 199);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 24);
+            this.label6.Size = new System.Drawing.Size(42, 23);
             this.label6.TabIndex = 83;
             this.label6.Text = "发射";
             // 
@@ -800,10 +815,10 @@
             this.button17.BackColor = System.Drawing.Color.White;
             this.button17.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button17.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button17.Location = new System.Drawing.Point(4, 73);
+            this.button17.Location = new System.Drawing.Point(4, 76);
             this.button17.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button17.Name = "button17";
-            this.button17.Size = new System.Drawing.Size(76, 31);
+            this.button17.Size = new System.Drawing.Size(76, 33);
             this.button17.TabIndex = 78;
             this.button17.Text = "压缩点";
             this.button17.UseVisualStyleBackColor = false;
@@ -814,9 +829,9 @@
             this.button21.BackColor = System.Drawing.Color.White;
             this.button21.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button21.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button21.Location = new System.Drawing.Point(87, 29);
+            this.button21.Location = new System.Drawing.Point(87, 30);
             this.button21.Name = "button21";
-            this.button21.Size = new System.Drawing.Size(77, 34);
+            this.button21.Size = new System.Drawing.Size(77, 36);
             this.button21.TabIndex = 73;
             this.button21.Text = "噪声采集";
             this.button21.UseVisualStyleBackColor = false;
@@ -827,10 +842,10 @@
             this.button3.BackColor = System.Drawing.Color.White;
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button3.Location = new System.Drawing.Point(4, 114);
+            this.button3.Location = new System.Drawing.Point(4, 119);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(76, 31);
+            this.button3.Size = new System.Drawing.Size(76, 33);
             this.button3.TabIndex = 85;
             this.button3.Text = "带外抑制";
             this.button3.UseVisualStyleBackColor = false;
@@ -841,12 +856,12 @@
             this.button2.BackColor = System.Drawing.Color.White;
             this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button2.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(87, 114);
+            this.button2.Location = new System.Drawing.Point(87, 119);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(77, 31);
+            this.button2.Size = new System.Drawing.Size(77, 33);
             this.button2.TabIndex = 84;
-            this.button2.Text = "衰减误差";
+            this.button2.Text = "衰减精度";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -855,10 +870,10 @@
             this.button18.BackColor = System.Drawing.Color.White;
             this.button18.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button18.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button18.Location = new System.Drawing.Point(4, 180);
+            this.button18.Location = new System.Drawing.Point(4, 229);
             this.button18.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button18.Name = "button18";
-            this.button18.Size = new System.Drawing.Size(76, 31);
+            this.button18.Size = new System.Drawing.Size(76, 35);
             this.button18.TabIndex = 75;
             this.button18.Text = "发射功率";
             this.button18.UseVisualStyleBackColor = false;
@@ -869,10 +884,10 @@
             this.button10.BackColor = System.Drawing.Color.White;
             this.button10.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button10.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button10.Location = new System.Drawing.Point(87, 180);
+            this.button10.Location = new System.Drawing.Point(87, 229);
             this.button10.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(77, 31);
+            this.button10.Size = new System.Drawing.Size(77, 35);
             this.button10.TabIndex = 82;
             this.button10.Text = "发射移相精度";
             this.button10.UseVisualStyleBackColor = false;
@@ -883,10 +898,10 @@
             this.button16.BackColor = System.Drawing.Color.White;
             this.button16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button16.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button16.Location = new System.Drawing.Point(4, 221);
+            this.button16.Location = new System.Drawing.Point(4, 274);
             this.button16.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button16.Name = "button16";
-            this.button16.Size = new System.Drawing.Size(76, 32);
+            this.button16.Size = new System.Drawing.Size(76, 35);
             this.button16.TabIndex = 76;
             this.button16.Text = "杂散抑制";
             this.button16.UseVisualStyleBackColor = false;
@@ -937,15 +952,33 @@
             this.pictureBox3.TabStop = false;
             this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
             // 
-            // toolStripButton2
+            // button5
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(65, 22);
-            this.toolStripButton2.Text = "清空Excel";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click_1);
+            this.button5.BackColor = System.Drawing.Color.White;
+            this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button5.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button5.Location = new System.Drawing.Point(4, 162);
+            this.button5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(76, 33);
+            this.button5.TabIndex = 86;
+            this.button5.Text = "MGC";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.Color.White;
+            this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button6.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button6.Location = new System.Drawing.Point(87, 162);
+            this.button6.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(77, 33);
+            this.button6.TabIndex = 87;
+            this.button6.Text = "平坦度";
+            this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // Main_New
             // 
@@ -1062,5 +1095,7 @@
         private System.Windows.Forms.CheckBox ch7_checkBox;
         private System.Windows.Forms.CheckBox ch8_checkBox;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }
