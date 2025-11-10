@@ -2244,7 +2244,7 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     await Task.Delay(200); // 让设备处理
                     //gain[i] = (markPower + compensationTable[freqGHz]).ToString("F2");
-                    gain[i] = (markPower + 20).ToString("F2");
+                    gain[i] = (markPower + 40).ToString("F2");
                 }
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
                 WriteArrayToExcelColumn(gain, 2, sheetName);  // B列，从第9行开始
@@ -4664,7 +4664,7 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     //pset[i] = (markPower + compensationTable[freqGHz]).ToString("F2");
-                    pset[i] = (markPower + 20).ToString("F2");
+                    pset[i] = (markPower + 40).ToString("F2");
                 }
 
                 xinhaoDevice.Disconnect();
@@ -6151,13 +6151,13 @@ namespace DbfTest
             {
                 // ---------- 1️⃣ 清空第一个sheet ----------
                 Excel.Worksheet sheet1 = (Excel.Worksheet)workbook.Worksheets[1];
-                Excel.Range range1 = sheet1.Range["B8", "N" + sheet1.Rows.Count]; // 从第9行到最后一行
+                Excel.Range range1 = sheet1.Range["B8", "Q" + sheet1.Rows.Count]; // 从第9行到最后一行
                 range1.ClearContents(); // 清空文本内容
 
                 // ---------- 2️⃣ 第二个sheet ----------
                 Excel.Worksheet sheet2 = (Excel.Worksheet)workbook.Worksheets[2];
-                Excel.Range range2a = sheet2.Range["B4", "BM124"];
-                Excel.Range range2b = sheet2.Range["B131", "BM251"];
+                Excel.Range range2a = sheet2.Range["B4", "BM16"];
+                Excel.Range range2b = sheet2.Range["B23", "BM35"];
                 range2a.Value2 = 0;
                 range2b.Value2 = 0;
 
@@ -6167,7 +6167,23 @@ namespace DbfTest
                 Excel.Range range3b = sheet3.Range["B131", "BM251"];
                 range3a.Value2 = 0;
                 range3b.Value2 = 0;
-
+                for(int i = 4; i <= 17; i++)
+                {
+                    if (i % 2 == 0)
+                    {
+                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
+                        Excel.Range range = sheet.Range["B8", "Q" + sheet.Rows.Count]; // 从第9行到最后一行
+                        range.ClearContents(); // 清空文本内容
+                    }
+                    else
+                    {
+                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
+                        Excel.Range rangea = sheet.Range["B4", "BM16"];
+                        Excel.Range rangeb = sheet.Range["B23", "BM35"];
+                        rangea.Value2 = 0;
+                        rangeb.Value2 = 0;
+                    }
+                }
                 // ---------- 保存 ----------
                 workbook.Save();
 
