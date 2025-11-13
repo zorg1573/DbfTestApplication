@@ -88,6 +88,7 @@
             this.manual_button.TabIndex = 39;
             this.manual_button.Text = "保存设置";
             this.manual_button.UseVisualStyleBackColor = true;
+            this.manual_button.Click += new System.EventHandler(this.manual_button_Click);
             // 
             // start_freq_textBox
             // 

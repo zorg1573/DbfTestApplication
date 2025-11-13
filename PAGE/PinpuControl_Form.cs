@@ -18,9 +18,9 @@ namespace DbfTest.PAGE
 {
     public partial class PinpuControl_Form : MetroForm
     {
-        private Main_New mainForm;
+        private Main_Form mainForm;
         string deviceAddress = "";
-        public PinpuControl_Form(Main_New mainForm)
+        public PinpuControl_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.Load += PinpuControl_Form_Load;

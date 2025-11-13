@@ -10,9 +10,9 @@ namespace DbfTest.PAGE
 {
     public partial class ChargeControl_Form : MetroForm
     {
-        private Main_New mainForm;
+        private Main_Form mainForm;
         string deviceAddress = "";
-        public ChargeControl_Form(Main_New mainForm)
+        public ChargeControl_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.Load += ChargeControl_Form_Load;

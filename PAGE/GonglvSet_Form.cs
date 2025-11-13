@@ -16,5 +16,10 @@ namespace DbfTest.PAGE
         {
             InitializeComponent();
         }
+
+        private void manual_button_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

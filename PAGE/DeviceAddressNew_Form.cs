@@ -19,8 +19,8 @@ namespace DbfTest.PAGE
 {
     public partial class DeviceAddressNew_Form : MetroForm
     {
-        private Main_New mainForm;
-        public DeviceAddressNew_Form(Main_New mainForm)
+        private Main_Form mainForm;
+        public DeviceAddressNew_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.Load += DeviceAddressNew_Form_Load;

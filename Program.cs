@@ -16,7 +16,7 @@ namespace DbfTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main_New());
+            Application.Run(new Main_Form());
         }
     }
 }

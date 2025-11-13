@@ -167,6 +167,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Pipelines, Version=9.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.IO.Pipelines.9.0.5\lib\net462\System.IO.Pipelines.dll</HintPath>
@@ -224,6 +225,12 @@
     <Compile Include="DAL\DbConfigHelper.cs" />
     <Compile Include="DAL\Main_DAL.cs" />
     <Compile Include="DAL\OperateLog_DAL.cs" />
+    <Compile Include="Main_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main_Form.Designer.cs">
+      <DependentUpon>Main_Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="MODEL\DbConfig.cs" />
     <Compile Include="MODEL\MeasurementBatch.cs" />
     <Compile Include="MODEL\MeasurementResult.cs" />
@@ -319,12 +326,6 @@
     <Compile Include="FUNCTION\ScpiDevice.cs" />
     <Compile Include="FUNCTION\VisualizationManager.cs" />
     <Compile Include="FUNCTION\KtNAController.cs" />
-    <Compile Include="Main_New.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main_New.Designer.cs">
-      <DependentUpon>Main_New.cs</DependentUpon>
-    </Compile>
     <Compile Include="MODEL\DeviceInfo.cs" />
     <Compile Include="MODEL\SerialScanConfig.cs" />
     <Compile Include="MODEL\SpectrumData.cs" />
@@ -421,6 +422,9 @@
     <Compile Include="ViewControl\PsgControl.Designer.cs">
       <DependentUpon>PsgControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Main_Form.resx">
+      <DependentUpon>Main_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PAGE\GonglvSet_Form.resx">
       <DependentUpon>GonglvSet_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -462,9 +466,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\DeviceList_Add_Form.resx">
       <DependentUpon>DeviceList_Add_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main_New.resx">
-      <DependentUpon>Main_New.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\DeviceAddres_Form.resx">
       <DependentUpon>DeviceAddres_Form.cs</DependentUpon>

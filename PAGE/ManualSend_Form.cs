@@ -38,7 +38,7 @@ namespace DbfTest.PAGE
         //byte[] modelValue = StringToByteArray("01 03 01 00");
         byte[] modelValue;
         byte[] emptyValue = StringToByteArray("00 00 00 00 00 00 00 00");
-        private Main_New mainForm;
+        private Main_Form mainForm;
         string ch1Yixiang = "000000";
         string ch2Yixiang = "000000";
         string ch3Yixiang = "000000";
@@ -59,7 +59,7 @@ namespace DbfTest.PAGE
                     radioButton4.Checked = true;
                     radioButton6.Checked = true;
                 }*/
-        public ManualSend_Form(Main_New mainForm)
+        public ManualSend_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.mainForm = mainForm;

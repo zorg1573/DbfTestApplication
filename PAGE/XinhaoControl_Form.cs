@@ -15,10 +15,10 @@ namespace DbfTest.PAGE
 {
     public partial class XinhaoControl_Form : MetroForm
     {
-        private Main_New mainForm;
+        private Main_Form mainForm;
         string deviceAddress = "";
 
-        public XinhaoControl_Form(Main_New mainForm)
+        public XinhaoControl_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.Load += XinhaoControl_Form_Load;

@@ -16,7 +16,7 @@ namespace DbfTest.PAGE
 {
     public partial class DeviceManage_Form : Form
     {
-        private Main_New mainForm;
+        private Main_Form mainForm;
         private string shiwangAddress = "";
         private string gonglvAddress = "";
         private string xinhaoAddress = "";
@@ -36,7 +36,7 @@ namespace DbfTest.PAGE
             InitializeComponent();
             this.Load += DeviceManage_Form_Load;
         }
-        public DeviceManage_Form(Main_New mainForm)
+        public DeviceManage_Form(Main_Form mainForm)
         {
             InitializeComponent();
             this.mainForm = mainForm;
