@@ -64,9 +64,7 @@ namespace DbfTest.PAGE
             InitializeComponent();
             this.mainForm = mainForm;
             this.Load += ManualSend_Form_Load;
-            radioButton4.Checked = true;
-            radioButton6.Checked = true;
-            comboBox_mgc.SelectedIndex = 0;
+            mgc_comboBox.SelectedIndex = 0;
         }
         private void ManualSend_Form_Load(object sender, EventArgs e)
         {
@@ -131,39 +129,39 @@ namespace DbfTest.PAGE
                 }
                 if (ch1_yixiang_textBox.Text != "")
                 {
-                    ch1Yixiang = GetBinaryFromTextBox(int.Parse(ch1_yixiang_textBox.Text));
+                    ch1Yixiang = ch1_yixiang_textBox.Text;
                 }
                 if (ch2_yixiang_textBox.Text != "")
                 {
-                    ch2Yixiang = GetBinaryFromTextBox(int.Parse(ch2_yixiang_textBox.Text));
+                    ch2Yixiang = ch2_yixiang_textBox.Text;
                 }
                 if (ch3_yixiang_textBox.Text != "")
                 {
-                    ch3Yixiang = GetBinaryFromTextBox(int.Parse(ch3_yixiang_textBox.Text));
+                    ch3Yixiang = ch3_yixiang_textBox.Text;
                 }
                 if (ch4_yixiang_textBox.Text != "")
                 {
-                    ch4Yixiang = GetBinaryFromTextBox(int.Parse(ch4_yixiang_textBox.Text));
+                    ch4Yixiang = ch4_yixiang_textBox.Text;
                 }
                 if (ch5_yixiang_textBox.Text != "")
                 {
-                    ch5Yixiang = GetBinaryFromTextBox(int.Parse(ch5_yixiang_textBox.Text));
+                    ch5Yixiang = ch5_yixiang_textBox.Text;
                 }
                 if (ch6_yixiang_textBox.Text != "")
                 {
-                    ch6Yixiang = GetBinaryFromTextBox(int.Parse(ch6_yixiang_textBox.Text));
+                    ch6Yixiang = ch6_yixiang_textBox.Text;
                 }
                 if (ch7_yixiang_textBox.Text != "")
                 {
-                    ch7Yixiang = GetBinaryFromTextBox(int.Parse(ch7_yixiang_textBox.Text));
+                    ch7Yixiang = ch7_yixiang_textBox.Text;
                 }
                 if (ch8_yixiang_textBox.Text != "")
                 {
-                    ch8Yixiang = GetBinaryFromTextBox(int.Parse(ch8_yixiang_textBox.Text));
+                    ch8Yixiang = ch8_yixiang_textBox.Text;
                 }
-                if (ch1_shuaijian_textBox.Text != "")
+                if (shuaijian_textBox.Text != "")
                 {
-                    ch1Shuaijian = GetBinaryFromTextBox(int.Parse(ch1_shuaijian_textBox.Text));
+                    ch1Shuaijian = shuaijian_textBox.Text;
                 }
 
                 if (radioButton2.Checked)
@@ -186,7 +184,7 @@ namespace DbfTest.PAGE
                     string ch7 = ch7send + ch7Yixiang;
                     string ch8 = ch8send + ch8Yixiang;
                     string model = "00";
-                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedIndex;
+                    string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -214,7 +212,7 @@ namespace DbfTest.PAGE
                     string ch7 = ch7recive + ch7Yixiang;
                     string ch8 = ch8recive + ch8Yixiang;
                     string model = "10";
-                    string model_stc = model + ch1Shuaijian + comboBox_mgc.SelectedIndex;
+                    string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -233,7 +231,7 @@ namespace DbfTest.PAGE
                     string ch6 = "0" + "000000";
                     string ch7 = "0" + "000000";
                     string ch8 = "0" + "000000";
-                    string model_stc = "01"+"000000"+ comboBox_mgc.SelectedIndex;
+                    string model_stc = "01" + "000000" + mgc_comboBox.SelectedIndex;
                     string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 03 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -242,13 +240,11 @@ namespace DbfTest.PAGE
                     //operateLog_DAL.InsertOperateLog_DT("负载模式","");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("手动发码失败: " + ex.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 //operateLog_DAL.InsertOperateLog_DT("手动发码失败", ex.ToString());
             }
-
-
         }
 
         private void cancel_button_Click(object sender, EventArgs e)
