@@ -4111,6 +4111,21 @@ namespace DbfTest
                 return;
             }
 
+            // 新增：用户确认弹窗
+            DialogResult confirmResult = MessageBox.Show(
+                "⚠️ 确定要清空当前 Excel 文件中的数据吗？\n\n此操作不可恢复！",
+                "确认清空数据",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirmResult != DialogResult.Yes)
+            {
+                MessageBox.Show("操作已取消。", "已取消", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+
             try
             {
                 // ---------- 1️⃣ 清空第一个sheet ----------

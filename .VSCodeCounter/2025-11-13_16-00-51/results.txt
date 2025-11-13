@@ -1,0 +1,122 @@
+Date : 2025-11-13 16:00:51
+Directory : d:\Code\CsharpProject\DbfTestApplication
+Total : 86 files,  20931 codes, 4457 comments, 1485 blanks, all 26873 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C#       |         85 |     20,354 |      4,457 |      1,485 |     26,296 |
+| XML      |          1 |        577 |          0 |          0 |        577 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                      | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                         |         86 |     20,931 |      4,457 |      1,485 |     26,873 |
+| . (Files)                                                                                 |          6 |      5,279 |        620 |        522 |      6,421 |
+| DAL                                                                                       |          7 |        842 |        304 |         87 |      1,233 |
+| DAL (Files)                                                                               |          3 |         84 |         49 |         18 |        151 |
+| DAL\Dapper                                                                                |          4 |        758 |        255 |         69 |      1,082 |
+| FUNCTION                                                                                  |          8 |        980 |        218 |        170 |      1,368 |
+| MODEL                                                                                     |          8 |        175 |          0 |         24 |        199 |
+| PAGE                                                                                      |         44 |     11,464 |      2,753 |        459 |     14,676 |
+| PAGE (Files)                                                                              |         36 |     10,516 |      2,477 |        421 |     13,414 |
+| PAGE\WaitForm                                                                             |          8 |        948 |        276 |         38 |      1,262 |
+| Properties                                                                                |          3 |         73 |         53 |         22 |        148 |
+| ViewControl                                                                               |         10 |      2,118 |        509 |        201 |      2,828 |
++-------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                  | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\Code\CsharpProject\DbfTestApplication\DAL\Dapper\DBUtil.cs                             | C#       |         44 |         11 |          1 |         56 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\Dapper\DbHelper.cs                           | C#       |        433 |        139 |         15 |        587 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\Dapper\Log.cs                                | C#       |         24 |          3 |          1 |         28 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\Dapper\SqlUtil.cs                            | C#       |        257 |        102 |         52 |        411 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\DbConfigHelper.cs                            | C#       |         25 |          0 |          7 |         32 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\Main_DAL.cs                                  | C#       |         43 |         44 |          9 |         96 |
+| d:\Code\CsharpProject\DbfTestApplication\DAL\OperateLog_DAL.cs                            | C#       |         16 |          5 |          2 |         23 |
+| d:\Code\CsharpProject\DbfTestApplication\DbfTest.csproj                                   | XML      |        577 |          0 |          0 |        577 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\ConfigLoader.cs                         | C#       |         11 |          0 |          2 |         13 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\Datalogger.cs                           | C#       |         11 |          0 |          2 |         13 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\DeviceConnectionManager.cs              | C#       |        157 |          8 |         20 |        185 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\KtNAController.cs                       | C#       |         61 |         39 |         11 |        111 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\LanScanFunc.cs                          | C#       |        100 |         49 |         18 |        167 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\ScpiDevice.cs                           | C#       |        569 |        122 |        104 |        795 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\SerialScanFunc.cs                       | C#       |         60 |          0 |         11 |         71 |
+| d:\Code\CsharpProject\DbfTestApplication\FUNCTION\VisualizationManager.cs                 | C#       |         11 |          0 |          2 |         13 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\DbConfig.cs                                | C#       |         25 |          0 |          4 |         29 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\DeviceInfo.cs                              | C#       |         25 |          0 |          4 |         29 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\LanScanConfig.cs                           | C#       |         18 |          0 |          3 |         21 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\MeasurementBatch.cs                        | C#       |         20 |          0 |          3 |         23 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\MeasurementResult.cs                       | C#       |         28 |          0 |          2 |         30 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\OperateLog.cs                              | C#       |         19 |          0 |          3 |         22 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\SerialScanConfig.cs                        | C#       |         17 |          0 |          2 |         19 |
+| d:\Code\CsharpProject\DbfTestApplication\MODEL\SpectrumData.cs                            | C#       |         23 |          0 |          3 |         26 |
+| d:\Code\CsharpProject\DbfTestApplication\Main.Designer.cs                                 | C#       |        163 |         62 |          8 |        233 |
+| d:\Code\CsharpProject\DbfTestApplication\Main.cs                                          | C#       |        164 |         24 |         19 |        207 |
+| d:\Code\CsharpProject\DbfTestApplication\Main_Form.Designer.cs                            | C#       |        806 |        227 |          6 |      1,039 |
+| d:\Code\CsharpProject\DbfTestApplication\Main_Form.cs                                     | C#       |      3,551 |        304 |        487 |      4,342 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\ChargeControl_Form.Designer.cs              | C#       |        179 |         56 |          5 |        240 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\ChargeControl_Form.cs                       | C#       |        115 |          0 |         15 |        130 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceAddres_Form.Designer.cs               | C#       |        869 |        236 |          6 |      1,111 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceAddres_Form.cs                        | C#       |         93 |          0 |         13 |        106 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceAddressNew_Form.Designer.cs           | C#       |        471 |        140 |          6 |        617 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceAddressNew_Form.cs                    | C#       |        178 |         14 |         23 |        215 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceFiles_Form.Designer.cs                | C#       |        327 |        101 |          6 |        434 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceFiles_Form.cs                         | C#       |        140 |         14 |         17 |        171 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceList_Add_Form.Designer.cs             | C#       |        194 |         54 |          5 |        253 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceList_Add_Form.cs                      | C#       |         95 |          0 |         15 |        110 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceManage_Form.Designer.cs               | C#       |        112 |         44 |          6 |        162 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\DeviceManage_Form.cs                        | C#       |        136 |          0 |         14 |        150 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\GonglvSet_Form.Designer.cs                  | C#       |         99 |         35 |          6 |        140 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\GonglvSet_Form.cs                           | C#       |         22 |          0 |          4 |         26 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\LANSet_Form.Designer.cs                     | C#       |        316 |         90 |          5 |        411 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\LANSet_Form.cs                              | C#       |        117 |          0 |         21 |        138 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\ManualSend_Form.Designer.cs                 | C#       |        370 |        110 |          5 |        485 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\ManualSend_Form.cs                          | C#       |        342 |         26 |         36 |        404 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\PinpuControl_Form.Designer.cs               | C#       |        374 |        113 |          6 |        493 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\PinpuControl_Form.cs                        | C#       |        214 |          3 |         34 |        251 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\SerialSet_Form.Designer.cs                  | C#       |        194 |         56 |          6 |        256 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\SerialSet_Form.cs                           | C#       |         56 |          0 |          8 |         64 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\SqlSet_Form.Designer.cs                     | C#       |        177 |         56 |          6 |        239 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\SqlSet_Form.cs                              | C#       |         87 |          0 |         10 |         97 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestData_Form.Designer.cs                   | C#       |        345 |        113 |          6 |        464 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestData_Form.cs                            | C#       |        145 |          9 |         25 |        179 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestSet_Form.Designer.cs                    | C#       |        948 |        308 |          6 |      1,262 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestSet_Form.cs                             | C#       |        107 |          0 |          8 |        115 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestSet_New_Form.Designer.cs                | C#       |        362 |        113 |          6 |        481 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\TestSet_New_Form.cs                         | C#       |        107 |          0 |         11 |        118 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\VNAFile_Form.Designer.cs                    | C#       |        172 |         53 |          5 |        230 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\VNAFile_Form.cs                             | C#       |        212 |          0 |         21 |        233 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\VNAFile_Form_Old.Designer.cs                | C#       |      2,076 |        623 |          6 |      2,705 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\VNAFile_Form_Old.cs                         | C#       |        192 |          0 |         18 |        210 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\FashejingduWait_Form.Designer.cs   | C#       |        206 |         68 |          6 |        280 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\FashejingduWait_Form.cs            | C#       |         31 |          1 |          3 |         35 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\JieshoujingduWait_Form.Designer.cs | C#       |        206 |         68 |          6 |        280 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\JieshoujingduWait_Form.cs          | C#       |         31 |          1 |          3 |         35 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\RecieveTestWait_Form.Designer.cs   | C#       |        206 |         68 |          6 |        280 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\RecieveTestWait_Form.cs            | C#       |         31 |          1 |          4 |         36 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\SendTestWait_Form.Designer.cs      | C#       |        206 |         68 |          6 |        280 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\WaitForm\SendTestWait_Form.cs               | C#       |         31 |          1 |          4 |         36 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\XinhaoControl_Form.Designer.cs              | C#       |        364 |        110 |          5 |        479 |
+| d:\Code\CsharpProject\DbfTestApplication\PAGE\XinhaoControl_Form.cs                       | C#       |        209 |          0 |         26 |        235 |
+| d:\Code\CsharpProject\DbfTestApplication\Program.cs                                       | C#       |         18 |          3 |          2 |         23 |
+| d:\Code\CsharpProject\DbfTestApplication\Properties\AssemblyInfo.cs                       | C#       |         15 |         17 |          5 |         37 |
+| d:\Code\CsharpProject\DbfTestApplication\Properties\Resources.Designer.cs                 | C#       |         45 |         28 |         11 |         84 |
+| d:\Code\CsharpProject\DbfTestApplication\Properties\Settings.Designer.cs                  | C#       |         13 |          8 |          6 |         27 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\ChargeControl.Designer.cs            | C#       |        174 |         56 |          7 |        237 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\ChargeControl.cs                     | C#       |        204 |          6 |         32 |        242 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\DeviceListControl.Designer.cs        | C#       |        134 |         50 |          7 |        191 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\DeviceListControl.cs                 | C#       |        203 |         32 |         33 |        268 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\PsgControl.Designer.cs               | C#       |        147 |         47 |          7 |        201 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\PsgControl.cs                        | C#       |        195 |          2 |         34 |        231 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\SpectrumControl.Designer.cs          | C#       |        416 |        149 |          9 |        574 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\SpectrumControl.cs                   | C#       |        273 |        105 |         32 |        410 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\VnaControl.Designer.cs               | C#       |        174 |         56 |          7 |        237 |
+| d:\Code\CsharpProject\DbfTestApplication\ViewControl\VnaControl.cs                        | C#       |        198 |          6 |         33 |        237 |
+| Total                                                                                     |          |     20,931 |      4,457 |      1,485 |     26,873 |
++-------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
