@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestSet_New_Form));
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label14 = new System.Windows.Forms.Label();
+            this.powerJie_textBox = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.stop_freq_textBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -59,9 +62,6 @@
             this.ch1_vol_textBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.power2_textBox = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -84,7 +84,7 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.label14);
-            this.panel1.Controls.Add(this.power2_textBox);
+            this.panel1.Controls.Add(this.powerJie_textBox);
             this.panel1.Controls.Add(this.label15);
             this.panel1.Controls.Add(this.comboBox2);
             this.panel1.Controls.Add(this.stop_freq_textBox);
@@ -101,6 +101,37 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(291, 213);
             this.panel1.TabIndex = 35;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label14.Location = new System.Drawing.Point(206, 144);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(35, 17);
+            this.label14.TabIndex = 51;
+            this.label14.Text = "dBm";
+            this.label14.Visible = false;
+            // 
+            // powerJie_textBox
+            // 
+            this.powerJie_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.powerJie_textBox.Location = new System.Drawing.Point(114, 141);
+            this.powerJie_textBox.Name = "powerJie_textBox";
+            this.powerJie_textBox.Size = new System.Drawing.Size(83, 26);
+            this.powerJie_textBox.TabIndex = 50;
+            this.powerJie_textBox.Visible = false;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label15.Location = new System.Drawing.Point(13, 140);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(90, 21);
+            this.label15.TabIndex = 49;
+            this.label15.Text = "接收功率：";
+            this.label15.Visible = false;
             // 
             // comboBox2
             // 
@@ -136,7 +167,7 @@
             // point_count_textBox
             // 
             this.point_count_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.point_count_textBox.Location = new System.Drawing.Point(114, 141);
+            this.point_count_textBox.Location = new System.Drawing.Point(114, 177);
             this.point_count_textBox.Name = "point_count_textBox";
             this.point_count_textBox.Size = new System.Drawing.Size(83, 26);
             this.point_count_textBox.TabIndex = 45;
@@ -145,7 +176,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(13, 140);
+            this.label4.Location = new System.Drawing.Point(13, 176);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(90, 21);
             this.label4.TabIndex = 44;
@@ -188,9 +219,9 @@
             this.label2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.Location = new System.Drawing.Point(13, 102);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 21);
+            this.label2.Size = new System.Drawing.Size(90, 21);
             this.label2.TabIndex = 35;
-            this.label2.Text = "功率：";
+            this.label2.Text = "发射功率：";
             // 
             // start_freq_textBox
             // 
@@ -387,37 +418,6 @@
             this.label7.TabIndex = 41;
             this.label7.Text = "电源设置";
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(206, 182);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(35, 17);
-            this.label14.TabIndex = 51;
-            this.label14.Text = "dBm";
-            this.label14.Visible = false;
-            // 
-            // power2_textBox
-            // 
-            this.power2_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.power2_textBox.Location = new System.Drawing.Point(114, 179);
-            this.power2_textBox.Name = "power2_textBox";
-            this.power2_textBox.Size = new System.Drawing.Size(83, 26);
-            this.power2_textBox.TabIndex = 50;
-            this.power2_textBox.Visible = false;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label15.Location = new System.Drawing.Point(13, 178);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(90, 21);
-            this.label15.TabIndex = 49;
-            this.label15.Text = "本振功率：";
-            this.label15.Visible = false;
-            // 
             // TestSet_New_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -478,7 +478,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox power2_textBox;
+        private System.Windows.Forms.TextBox powerJie_textBox;
         private System.Windows.Forms.Label label15;
     }
 }

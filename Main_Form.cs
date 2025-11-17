@@ -35,7 +35,7 @@ namespace DbfTest
 
         //TestSet_KU.json
         double power = -1;
-        double powerBenzhen = -1;
+        double powerJie = -1;
         double startFreq = -1;
         double stopFreq = -1;
         int pointCount = -1;
@@ -717,7 +717,7 @@ namespace DbfTest
 
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-                await xinhaoDevice.SetPower(-60);
+                await xinhaoDevice.SetPower(powerJie);
                 await xinhaoDevice.QueryOpc();
                 await xinhaoDevice.EnableOutput();
 
@@ -941,7 +941,7 @@ namespace DbfTest
                 double markPower = double.NaN;
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-                await xinhaoDevice.SetPower(-60);
+                await xinhaoDevice.SetPower(powerJie);
                 await xinhaoDevice.QueryOpc();
                 await xinhaoDevice.EnableOutput();
 
@@ -1113,7 +1113,7 @@ namespace DbfTest
             double markPower = double.NaN;
             await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-            await xinhaoDevice.SetPower(-60);
+            await xinhaoDevice.SetPower(powerJie);
             await xinhaoDevice.QueryOpc();
             await xinhaoDevice.EnableOutput();
 
@@ -1386,7 +1386,7 @@ namespace DbfTest
             double markPower = double.NaN;
             await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-            await xinhaoDevice.SetPower(-60);
+            await xinhaoDevice.SetPower(powerJie);
             await xinhaoDevice.QueryOpc();
             await xinhaoDevice.EnableOutput();
 
@@ -1518,8 +1518,10 @@ namespace DbfTest
 
                 await vnaDevice.SendsjjtStart();
 
+                await signalGen.SetPower(powerJie);
+                await signalGen.QueryOpc();
                 await signalGen.EnableOutput(); // 打开信号源输出
-                await signalGen.ModON(); // 打开调制输出
+                //await signalGen.ModON(); // 打开调制输出
                 rf_checkBox.Checked = true;
                 mod_checkBox.Checked = true;
                 int maxRetryCount = 10; // 测量次数
@@ -1623,9 +1625,9 @@ namespace DbfTest
             {
             await CloseCharge(); // 电源关电
             await signalGen.DisableOutput(); // 安全关闭输出
-            await signalGen.ModOFF();
+            //await signalGen.ModOFF();
             rf_checkBox.Checked = false;
-            mod_checkBox.Checked = false;
+            //mod_checkBox.Checked = false;
             }
         }
 
@@ -2093,6 +2095,12 @@ namespace DbfTest
                 if (_power != null)
                 {
                     power = double.Parse(_power.ToString());
+                }
+
+                data.TryGetValue("powerJie_textBox", out object _powerJ);
+                if (_powerJ != null)
+                {
+                    powerJie = double.Parse(_powerJ.ToString());
                 }
 
                 data.TryGetValue("ch1_vol_textBox", out object ch1v);
