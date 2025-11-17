@@ -50,12 +50,12 @@ namespace DbfTest.PAGE
             }
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("DeviceFiles.json", json);
+            File.WriteAllText("DeviceFiles_KU.json", json);
         }
 
         private void LoadFromJson()
         {
-            string filePath = "DeviceFiles.json";
+            string filePath = "DeviceFiles_KU.json";
             if (!File.Exists(filePath))
                 return;
 

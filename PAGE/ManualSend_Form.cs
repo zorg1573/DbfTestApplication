@@ -210,7 +210,7 @@ namespace DbfTest.PAGE
                     string ch2send = checkBox_ch2.Checked ? "1" : "0";
                     string ch3send = checkBox_ch3.Checked ? "1" : "0";
                     string ch4send = checkBox_ch4.Checked ? "1" : "0";
-                    string tr = "0" + ch1send + "0" + ch2send + "0" + ch3send + "0" + ch4send;
+                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
                     string ta = ch1Shuaijian + ch2Shuaijian + ch3Shuaijian + ch4Shuaijian;
                     string tp = ch1Yixiang + ch2Yixiang + ch3Yixiang + ch4Yixiang;
                     string ra = new string('0', 24);
@@ -230,11 +230,11 @@ namespace DbfTest.PAGE
                     string ch2recieve = checkBox_ch2.Checked ? "1" : "0";
                     string ch3recieve = checkBox_ch3.Checked ? "1" : "0";
                     string ch4recieve = checkBox_ch4.Checked ? "1" : "0";
-                    string tr = ch1recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch4recieve + "0";
-                    string ta = ch1Shuaijian + ch2Shuaijian + ch3Shuaijian + ch4Shuaijian;
-                    string tp = ch1Yixiang + ch2Yixiang + ch3Yixiang + ch4Yixiang;
-                    string ra = new string('0', 24);
-                    string rp = new string('0', 24);
+                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
+                    string ta = new string('0', 24);
+                    string tp = new string('0', 24);
+                    string ra = ch1Shuaijian + ch2Shuaijian + ch3Shuaijian + ch4Shuaijian;
+                    string rp = ch1Yixiang + ch2Yixiang + ch3Yixiang + ch4Yixiang;
                     string model = "00000001";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 02 00");

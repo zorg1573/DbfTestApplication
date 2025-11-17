@@ -38,7 +38,7 @@ namespace DbfTest.PAGE
         }
         private void LoadFromJson()
         {
-            string filePath = "TestSetNew.json";
+            string filePath = "TestSet_KU.json";
             if (!File.Exists(filePath))
                 return;
 
@@ -84,7 +84,7 @@ namespace DbfTest.PAGE
             }
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("TestSetNew.json", json);
+            File.WriteAllText("TestSet_KU.json", json);
         }
         private void manual_button_Click(object sender, EventArgs e)
         {

@@ -754,7 +754,7 @@ namespace DbfTest.FUNCTION
         }
         public async Task<bool> LoadGonglvState()
         {
-            return await SendCommandAsync("*RCL 1");
+            return await SendCommandAsync("*RCL 3");
         }
         public async Task<bool> SaveGonglvState()
         {
