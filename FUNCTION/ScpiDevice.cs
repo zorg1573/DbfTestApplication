@@ -490,7 +490,7 @@ namespace DbfTest.FUNCTION
         }
         public async Task ScanOnce0()
         {
-            await SendCommandAsync($":SENS:SWE:MODE SINGle");
+            await SendCommandAsync($":SENS4:SWE:MODE SINGle");
         }
         public async Task SendGainStart()
         {
@@ -537,7 +537,7 @@ namespace DbfTest.FUNCTION
         // 获取 S12 增益（对数幅度，dB）
         public async Task<string[]> GetGainStringAsync()
         {
-            await SendCommandAsync(":CALC:PAR:SEL 'TRC1'");
+            await SendCommandAsync(":CALC:PAR:SEL 'CH1_S12_2'");
             await SendCommandAsync(":CALC:FORM MLOG");
             string data = await QueryAsync(":CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
@@ -561,16 +561,16 @@ namespace DbfTest.FUNCTION
         }
         public async Task<string[]> GetGainStringAsync_New()
         {
-            await SendCommandAsync(":CALC2:PAR:SEL 'TRC5'");
-            await SendCommandAsync(":CALC2:FORM MLOG");
-            string data = await QueryAsync(":CALC2:DATA? FDATA");
+            await SendCommandAsync(":CALC:PAR:SEL 'CH1_S12_2'");
+            await SendCommandAsync(":CALC:FORM MLOG");
+            string data = await QueryAsync(":CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
             return parts;
         }
         // 获取 S11 驻波比（VSWR）
         public async Task<string[]> GetInputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'TRC3'");
+            await SendCommandAsync("CALC:PAR:SEL 'CH1_S21_3'");
             await SendCommandAsync("CALC:FORM SWR");
             string data = await QueryAsync("CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
@@ -579,7 +579,7 @@ namespace DbfTest.FUNCTION
         // 获取 S22 驻波比（VSWR）
         public async Task<string[]> GetOutputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'TRC4'");
+            await SendCommandAsync("CALC:PAR:SEL 'CH1_S11_1'");
             await SendCommandAsync("CALC:FORM SWR");
             string data = await QueryAsync("CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
@@ -588,7 +588,7 @@ namespace DbfTest.FUNCTION
         // 获取初始相位
         public async Task<string[]> GetInitialPhaseStringAsync()
         {
-            await SendCommandAsync(":CALC:PAR:SEL 'TRC2'");
+            await SendCommandAsync(":CALC:PAR:SEL 'CH1_S22_4'");
             await SendCommandAsync(":CALC:FORM UPH");
             string data = await QueryAsync(":CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
@@ -597,6 +597,7 @@ namespace DbfTest.FUNCTION
         public async Task<string[]> GetPhase_Send()
         {
             await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_1'");
+            //await SendCommandAsync(":CALC4:PAR:SEL 'TRC9'");
             //await SendCommandAsync(":CALC1:FORM PHAS");
             await SendCommandAsync(":CALC1:FORM UPH");
             string data = await QueryAsync(":CALC1:DATA? FDATA");
@@ -605,9 +606,9 @@ namespace DbfTest.FUNCTION
         }
         public async Task<string[]> GetInitialPhaseStringAsync_New()
         {
-            await SendCommandAsync(":CALC2:PAR:SEL 'TRC6'");
-            await SendCommandAsync(":CALC2:FORM UPH");
-            string data = await QueryAsync(":CALC2:DATA? FDATA");
+            await SendCommandAsync(":CALC:PAR:SEL 'CH1_S22_4'");
+            await SendCommandAsync(":CALC:FORM UPH");
+            string data = await QueryAsync(":CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
             return parts;
         }
