@@ -111,7 +111,6 @@
             this.label14.Size = new System.Drawing.Size(35, 17);
             this.label14.TabIndex = 51;
             this.label14.Text = "dBm";
-            this.label14.Visible = false;
             // 
             // powerJie_textBox
             // 
@@ -120,7 +119,6 @@
             this.powerJie_textBox.Name = "powerJie_textBox";
             this.powerJie_textBox.Size = new System.Drawing.Size(83, 26);
             this.powerJie_textBox.TabIndex = 50;
-            this.powerJie_textBox.Visible = false;
             // 
             // label15
             // 
@@ -131,7 +129,6 @@
             this.label15.Size = new System.Drawing.Size(90, 21);
             this.label15.TabIndex = 49;
             this.label15.Text = "接收功率：";
-            this.label15.Visible = false;
             // 
             // comboBox2
             // 

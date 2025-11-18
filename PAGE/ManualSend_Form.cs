@@ -211,14 +211,14 @@ namespace DbfTest.PAGE
                     string ch3send = checkBox_ch3.Checked ? "1" : "0";
                     string ch4send = checkBox_ch4.Checked ? "1" : "0";
                     string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
-                    string ta = ch1Shuaijian + ch2Shuaijian + ch3Shuaijian + ch4Shuaijian;
-                    string tp = ch1Yixiang + ch2Yixiang + ch3Yixiang + ch4Yixiang;
+                    string ta = ch4Shuaijian + ch3Shuaijian + ch2Shuaijian + ch1Shuaijian;
                     string ra = new string('0', 24);
+                    string tp = ch4Yixiang + ch3Yixiang + ch2Yixiang + ch1Yixiang;
                     string rp = new string('0', 24);
                     string model = "00000000";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}");
@@ -232,13 +232,13 @@ namespace DbfTest.PAGE
                     string ch4recieve = checkBox_ch4.Checked ? "1" : "0";
                     string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
+                    string ra = ch4Shuaijian + ch3Shuaijian + ch2Shuaijian + ch1Shuaijian;
                     string tp = new string('0', 24);
-                    string ra = ch1Shuaijian + ch2Shuaijian + ch3Shuaijian + ch4Shuaijian;
-                    string rp = ch1Yixiang + ch2Yixiang + ch3Yixiang + ch4Yixiang;
+                    string rp = ch4Yixiang + ch3Yixiang + ch2Yixiang + ch1Yixiang;
                     string model = "00000001";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
                     mainForm.LogToConsole(ch1Yixiang);
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}");
@@ -254,7 +254,7 @@ namespace DbfTest.PAGE
                     string model = "00000010";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("负载模式","");

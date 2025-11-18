@@ -60,17 +60,17 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.rf_checkBox = new System.Windows.Forms.CheckBox();
             this.mod_checkBox = new System.Windows.Forms.CheckBox();
@@ -433,102 +433,6 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(119, 575);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
-            // button10
-            // 
-            this.button10.BackColor = System.Drawing.Color.White;
-            this.button10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.Location = new System.Drawing.Point(4, 527);
-            this.button10.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(111, 44);
-            this.button10.TabIndex = 86;
-            this.button10.Text = "杂散抑制";
-            this.button10.UseVisualStyleBackColor = false;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.White;
-            this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(4, 475);
-            this.button9.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(111, 42);
-            this.button9.TabIndex = 85;
-            this.button9.Text = "发射移相";
-            this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.White;
-            this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(4, 423);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(111, 42);
-            this.button8.TabIndex = 84;
-            this.button8.Text = "发射功率";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 365);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 51);
-            this.label2.TabIndex = 83;
-            this.label2.Text = "发射测试";
-            // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.White;
-            this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(4, 319);
-            this.button7.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(111, 42);
-            this.button7.TabIndex = 82;
-            this.button7.Text = "噪声采集";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button6
-            // 
-            this.button6.BackColor = System.Drawing.Color.White;
-            this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.Location = new System.Drawing.Point(4, 163);
-            this.button6.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(111, 42);
-            this.button6.TabIndex = 81;
-            this.button6.Text = "衰减精度";
-            this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.White;
-            this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(4, 267);
-            this.button5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(111, 42);
-            this.button5.TabIndex = 80;
-            this.button5.Text = "压缩点";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.White;
@@ -583,6 +487,102 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "接收测试";
             this.label1.DoubleClick += new System.EventHandler(this.label1_DoubleClick);
+            // 
+            // button6
+            // 
+            this.button6.BackColor = System.Drawing.Color.White;
+            this.button6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button6.Location = new System.Drawing.Point(4, 163);
+            this.button6.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(111, 42);
+            this.button6.TabIndex = 81;
+            this.button6.Text = "衰减精度";
+            this.button6.UseVisualStyleBackColor = false;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button5
+            // 
+            this.button5.BackColor = System.Drawing.Color.White;
+            this.button5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Location = new System.Drawing.Point(4, 267);
+            this.button5.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(111, 42);
+            this.button5.TabIndex = 80;
+            this.button5.Text = "压缩点";
+            this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button7
+            // 
+            this.button7.BackColor = System.Drawing.Color.White;
+            this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.Location = new System.Drawing.Point(4, 319);
+            this.button7.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(111, 42);
+            this.button7.TabIndex = 82;
+            this.button7.Text = "噪声采集";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(5, 365);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 51);
+            this.label2.TabIndex = 83;
+            this.label2.Text = "发射测试";
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.White;
+            this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.Location = new System.Drawing.Point(4, 423);
+            this.button8.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(111, 42);
+            this.button8.TabIndex = 84;
+            this.button8.Text = "发射功率";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.White;
+            this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.Location = new System.Drawing.Point(4, 475);
+            this.button9.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(111, 42);
+            this.button9.TabIndex = 85;
+            this.button9.Text = "发射移相";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button10
+            // 
+            this.button10.BackColor = System.Drawing.Color.White;
+            this.button10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button10.Location = new System.Drawing.Point(4, 527);
+            this.button10.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(111, 44);
+            this.button10.TabIndex = 86;
+            this.button10.Text = "杂散抑制";
+            this.button10.UseVisualStyleBackColor = false;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // panel1
             // 
@@ -815,7 +815,6 @@
             this.button13.TabIndex = 103;
             this.button13.Text = "button13";
             this.button13.UseVisualStyleBackColor = true;
-            this.button13.Visible = false;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // splitContainer1

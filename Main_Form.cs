@@ -248,73 +248,7 @@ namespace DbfTest
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// 
-        Dictionary<double, string> phaseToBits = new Dictionary<double, string>
-{
-    {0,   "000000"},
-    {-5.625,   "001000"},
-    {-11.250,  "000100"},
-    {-16.875,  "001100"},
-    {-22.500,  "000010"},
-    {-28.125,  "001010"},
-    {-33.750,  "000110"},
-    {-39.375,  "001110"},
-    {-45.000,  "010000"},
-    {-50.625,  "011000"},
-    {-56.250,  "010100"},
-    {-61.875,  "011100"},
-    {-67.500,  "010010"},
-    {-73.125,  "011010"},
-    {-78.750,  "010110"},
-    {-84.375,  "011110"},
-    {-90.000,  "000001"},
-    {-95.625,  "001001"},
-    {-101.250, "000101"},
-    {-106.875, "001101"},
-    {-112.500, "000011"},
-    {-118.125, "001011"},
-    {-123.750, "000111"},
-    {-129.375, "001111"},
-    {-135.000, "010001"},
-    {-140.625, "011001"},
-    {-146.250, "010101"},
-    {-151.875, "011101"},
-    {-157.500, "010011"},
-    {-163.125, "011011"},
-    {-168.750, "010111"},
-    {-174.375, "011111"},
-    {-180.000, "100000"},
-    {-185.625, "101000"},
-    {-191.250, "100100"},
-    {-196.875, "101100"},
-    {-202.500, "100010"},
-    {-208.125, "101010"},
-    {-213.750, "100110"},
-    {-219.375, "101110"},
-    {-225.000, "110000"},
-    {-230.625, "111000"},
-    {-236.250, "110100"},
-    {-241.875, "111100"},
-    {-247.500, "110010"},
-    {-253.125, "111010"},
-    {-258.750, "110110"},
-    {-264.375, "111110"},
-    {-270.000, "100001"},
-    {-275.625, "101001"},
-    {-281.250, "100101"},
-    {-286.875, "101101"},
-    {-292.500, "100011"},
-    {-298.125, "101011"},
-    {-303.750, "100111"},
-    {-309.375, "101111"},
-    {-315.000, "110001"},
-    {-320.625, "111001"},
-    {-326.250, "110101"},
-    {-331.875, "111101"},
-    {-337.500, "110011"},
-    {-343.125, "111011"},
-    {-348.750, "110111"},
-    {-354.375, "111111"}
-};
+
         private async void button9_Click(object sender, EventArgs e)
         {
             LogToConsole("开始移相精度测试...");
@@ -363,7 +297,7 @@ namespace DbfTest
                 LogToConsole("矢网连接失败");
                 return;
             }
-            await scpiDevice.LoadStateFile("yixiang.csa");
+            await scpiDevice.LoadStateFile("kuyixiang.csa");
             await scpiDevice.EnableOutput();
             //await SendTestUDP(0, "移相"); // FPGA发码
             //await Task.Delay(1000);           // 等待设备稳定
@@ -560,7 +494,8 @@ namespace DbfTest
                     double freqHz = double.Parse(freqArray[i]) * 1e9;
                     double freqGHz = double.Parse(freqArray[i]);
 
-                    await signalGen.SetCenterFrequencyAsync(freqHz);
+                    await signalGen.SetFrequency(freqHz);
+                    await signalGen.QueryOpc();
 
                     await Task.Delay(1000); // 延时保证设备稳定
 
@@ -2007,10 +1942,10 @@ namespace DbfTest
 
             //return Convert.ToString(number, 2).PadLeft(6, '0');
             string binary = Convert.ToString(number, 2).PadLeft(6, '0');
-            //char[] reversed = binary.ToCharArray();
-            //Array.Reverse(reversed);
-            //return new string(reversed);
-            return binary;
+            char[] reversed = binary.ToCharArray();
+            Array.Reverse(reversed);
+            return new string(reversed);
+            //return binary;
         }
 
         private string[] GetFilterFreqArray(int countNum)
@@ -2651,13 +2586,13 @@ namespace DbfTest
                     continue; // 跳过该列
 
                 // 遍历第4~154行
-                for (int row = 4; row <= 124; row++)
+                for (int row = 4; row <= 204; row++)
                 {
                     object cellValueObj = phaseSheet.Cells[row, col].Value;
                     if (cellValueObj != null && double.TryParse(cellValueObj.ToString(), out double measuredValue))
                     {
                         double result = measuredValue - standardValue;
-                        int targetRow = 131 + (row - 4);
+                        int targetRow = 209 + (row - 4);
                         phaseSheet.Cells[targetRow, col].Value = result;
                     }
                 }
@@ -2712,10 +2647,10 @@ namespace DbfTest
                 // ⭐ 只处理这些频率（GHz）
                 // =============================
                 double step = (stopFreq - startFreq) / (pointCount - 1);
-                double[] selectedFreqGHz = Enumerable.Range(0, pointCount).Select(i => startFreq + i * step).ToArray();
+                double[] selectedFreqGHz = Enumerable.Range(0, pointCount).Select(i => (startFreq + i * step)*1e-9).ToArray();
 
 
-                int startRow = 201;
+                int startRow = 209;
                 int currentRow = startRow;
 
                 while (true)
@@ -2731,7 +2666,9 @@ namespace DbfTest
                     // =============================
                     // ⭐ 不在目标频率数组中 → 跳过
                     // =============================
-                    if (!selectedFreqGHz.Contains(freqGHz))
+                    bool isSelected = selectedFreqGHz.Any(f => Math.Abs(f - freqGHz) < 1e-6);
+
+                    if (!isSelected)
                     {
                         currentRow++;
                         continue;
@@ -3295,7 +3232,7 @@ namespace DbfTest
                 string model = "00000010";
                 string buling = new string('0', 8);
                 modelValue = StringToByteArray("01 03 03 00");
-                var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
             });
@@ -3318,7 +3255,7 @@ namespace DbfTest
                     string model = "00000001";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
                     string chSum = "";
                     if (ch1_checkBox.Checked)
@@ -3369,7 +3306,7 @@ namespace DbfTest
                     string model = "00000000";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
 
                     string chSum = "";
@@ -3424,7 +3361,7 @@ namespace DbfTest
                     string model = "00000010";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 }
@@ -3477,7 +3414,7 @@ namespace DbfTest
                     string model = "00000001";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     LogToConsole(numToString);
                 }
@@ -3514,7 +3451,7 @@ namespace DbfTest
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
 
-                    string tr = ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send + "0";
+                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3530,7 +3467,7 @@ namespace DbfTest
                     string model = "00000000";
                     string buling = new string('0', 8);
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, tp, ra, rp, model, buling });
+                    var codeValue = GenerateCodeValueFromBits(new[] { tr, ta, ra, tp, rp, model, buling });
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     LogToConsole(numToString);
                 }
@@ -4040,7 +3977,7 @@ namespace DbfTest
 
         private void button13_Click(object sender, EventArgs e)
         {
-
+            CalculatePhaseAccuracyAndWriteToExcel($"发射通道相移精度测试结果1", 1);
         }
 
 
