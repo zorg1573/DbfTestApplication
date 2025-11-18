@@ -261,7 +261,7 @@ namespace DbfTest
             int chNum = 0;
 
             int num = 0;
-            progressBar1.Maximum = pointCount;
+            progressBar1.Maximum = 64;
             progressBar1.Value = 0;
 
 
@@ -356,8 +356,9 @@ namespace DbfTest
                 //unwrappedPhases.Add(currentPhase.ToArray());
 
                 num++;
-                progressBar1.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
-                progressBar1.Refresh();
+                progressBar1.Value += 1;
+                label6.Text = ((double)num / 64 * 100).ToString("f2") + "%";
+                label6.Refresh();
             }
 
             await scpiDevice.DisableOutput();
@@ -370,10 +371,6 @@ namespace DbfTest
             {
                 string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
                 WriteArrayToExcelColumn_New(phaseStrings, i + 2, $"发射通道相移精度测试结果{chNum}");
-
-                num++;
-                progressBar1.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
-                progressBar1.Refresh();
             }
             SubtractStandardAndWriteResult($"发射通道相移精度测试结果{chNum}");
             CalculatePhaseAccuracyAndWriteToExcel($"发射通道相移精度测试结果{chNum}", chNum);
@@ -394,7 +391,7 @@ namespace DbfTest
                 int chNum = 0;
 
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount*3;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -483,8 +480,9 @@ namespace DbfTest
                     zhupuP[i] = power;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 // 1. 加载状态文件
                 await pinpuDevice.LoadPinpuStateAsync(pinpuDaiwaiyizhiPath);
@@ -533,8 +531,9 @@ namespace DbfTest
                     dwyzP[i] = Math.Max(power1, power2);
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 for (int i = 0; i < pointCount; i++)
                 {
@@ -543,8 +542,9 @@ namespace DbfTest
                     LogToConsole("发射抑制测试:" + freqArray[i] + ": " + zhupuP[i] + " - " + dwyzP[i] + " = " + result);
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 //fasheYizhi = await GetFasheyizhiAsync(freqArray);
@@ -681,8 +681,9 @@ namespace DbfTest
                     gain[i] = (markPower + 40).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
                 WriteArrayToExcelColumn(gain, 2, sheetName);  // B列，从第9行开始
@@ -777,9 +778,9 @@ namespace DbfTest
                     double data = await pinpuDevice.GetZaoshengPointAsync(freqHz, 1);
                     NFData[i] = data.ToString("F2");
 
-                    num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 WriteZaoshengToMatchingFrequencyRows(freqArray, NFData, "测试结果");
                 LogToConsole("噪声采集");
@@ -816,7 +817,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount*3;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -908,8 +909,9 @@ namespace DbfTest
                     found[i] = false;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 // 2. 增加功率，查找压缩点
                 for (int i = 0; i < pointCount; i++)
@@ -937,8 +939,9 @@ namespace DbfTest
                     }
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 for (int i = 0; i < pointCount; i++)
@@ -958,8 +961,9 @@ namespace DbfTest
                     pset[i] = (markPower + 40).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -1054,7 +1058,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            progressBar1.Maximum = pointCount;
+            progressBar1.Maximum = pointCount*64;
             progressBar1.Value = 0;
 
             double step = (stopFreq - startFreq) / (pointCount - 1);
@@ -1094,8 +1098,9 @@ namespace DbfTest
                     gain[i] = markPower;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 unwrappedPhases.Add(gain);
             }
@@ -1232,8 +1237,9 @@ namespace DbfTest
                     m45[i] = (Math.Min(markPower2, markPower3) - markPower).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -1328,7 +1334,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            progressBar1.Maximum = pointCount;
+            progressBar1.Maximum = pointCount*64;
             progressBar1.Value = 0;
 
             double step = (stopFreq - startFreq) / (pointCount - 1);
@@ -1368,8 +1374,9 @@ namespace DbfTest
                     gain[i] = markPower;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 unwrappedPhases.Add(gain);
             }
