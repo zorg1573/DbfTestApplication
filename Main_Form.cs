@@ -314,7 +314,7 @@ namespace DbfTest
                 await Task.Delay(500);           // 等待设备稳定
                 await scpiDevice.ScanOnce0();
                 await scpiDevice.ScanOnce0();
-                await Task.Delay(500);
+                await Task.Delay(800);
                 string[] initial = await scpiDevice.GetPhase_Send();    // 初相（°）
 
                 // 转换为 double[]
