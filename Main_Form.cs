@@ -853,8 +853,9 @@ namespace DbfTest
                     gain[i] = (markPower + 40).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value += 1;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);  // A列，从第8行开始
                 WriteArrayToExcelColumn(gain, 2, sheetName);  // B列，从第9行开始
