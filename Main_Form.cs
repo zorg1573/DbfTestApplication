@@ -654,8 +654,7 @@ namespace DbfTest
                 string[] inputVswr21 = ExtractStep100MHz(inputVswr);
                 string[] outputVswr21 = ExtractStep100MHz(outputVswr);
 
-                WriteArrayToExcelColumn(gain21, 2, sheetName);
-                WriteArrayToExcelColumn(initial21, 3, sheetName);
+
                 WriteArrayToExcelColumn(inputVswr21, 4, sheetName);
                 WriteArrayToExcelColumn(outputVswr21, 5, sheetName);
                 LogToConsole("写入Excel完成");
@@ -3242,7 +3241,7 @@ namespace DbfTest
                     string ch2recieve = ch2_checkBox.Checked ? "1" : "0";
                     string ch3recieve = ch3_checkBox.Checked ? "1" : "0";
                     string ch4recieve = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
+                    string tr = ch4recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3293,7 +3292,7 @@ namespace DbfTest
                     string ch2send = ch2_checkBox.Checked ? "1" : "0";
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
+                    string tr = "0" + ch4send + "0" + ch2send + "0" + ch3send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
