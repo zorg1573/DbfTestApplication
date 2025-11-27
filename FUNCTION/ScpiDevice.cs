@@ -416,45 +416,58 @@ namespace DbfTest.FUNCTION
         /// <param name="freq">测试频率</param>
         /// <param name="pointIndex">目标点索引（从0开始）</param>
         /// <returns>该点的有效值，若多次采样仍无效则返回 double.NaN</returns>
-        public async Task<double> GetZaoshengPointAsync(double freq, int pointIndex)
+        public async Task<string[]> GetZaoshengPointAsync()
         {
-            double benZhen = freq - 175 * 1e6;
-            await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
-            await SendCommandAsync($":SENS:FREQ:CENT {freq}");
+            const int maxTry = 50; // 最多尝试次数
+            string[] finalValues = null;
 
-            const int maxTries = 10;
-            double validValue = double.NaN;
-
-            for (int attempt = 1; attempt <= maxTries; attempt++)
+            for (int n = 1; n <= maxTry; n++)
             {
                 await SendCommandAsync("INIT:IMM");
                 await Task.Delay(500);
                 string data = await QueryAsync("TRAC? TRACE1, NOISe");
                 await SendCommandAsync("*OPC");
-
                 if (string.IsNullOrWhiteSpace(data))
                     continue;
 
                 string[] parts = data.Split(',');
-                if (pointIndex >= parts.Length)
+                if (parts.Length == 0)
+                    continue;
+
+                if (finalValues == null)
+                    finalValues = new string[parts.Length];
+
+                for (int i = 0; i < parts.Length; i++)
                 {
-                    //LogToConsole($"⚠️ 点位索引 {pointIndex} 超出范围（最大 {parts.Length - 1}）。");
-                    return double.NaN;
+                    string raw = parts[i]?.Trim() ?? "";
+
+                    // ------- 判定是否有效 -------
+                    bool ok = double.TryParse(raw, out double v) &&
+                              !double.IsNaN(v) &&
+                              v != 0 &&
+                              Math.Abs(v - 9.9099995E+37) > 1e30 &&
+                              Math.Abs(v + 9.91E+37) > 1e30;
+
+                    if (ok)
+                        finalValues[i] = v.ToString();
                 }
 
-                if (double.TryParse(parts[pointIndex], out double val))
-                {
-                    if (!double.IsNaN(val) && Math.Abs(val - 9.9099995E+37) > 1e30 && val > 0)
-                    {
-                        validValue = val;
-                        break;
-                    }
-                }
+                // ------- 检查是否全部有效 -------
+                bool allValid = finalValues.All(s =>
+                    double.TryParse(s, out double v) &&
+                    !double.IsNaN(v) &&
+                    v > 0 &&
+                    Math.Abs(v - 9.9099995E+37) > 1e30 &&
+                    Math.Abs(v + 9.91E+37) > 1e30)
+                    ;
 
-                await Task.Delay(200);
+                if (allValid)
+                    return finalValues;
+
+                await Task.Delay(5000);
             }
 
-            return validValue;
+            return finalValues;
         }
 
         #endregion
@@ -490,7 +503,7 @@ namespace DbfTest.FUNCTION
         }
         public async Task ScanOnce0()
         {
-            await SendCommandAsync($":SENS4:SWE:MODE SINGle");
+            await SendCommandAsync($":SENS:SWE:MODE SINGle");
         }
         public async Task SendGainStart()
         {
@@ -570,7 +583,7 @@ namespace DbfTest.FUNCTION
         // 获取 S11 驻波比（VSWR）
         public async Task<string[]> GetInputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'CH1_S21_3'");
+            await SendCommandAsync("CALC:PAR:SEL 'CH1_S11_1'");
             await SendCommandAsync("CALC:FORM SWR");
             string data = await QueryAsync("CALC:DATA? FDATA");
             string[] parts = data?.Split(',');
@@ -579,7 +592,7 @@ namespace DbfTest.FUNCTION
         // 获取 S22 驻波比（VSWR）
         public async Task<string[]> GetOutputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'CH1_S11_1'");
+            await SendCommandAsync("CALC:PAR:SEL 'CH1_S22_3'");
             await SendCommandAsync("CALC:FORM SWR");
             string data = await QueryAsync("CALC:DATA? FDATA");
             string[] parts = data?.Split(',');

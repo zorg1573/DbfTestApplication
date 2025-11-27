@@ -315,8 +315,7 @@ namespace DbfTest
 
                 await Task.Delay(500);           // 等待设备稳定
                 await scpiDevice.ScanOnce0();
-                await scpiDevice.ScanOnce0();
-                await Task.Delay(800);
+                await Task.Delay(500);
                 string[] initial = await scpiDevice.GetPhase_Send();    // 初相（°）
 
                 // 转换为 double[]
@@ -654,7 +653,8 @@ namespace DbfTest
                 string[] inputVswr21 = ExtractStep100MHz(inputVswr);
                 string[] outputVswr21 = ExtractStep100MHz(outputVswr);
 
-
+                WriteArrayToExcelColumn(gain21, 2, sheetName);
+                WriteArrayToExcelColumn(initial21, 3, sheetName);
                 WriteArrayToExcelColumn(inputVswr21, 4, sheetName);
                 WriteArrayToExcelColumn(outputVswr21, 5, sheetName);
                 LogToConsole("写入Excel完成");
@@ -740,11 +740,9 @@ namespace DbfTest
                     return;
                 }
                 ScpiDevice pinpuDevice = new ScpiDevice();
-                ScpiDevice xinhaoBenzhenDevice = new ScpiDevice();
 
                 bool connected = await pinpuDevice.ConnectAsync(pinpuAddress);
-                bool connected2 = await xinhaoBenzhenDevice.ConnectAsync(vnaAddress);
-                if (!connected || !connected2)
+                if (!connected)
                 {
                     LogToConsole("连接失败");
                     return;
@@ -754,32 +752,15 @@ namespace DbfTest
                 double step = 0;
                 step = (stopFreq - startFreq) / (pointCount - 1);
 
-                await xinhaoBenzhenDevice.LoadStateFile("xinhaoyuan.csa");
-                await xinhaoBenzhenDevice.EnableOutput();
-
-                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STAT 1,'C:/R_S/Instr/user/QuickSave/dbfzaosheng.dfl'");
+                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STAT 1,'C:/R_S/Instr/user/QuickSave/kuzaosheng.dfl'");
                 await pinpuDevice.SendCommandAsync("*OPC");
 
-                for (int i = 0; i < pointCount; i++)
-                {
-                    double freqHz = startFreq + step * i;
-                    double freqGHz = freqHz / 1e9;
-                    freqArray[i] = freqGHz.ToString("F6");
-                    await xinhaoBenzhenDevice.SetCenterFrequencyAsync(freqHz - 175 * 1e6);
-                    await Task.Delay(500);
-                    double data = await pinpuDevice.GetZaoshengPointAsync(freqHz, 1);
-                    NFData[i] = data.ToString("F2");
+                string[] data = await pinpuDevice.GetZaoshengPointAsync();
 
-                    progressBar1.Value += 1;
-                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    label6.Refresh();
-                }
-                WriteZaoshengToMatchingFrequencyRows(freqArray, NFData, "测试结果");
+                WriteZaoshengToMatchingFrequencyRows(freqArray, data, "测试结果");
                 LogToConsole("噪声采集");
 
-                await xinhaoBenzhenDevice.DisableOutput();
                 pinpuDevice.Disconnect();
-                xinhaoBenzhenDevice.Disconnect();
                 await CloseCharge();
                 await CloseFPGA();
             }
@@ -2274,9 +2255,9 @@ namespace DbfTest
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
-                int powerColumn = 11;
-                int xiaolvColumn = 12;
-                int dingJiangColumn = 13;
+                int powerColumn = 14;
+                int xiaolvColumn = 15;
+                int dingJiangColumn = 16;
 
                 int usedRowCount = worksheet.UsedRange.Rows.Count;
 
@@ -2493,35 +2474,59 @@ namespace DbfTest
         }
         public void SubtractStandardAndWriteResult(string sheetName)
         {
-            LogToConsole("开始写入数据差值");
+            LogToConsole("开始写入数据差值（按目标频率点过滤）");
+
             var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             var workbook = excelApp.ActiveWorkbook;
             Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
 
-            int startCol = 2;  // 从第2列开始
+            int startCol = 2;
             int endCol = 65;
+
+            // 允许 0.01 GHz 的匹配误差（Excel 精度避免错误）
+            const double tolerance = 0.0001;
+
+            double step = (stopFreq - startFreq) / (pointCount - 1);
+            double[] selectedFreqGHz = Enumerable.Range(0, pointCount).Select(i => (startFreq + i * step) * 1e-9).ToArray();
 
             for (int col = startCol; col <= endCol; col++)
             {
-                // 获取标准值（第3行）
                 object standardObj = phaseSheet.Cells[3, col].Value;
                 if (standardObj == null || !double.TryParse(standardObj.ToString(), out double standardValue))
-                    continue; // 跳过该列
+                    continue;
 
-                // 遍历第4~154行
+                // 遍历所有频率行（第 4 到 204 行）
                 for (int row = 4; row <= 204; row++)
                 {
-                    object cellValueObj = phaseSheet.Cells[row, col].Value;
-                    if (cellValueObj != null && double.TryParse(cellValueObj.ToString(), out double measuredValue))
+                    // A 列（第 1 列）存频率
+                    object freqObj = phaseSheet.Cells[row, 1].Value;
+
+                    if (freqObj == null || !double.TryParse(freqObj.ToString(), out double freqGHz))
+                        continue;
+
+                    // ⭐ 判断该行频率是否在目标频率列表中
+                    bool isTargetFreq =
+                        selectedFreqGHz.Any(f => Math.Abs(f - freqGHz) < tolerance);
+
+                    if (!isTargetFreq)
+                        continue; // 跳过非目标频率
+
+                    // 处理有效相位
+                    object cellValObj = phaseSheet.Cells[row, col].Value;
+
+                    if (cellValObj != null &&
+                        double.TryParse(cellValObj.ToString(), out double measuredValue))
                     {
                         double result = measuredValue - standardValue;
+
+                        // 对应写入 209+(row-4)
                         int targetRow = 209 + (row - 4);
                         phaseSheet.Cells[targetRow, col].Value = result;
                     }
                 }
             }
 
-            LogToConsole("数据差值写入完成");
+            LogToConsole("差值写入完成（已按目标频率点过滤）");
         }
         public void SubtractStandardAndWriteResult_Jieshou(string sheetName)
         {
@@ -3241,7 +3246,7 @@ namespace DbfTest
                     string ch2recieve = ch2_checkBox.Checked ? "1" : "0";
                     string ch3recieve = ch3_checkBox.Checked ? "1" : "0";
                     string ch4recieve = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = ch4recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch1recieve + "0";
+                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3292,7 +3297,7 @@ namespace DbfTest
                     string ch2send = ch2_checkBox.Checked ? "1" : "0";
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = "0" + ch4send + "0" + ch2send + "0" + ch3send + "0" + ch1send;
+                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3392,7 +3397,7 @@ namespace DbfTest
                     string ch3recieve = ch3_checkBox.Checked ? "1" : "0";
                     string ch4recieve = ch4_checkBox.Checked ? "1" : "0";
 
-                    string tr = ch4recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch1recieve + "0";
+                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3445,7 +3450,7 @@ namespace DbfTest
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
 
-                    string tr = "0" + ch4send + "0" + ch2send + "0" + ch3send + "0" + ch1send;
+                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3971,21 +3976,21 @@ namespace DbfTest
 
         private async void button13_Click(object sender, EventArgs e)
         {
-            /*            ScpiDevice scpiDevice = new ScpiDevice();
+            ScpiDevice scpiDevice = new ScpiDevice();
 
-                        bool connected = await scpiDevice.ConnectAsync(vnaAddress);
-                        if (!connected)
-                        {
-                            LogToConsole("矢网连接失败");
-                            return;
-                        }
-                        string ans = await scpiDevice.QueryAsync(":CALC1:PAR:CAT?");
-                        LogToConsole(ans);
+            bool connected = await scpiDevice.ConnectAsync(vnaAddress);
+            if (!connected)
+            {
+                LogToConsole("矢网连接失败");
+                return;
+            }
+            string ans = await scpiDevice.QueryAsync(":CALC1:PAR:CAT?");
+            LogToConsole(ans);
 
-                        await scpiDevice.SendCommandAsync($"CALC:PAR:SEL 'CH1_S22_4'");
+            //await scpiDevice.SendCommandAsync($"CALC:PAR:SEL 'CH1_S22_4'");
 
-                        scpiDevice.Disconnect();*/
-            CalculatePhaseAccuracyAndWriteToExcel($"接收通道衰减精度测试结果1", 1);
+            scpiDevice.Disconnect();
+            //CalculatePhaseAccuracyAndWriteToExcel($"接收通道衰减精度测试结果1", 1);
         }
 
 
