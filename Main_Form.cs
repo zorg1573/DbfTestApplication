@@ -7,6 +7,7 @@ using MetroFramework.Forms;
 using PacketDotNet;
 using SharpPcap;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -69,7 +70,22 @@ namespace DbfTest
             GetDeviceFilesJson();
             GetTestSetNewJson();
             InitializeDSO();
+            StartExcelWorker();
 
+        }
+        private void StartExcelWorker()
+        {
+            Task.Run(async () =>
+            {
+                foreach (var task in _excelTaskQueue.GetConsumingEnumerable())
+                {
+                    // 回 UI 线程执行 Excel 操作
+                    await this.InvokeAsync(async () =>
+                    {
+                        await task();
+                    });
+                }
+            });
         }
 
         #region 发射测试
@@ -229,8 +245,9 @@ namespace DbfTest
                     xiaolvString[i] = PowerWatt * 0.2 / chargePower * 10 + "%"; // 计算效率百分比
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
 
                     //main_DAL.UpdateTestDataFreq_DT(ch, componentName, double.Parse(freqArray[i]), double.Parse(compensatedPowerString[i]));
                 }
@@ -333,6 +350,7 @@ namespace DbfTest
     {-348.750, "110111"},
     {-354.375, "111111"}
 };
+        private readonly BlockingCollection<Func<Task>> _excelTaskQueue = new BlockingCollection<Func<Task>>();
         private async void button9_Click(object sender, EventArgs e)
         {
             LogToConsole("开始移相精度测试...");
@@ -442,7 +460,6 @@ namespace DbfTest
 
                 await Task.Delay(500);           // 等待设备稳定
                 await scpiDevice.ScanOnce0();
-                await scpiDevice.ScanOnce0();
                 await Task.Delay(500);
                 string[] initial = await scpiDevice.GetPhase_Send();    // 初相（°）
 
@@ -485,8 +502,9 @@ namespace DbfTest
                 //unwrappedPhases.Add(currentPhase.ToArray());
 
                 num++;
-                progressBar1.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
-                progressBar1.Refresh();
+                progressBar1.Value++;
+                label6.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
+                label6.Refresh();
             }
 
             await scpiDevice.DisableOutput();
@@ -495,17 +513,21 @@ namespace DbfTest
             await CloseCharge(); // 电源关电
 
             // 写入解包后的初相（第 i + 2 列）
-            for (int i = 0; i < unwrappedPhases.Count; i++)
+            _excelTaskQueue.Add(async () =>
             {
-                string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
-                WriteArrayToExcelColumn_New(phaseStrings, i + 2, "发射通道相移精度测试结果");
+                for (int i = 0; i < unwrappedPhases.Count; i++)
+                {
+                    string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
+                    WriteArrayToExcelColumn_New(phaseStrings, i + 2, "发射通道相移精度测试结果");
 
-                num++;
-                progressBar1.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
-                progressBar1.Refresh();
-            }
-            SubtractStandardAndWriteResult("发射通道相移精度测试结果");
-            CalculatePhaseAccuracyAndWriteToExcel("发射通道相移精度测试结果", chNum);
+                    num++;
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
+                    label6.Refresh();
+                }
+                SubtractStandardAndWriteResult("发射通道相移精度测试结果");
+                CalculatePhaseAccuracyAndWriteToExcel("发射通道相移精度测试结果", chNum);
+            });
         }
         /// <summary>
         /// 杂散抑制
@@ -523,7 +545,7 @@ namespace DbfTest
                 int chNum = 0;
 
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount * 3;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -629,8 +651,9 @@ namespace DbfTest
                     zhupuP[i] = power;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 // 1. 加载状态文件
                 await pinpuDevice.LoadPinpuStateAsync(pinpuDaiwaiyizhiPath);
@@ -678,8 +701,9 @@ namespace DbfTest
                     dwyzP[i] = Math.Max(power1, power2);
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 for (int i = 0; i < pointCount; i++)
                 {
@@ -688,8 +712,9 @@ namespace DbfTest
                     LogToConsole("发射抑制测试:" + freqArray[i] + ": " + zhupuP[i] + " - " + dwyzP[i] + " = " + result);
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 //fasheYizhi = await GetFasheyizhiAsync(freqArray);
@@ -853,7 +878,7 @@ namespace DbfTest
                     gain[i] = (markPower + 40).ToString("F2");
 
                     num++;
-                    progressBar1.Value += 1;
+                    progressBar1.Value ++;
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -953,8 +978,9 @@ namespace DbfTest
                     NFData[i] = data.ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 WriteZaoshengToMatchingFrequencyRows(freqArray, NFData, "测试结果");
                 LogToConsole("噪声采集");
@@ -991,7 +1017,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount*3;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -1102,8 +1128,9 @@ namespace DbfTest
                     found[i] = false;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 // 2. 增加功率，查找压缩点
                 for (int i = 0; i < pointCount; i++)
@@ -1131,8 +1158,9 @@ namespace DbfTest
                     }
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 for (int i = 0; i < pointCount; i++)
@@ -1152,8 +1180,9 @@ namespace DbfTest
                     pset[i] = (markPower + 40).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -1192,7 +1221,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount*2;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -1296,8 +1325,9 @@ namespace DbfTest
                     refGains[i] = markPower;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 // 2. 增加功率，查找压缩点
@@ -1319,8 +1349,9 @@ namespace DbfTest
                     jpyz[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -1473,8 +1504,9 @@ namespace DbfTest
                     m45[i] = (Math.Min(markPower2, markPower3) - markPower).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -1592,7 +1624,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            progressBar1.Maximum = pointCount;
+            progressBar1.Maximum = pointCount*64;
             progressBar1.Value = 0;
 
             double step = (stopFreq - startFreq) / (pointCount - 1);
@@ -1658,8 +1690,9 @@ namespace DbfTest
                     gain[i] = markPower;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
                 unwrappedPhases.Add(gain);
             }
@@ -1675,13 +1708,16 @@ namespace DbfTest
             await CloseCharge(); // 电源关电
 
             // 写入解包后的初相（第 i + 2 列）
-            for (int i = 0; i < unwrappedPhases.Count; i++)
+            _excelTaskQueue.Add(async () =>
             {
-                string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
-                WriteArrayToExcelColumn_New(phaseStrings, i + 2, $"接收通道衰减精度测试结果{chNum}");
-            }
-            SubtractStandardAndWriteResult_Jieshou($"接收通道衰减精度测试结果{chNum}");
-            //CalculatePhaseAccuracyAndWriteToExcel_Jieshou($"接收通道衰减精度测试结果{chNum}");
+                for (int i = 0; i < unwrappedPhases.Count; i++)
+                {
+                    string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
+                    WriteArrayToExcelColumn_New(phaseStrings, i + 2, $"接收通道衰减精度测试结果{chNum}");
+                }
+                SubtractStandardAndWriteResult_Jieshou($"接收通道衰减精度测试结果{chNum}");
+                //CalculatePhaseAccuracyAndWriteToExcel_Jieshou($"接收通道衰减精度测试结果{chNum}");
+            });
         }
         /// <summary>
         /// MGC
@@ -3075,35 +3111,88 @@ namespace DbfTest
         }
         public void SubtractStandardAndWriteResult(string sheetName)
         {
-            LogToConsole("开始写入数据差值");
+            /*            LogToConsole("开始写入数据差值");
+                        var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                        var workbook = excelApp.ActiveWorkbook;
+                        Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
+
+                        int startCol = 2;  // 从第2列开始
+                        int endCol = 65;
+
+                        for (int col = startCol; col <= endCol; col++)
+                        {
+                            // 获取标准值（第3行）
+                            object standardObj = phaseSheet.Cells[3, col].Value;
+                            if (standardObj == null || !double.TryParse(standardObj.ToString(), out double standardValue))
+                                continue; // 跳过该列
+
+                            // 遍历第4~154行
+                            for (int row = 4; row <= 124; row++)
+                            {
+                                object cellValueObj = phaseSheet.Cells[row, col].Value;
+                                if (cellValueObj != null && double.TryParse(cellValueObj.ToString(), out double measuredValue))
+                                {
+                                    double result = measuredValue - standardValue;
+                                    int targetRow = 131 + (row - 4);
+                                    phaseSheet.Cells[targetRow, col].Value = result;
+                                }
+                            }
+                        }
+
+                        LogToConsole("数据差值写入完成");*/
+            LogToConsole("开始写入数据差值（按目标频率点过滤）");
+
             var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
             var workbook = excelApp.ActiveWorkbook;
             Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
 
-            int startCol = 2;  // 从第2列开始
+            int startCol = 2;
             int endCol = 65;
+
+            // 允许 0.01 GHz 的匹配误差（Excel 精度避免错误）
+            const double tolerance = 0.0001;
+
+            double step = (stopFreq - startFreq) / (pointCount - 1);
+            double[] selectedFreqGHz = Enumerable.Range(0, pointCount).Select(i => (startFreq + i * step) * 1e-9).ToArray();
 
             for (int col = startCol; col <= endCol; col++)
             {
-                // 获取标准值（第3行）
                 object standardObj = phaseSheet.Cells[3, col].Value;
                 if (standardObj == null || !double.TryParse(standardObj.ToString(), out double standardValue))
-                    continue; // 跳过该列
+                    continue;
 
-                // 遍历第4~154行
+                // 遍历所有频率行（第 4 到 124 行）
                 for (int row = 4; row <= 124; row++)
                 {
-                    object cellValueObj = phaseSheet.Cells[row, col].Value;
-                    if (cellValueObj != null && double.TryParse(cellValueObj.ToString(), out double measuredValue))
+                    // A 列（第 1 列）存频率
+                    object freqObj = phaseSheet.Cells[row, 1].Value;
+
+                    if (freqObj == null || !double.TryParse(freqObj.ToString(), out double freqGHz))
+                        continue;
+
+                    // ⭐ 判断该行频率是否在目标频率列表中
+                    bool isTargetFreq =
+                        selectedFreqGHz.Any(f => Math.Abs(f - freqGHz) < tolerance);
+
+                    if (!isTargetFreq)
+                        continue; // 跳过非目标频率
+
+                    // 处理有效相位
+                    object cellValObj = phaseSheet.Cells[row, col].Value;
+
+                    if (cellValObj != null &&
+                        double.TryParse(cellValObj.ToString(), out double measuredValue))
                     {
                         double result = measuredValue - standardValue;
+
+                        // 对应写入 209+(row-4)
                         int targetRow = 131 + (row - 4);
                         phaseSheet.Cells[targetRow, col].Value = result;
                     }
                 }
             }
 
-            LogToConsole("数据差值写入完成");
+            LogToConsole("差值写入完成（已按目标频率点过滤）");
         }
         public void SubtractStandardAndWriteResult_Jieshou(string sheetName)
         {
