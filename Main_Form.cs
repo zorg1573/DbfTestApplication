@@ -1624,7 +1624,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            progressBar1.Maximum = pointCount*64;
+            progressBar1.Maximum = pointCount * 64;
             progressBar1.Value = 0;
 
             double step = (stopFreq - startFreq) / (pointCount - 1);
@@ -2103,7 +2103,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount * 3;
                 progressBar1.Value = 0;
 
                 if (ch1_checkBox.Checked)
@@ -2269,8 +2269,9 @@ namespace DbfTest
                     m40[i] = (markPower - Math.Min(markPower4, markPower5)).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 for (int i = 0; i < pointCount; i++)
@@ -2291,8 +2292,9 @@ namespace DbfTest
                     jpyz[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 string ch1send = ch1_checkBox.Checked ? "1" : "0";
@@ -2337,8 +2339,9 @@ namespace DbfTest
                     mgc[i] = refGains2[i].ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
 
