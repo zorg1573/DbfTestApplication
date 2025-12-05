@@ -363,7 +363,7 @@ namespace DbfTest
             int chNum = 0;
 
             int num = 0;
-            progressBar1.Maximum = pointCount;
+            progressBar1.Maximum = 64;
             progressBar1.Value = 0;
 
 
@@ -442,17 +442,17 @@ namespace DbfTest
                 string ch6send = ch6_checkBox.Checked ? "1" : "0";
                 string ch7send = ch7_checkBox.Checked ? "1" : "0";
                 string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = ch1send + bitString;
-                string ch2 = ch2send + bitString;
-                string ch3 = ch3send + bitString;
-                string ch4 = ch4send + bitString;
-                string ch5 = ch5send + bitString;
-                string ch6 = ch6send + bitString;
-                string ch7 = ch7send + bitString;
-                string ch8 = ch8send + bitString;
+                string ch1 = new string('0', 28) + "00" + "0" + bitString + "000000" + "000000" + "000000" + ch1send;
+                string ch2 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch2send;
+                string ch3 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch3send;
+                string ch4 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch4send;
+                string ch5 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch5send;
+                string ch6 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch6send;
+                string ch7 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch7send;
+                string ch8 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch8send;
                 string model = "00";
                 string model_stc = model + "000000" + "0";
-                string buling = new string('0', 55);
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 01 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -503,7 +503,7 @@ namespace DbfTest
 
                 num++;
                 progressBar1.Value++;
-                label6.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
+                label6.Text = ((double)num / 64 * 100).ToString("f2") + "%";
                 label6.Refresh();
             }
 
@@ -519,11 +519,6 @@ namespace DbfTest
                 {
                     string[] phaseStrings = unwrappedPhases[i].Select(v => v.ToString()).ToArray();
                     WriteArrayToExcelColumn_New(phaseStrings, i + 2, "发射通道相移精度测试结果");
-
-                    num++;
-                    progressBar1.Value++;
-                    label6.Text = ((double)num / (64 + unwrappedPhases.Count) * 100).ToString("f2") + "%";
-                    label6.Refresh();
                 }
                 SubtractStandardAndWriteResult("发射通道相移精度测试结果");
                 CalculatePhaseAccuracyAndWriteToExcel("发射通道相移精度测试结果", chNum);
@@ -1635,25 +1630,25 @@ namespace DbfTest
                 string numToString = ToSixBitBinaryString(idx);
 
                 LogToConsole("idx:" + idx + ",bitString:" + numToString);
-                string ch1send = ch1_checkBox.Checked ? "1" : "0";
-                string ch2send = ch2_checkBox.Checked ? "1" : "0";
-                string ch3send = ch3_checkBox.Checked ? "1" : "0";
-                string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                string ch5send = ch5_checkBox.Checked ? "1" : "0";
-                string ch6send = ch6_checkBox.Checked ? "1" : "0";
-                string ch7send = ch7_checkBox.Checked ? "1" : "0";
-                string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = ch1send + "000000";
-                string ch2 = ch2send + "000000";
-                string ch3 = ch3send + "000000";
-                string ch4 = ch4send + "000000";
-                string ch5 = ch5send + "000000";
-                string ch6 = ch6send + "000000";
-                string ch7 = ch7send + "000000";
-                string ch8 = ch8send + "000000";
+                string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
                 string model_stc = model + numToString + "0";
-                string buling = new string('0', 55);
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -1734,7 +1729,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
+                progressBar1.Maximum = pointCount*2;
                 progressBar1.Value = 0;
 
 
@@ -1844,28 +1839,29 @@ namespace DbfTest
                     refGains[i] = markPower;
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
-                string ch1send = ch1_checkBox.Checked ? "1" : "0";
-                string ch2send = ch2_checkBox.Checked ? "1" : "0";
-                string ch3send = ch3_checkBox.Checked ? "1" : "0";
-                string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                string ch5send = ch5_checkBox.Checked ? "1" : "0";
-                string ch6send = ch6_checkBox.Checked ? "1" : "0";
-                string ch7send = ch7_checkBox.Checked ? "1" : "0";
-                string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = ch1send + "000000";
-                string ch2 = ch2send + "000000";
-                string ch3 = ch3send + "000000";
-                string ch4 = ch4send + "000000";
-                string ch5 = ch5send + "000000";
-                string ch6 = ch6send + "000000";
-                string ch7 = ch7send + "000000";
-                string ch8 = ch8send + "000000";
+                string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
                 string model_stc = model + "000000" + "1";
-                string buling = new string('0', 55);
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -1889,8 +1885,9 @@ namespace DbfTest
                     mgc[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -2067,8 +2064,9 @@ namespace DbfTest
                     m40[i] = (markPower - Math.Min(markPower4, markPower5)).ToString("F2");
 
                     num++;
-                    progressBar1.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
-                    progressBar1.Refresh();
+                    progressBar1.Value++;
+                    label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
+                    label6.Refresh();
                 }
 
                 xinhaoDevice.Disconnect();
@@ -2297,22 +2295,22 @@ namespace DbfTest
                     label6.Refresh();
                 }
 
-                string ch1send = ch1_checkBox.Checked ? "1" : "0";
-                string ch2send = ch2_checkBox.Checked ? "1" : "0";
-                string ch3send = ch3_checkBox.Checked ? "1" : "0";
-                string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                string ch5send = ch5_checkBox.Checked ? "1" : "0";
-                string ch6send = ch6_checkBox.Checked ? "1" : "0";
-                string ch7send = ch7_checkBox.Checked ? "1" : "0";
-                string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = ch1send + "000000";
-                string ch2 = ch2send + "000000";
-                string ch3 = ch3send + "000000";
-                string ch4 = ch4send + "000000";
-                string ch5 = ch5send + "000000";
-                string ch6 = ch6send + "000000";
-                string ch7 = ch7send + "000000";
-                string ch8 = ch8send + "000000";
+                string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
                 string model_stc = model + "000000" + "1";
                 string buling = new string('0', 55);
@@ -3689,7 +3687,7 @@ namespace DbfTest
             /*            if (bitStrings.Length != 10)
                             throw new ArgumentException("应包含10个通道的比特串");*/
 
-            int[] expectedLengths = { 7, 7, 7, 7, 7, 7, 7, 7, 9, 55 };
+            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59 };
             string allBits = "";
 
             for (int i = 0; i < 10; i++)
@@ -3701,12 +3699,12 @@ namespace DbfTest
                 allBits += bits;
             }
 
-            if (allBits.Length != 120)
-                throw new ArgumentException($"总位数应为120，但现在是 {allBits.Length}");
+            if (allBits.Length != 320)
+                throw new ArgumentException($"总位数应为320，但现在是 {allBits.Length}");
 
             // 输出 15 字节（120 位）
-            byte[] codeBytes = new byte[15];
-            for (int i = 0; i < 15; i++)
+            byte[] codeBytes = new byte[40];
+            for (int i = 0; i < 40; i++)
             {
                 string byteStr = allBits.Substring(i * 8, 8);
                 codeBytes[i] = Convert.ToByte(byteStr, 2);
@@ -3738,16 +3736,16 @@ namespace DbfTest
         {
             await Task.Run(() =>
             {
-                string ch1 = "0" + "000000";
-                string ch2 = "0" + "000000";
-                string ch3 = "0" + "000000";
-                string ch4 = "0" + "000000";
-                string ch5 = "0" + "000000";
-                string ch6 = "0" + "000000";
-                string ch7 = "0" + "000000";
-                string ch8 = "0" + "000000";
+                string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
                 string model_stc = "01" + "000000" + "0";
-                string buling = new string('0', 55);
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 03 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -3768,17 +3766,18 @@ namespace DbfTest
                     string ch6recive = ch6_checkBox.Checked ? "1" : "0";
                     string ch7recive = ch7_checkBox.Checked ? "1" : "0";
                     string ch8recive = ch8_checkBox.Checked ? "1" : "0";
-                    string ch1 = ch1recive + new string('0', 6);
-                    string ch2 = ch2recive + new string('0', 6);
-                    string ch3 = ch3recive + new string('0', 6);
-                    string ch4 = ch4recive + new string('0', 6);
-                    string ch5 = ch5recive + new string('0', 6);
-                    string ch6 = ch6recive + new string('0', 6);
-                    string ch7 = ch7recive + new string('0', 6);
-                    string ch8 = ch8recive + new string('0', 6);
-                    string model_stc = "10" + "000000" + "0";
-                    byte[] modelValue = StringToByteArray("01 03 02 00");
-                    string buling = new string('0', 55);
+                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model = "10";
+                    string model_stc = model + "000000" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
                     string chSum = "";
                     if (ch1_checkBox.Checked)
@@ -3841,17 +3840,18 @@ namespace DbfTest
                     string ch6send = ch6_checkBox.Checked ? "1" : "0";
                     string ch7send = ch7_checkBox.Checked ? "1" : "0";
                     string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                    string ch1 = ch1send + new string('0', 6);
-                    string ch2 = ch2send + new string('0', 6);
-                    string ch3 = ch3send + new string('0', 6);
-                    string ch4 = ch4send + new string('0', 6);
-                    string ch5 = ch5send + new string('0', 6);
-                    string ch6 = ch6send + new string('0', 6);
-                    string ch7 = ch7send + new string('0', 6);
-                    string ch8 = ch8send + new string('0', 6);
-                    string model_stc = "00" + "000000" + "0";
-                    byte[] modelValue = StringToByteArray("01 03 01 00");
-                    string buling = new string('0', 55);
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch1send;
+                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch2send;
+                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch3send;
+                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch4send;
+                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch5send;
+                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch6send;
+                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch7send;
+                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch8send;
+                    string model = "00";
+                    string model_stc = model + "000000" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
                     string chSum = "";
                     if (ch1_checkBox.Checked)
@@ -3912,16 +3912,16 @@ namespace DbfTest
                 try
                 {
                     LogToConsole("切换至负载态");
-                    string ch1 = "0" + "000000";
-                    string ch2 = "0" + "000000";
-                    string ch3 = "0" + "000000";
-                    string ch4 = "0" + "000000";
-                    string ch5 = "0" + "000000";
-                    string ch6 = "0" + "000000";
-                    string ch7 = "0" + "000000";
-                    string ch8 = "0" + "000000";
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
                     string model_stc = "01" + "000000" + "0";
-                    string buling = new string('0', 55);
+                    string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 03 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -4108,17 +4108,6 @@ namespace DbfTest
                     return;
                 }
 
-                // 构建 testChannel
-                string testChannel = "";
-                if (ch1_checkBox.Checked) testChannel = "ch1";
-                if (ch2_checkBox.Checked) testChannel = "ch2";
-                if (ch3_checkBox.Checked) testChannel = "ch3";
-                if (ch4_checkBox.Checked) testChannel = "ch4";
-                if (ch1_checkBox.Checked) testChannel = "ch5";
-                if (ch2_checkBox.Checked) testChannel = "ch6";
-                if (ch3_checkBox.Checked) testChannel = "ch7";
-                if (ch4_checkBox.Checked) testChannel = "ch8";
-
                 string testComponent = componentName_textBox.Text ?? "component";
                 string testType = testType_comboBox.Text ?? "";
                 string timestamp = DateTime.Now.ToString("yyyy.MM.dd.HHmmss");
@@ -4166,7 +4155,7 @@ namespace DbfTest
                 }
 
                 // 构造安全的文件名（移除文件名中非法字符）
-                string rawFileName = $"{testComponent}{testChannel}_高低温{testType}_{timestamp}";
+                string rawFileName = $"{testComponent}_高低温{testType}_{timestamp}";
                 var invalidChars = Path.GetInvalidFileNameChars();
                 foreach (var c in invalidChars)
                 {
