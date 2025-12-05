@@ -66,6 +66,7 @@ namespace DbfTest
             testType_comboBox.SelectedIndex = 0;
             operator_textBox.Text = "操作员";
             componentName_textBox.Text = "DBF";
+            jsbc_textBox.Text = "60";
             GetAddress();
             GetDeviceFilesJson();
             GetTestSetNewJson();
@@ -430,34 +431,34 @@ namespace DbfTest
             for (int idx = 0; idx < 64; idx++)
             {
 
-                double targetPhase = -idx * 5.625;
-                string bitString = new string(phaseToBits[targetPhase].Reverse().ToArray());
+                /*                double targetPhase = -idx * 5.625;
+                                string bitString = new string(phaseToBits[targetPhase].Reverse().ToArray());
 
-                LogToConsole("idx:" + idx + ",targetPhase:" + targetPhase + ",bitString:" + bitString);
-                string ch1send = ch1_checkBox.Checked ? "1" : "0";
-                string ch2send = ch2_checkBox.Checked ? "1" : "0";
-                string ch3send = ch3_checkBox.Checked ? "1" : "0";
-                string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                string ch5send = ch5_checkBox.Checked ? "1" : "0";
-                string ch6send = ch6_checkBox.Checked ? "1" : "0";
-                string ch7send = ch7_checkBox.Checked ? "1" : "0";
-                string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = new string('0', 28) + "00" + "0" + bitString + "000000" + "000000" + "000000" + ch1send;
-                string ch2 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch2send;
-                string ch3 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch3send;
-                string ch4 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch4send;
-                string ch5 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch5send;
-                string ch6 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch6send;
-                string ch7 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch7send;
-                string ch8 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch8send;
-                string model = "00";
-                string model_stc = model + "000000" + "0";
-                string buling = new string('0', 59);
-                modelValue = StringToByteArray("01 03 01 00");
-                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                                LogToConsole("idx:" + idx + ",targetPhase:" + targetPhase + ",bitString:" + bitString);
+                                string ch1send = ch1_checkBox.Checked ? "1" : "0";
+                                string ch2send = ch2_checkBox.Checked ? "1" : "0";
+                                string ch3send = ch3_checkBox.Checked ? "1" : "0";
+                                string ch4send = ch4_checkBox.Checked ? "1" : "0";
+                                string ch5send = ch5_checkBox.Checked ? "1" : "0";
+                                string ch6send = ch6_checkBox.Checked ? "1" : "0";
+                                string ch7send = ch7_checkBox.Checked ? "1" : "0";
+                                string ch8send = ch8_checkBox.Checked ? "1" : "0";
+                                string ch1 = new string('0', 28) + "00" + "0" + bitString + "000000" + "000000" + "000000" + ch1send;
+                                string ch2 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch2send;
+                                string ch3 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch3send;
+                                string ch4 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch4send;
+                                string ch5 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch5send;
+                                string ch6 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch6send;
+                                string ch7 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch7send;
+                                string ch8 = "00" + "0" + bitString + "000000" + "000000" + "000000" + ch8send;
+                                string model = "00";
+                                string model_stc = model + "000000" + "0";
+                                string buling = new string('0', 59);
+                                modelValue = StringToByteArray("01 03 01 00");
+                                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
-                SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
-
+                                SendCustomPacket(headValue, modelValue, emptyValue, codeValue);*/
+                await SendTestUDP(idx, "移相");
                 await Task.Delay(500);           // 等待设备稳定
                 await scpiDevice.ScanOnce0();
                 await Task.Delay(500);
@@ -605,7 +606,7 @@ namespace DbfTest
                 await signalGen.EnableOutput(); // 打开信号源输出
 
                 // 1. 加载状态文件（仅一次）
-                await pinpuDevice.LoadPinpuStateAsync(pinpuZhupuStatePath);
+                await pinpuDevice.LoadPinpuStateAsync("C:\\R_S\\Instr\\user\\QuickSave\\zhupu.dfl");
                 await Task.Delay(2000); // 延时保证设备稳定
                 for (int i = 0; i < pointCount; i++)
                 {
@@ -647,7 +648,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 // 1. 加载状态文件
@@ -697,7 +698,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 for (int i = 0; i < pointCount; i++)
@@ -708,7 +709,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -870,7 +871,7 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     await Task.Delay(200); // 让设备处理
                     //gain[i] = (markPower + compensationTable[freqGHz]).ToString("F2");
-                    gain[i] = (markPower + 40).ToString("F2");
+                    gain[i] = (markPower + double.Parse(jsbc_textBox.Text)).ToString("F2");
 
                     num++;
                     progressBar1.Value ++;
@@ -1124,7 +1125,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 // 2. 增加功率，查找压缩点
@@ -1147,14 +1148,14 @@ namespace DbfTest
                         if ((power + 60) - (markPower - refGains[i]) > 1)
                         {
                             //yasuodian[i] = (markPower+ compensationTable[freqGHz]).ToString("F2");
-                            yasuodian[i] = (markPower + 20).ToString("F2");
+                            yasuodian[i] = (markPower).ToString("F2");
                             found[i] = true;
                         }
                     }
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -1172,11 +1173,11 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     //pset[i] = (markPower + compensationTable[freqGHz]).ToString("F2");
-                    pset[i] = (markPower + 40).ToString("F2");
+                    pset[i] = markPower.ToString("F2");
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -1321,7 +1322,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -1345,7 +1346,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -1627,7 +1628,7 @@ namespace DbfTest
 
             for (int idx = 0; idx < 64; idx++)
             {
-                string numToString = ToSixBitBinaryString(idx);
+                string numToString = ToSixBitBinaryString2(idx);
 
                 LogToConsole("idx:" + idx + ",bitString:" + numToString);
                 string ch1recive = ch1_checkBox.Checked ? "1" : "0";
@@ -1686,7 +1687,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 64 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 64) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 unwrappedPhases.Add(gain);
@@ -1840,7 +1841,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 string ch1recive = ch1_checkBox.Checked ? "1" : "0";
@@ -1886,7 +1887,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 2 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -2236,7 +2237,7 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync(1) ?? double.NaN;
                     markPower6 = await pinpuDevice.ReadMarkerPowerAsync(6) ?? double.NaN;
                     markPower7 = await pinpuDevice.ReadMarkerPowerAsync(7) ?? double.NaN;
-                    gain[i] = (markPower + 40).ToString("F2");
+                    gain[i] = (markPower + 60).ToString("F2");
                     refGains[i] = markPower;
                     refGains2[i] = markPower;
 
@@ -2478,6 +2479,18 @@ namespace DbfTest
             return Math.Pow(10, (dBm / 10.0));
         }
         public string ToSixBitBinaryString(int number)
+        {
+            if (number < 0 || number > 63)
+                throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
+
+            //return Convert.ToString(number, 2).PadLeft(6, '0');
+            string binary = Convert.ToString(number, 2).PadLeft(6, '0');
+            char[] reversed = binary.ToCharArray();
+            Array.Reverse(reversed);
+            return new string(reversed);
+            //return binary;
+        }
+        public string ToSixBitBinaryString2(int number)
         {
             if (number < 0 || number > 63)
                 throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
@@ -3897,6 +3910,62 @@ namespace DbfTest
 
                     operateLog_DAL.InsertOperateLog_DT("发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}", operator_textBox.Text);
 
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole("发射测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("发射测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
+        }
+        private async Task SendTestUDP(int num, string yixiangOrshuaijian)
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    // 获取勾选的通道数量
+                    int selectedCount = 0;
+                    if (ch1_checkBox.Checked) selectedCount++;
+                    if (ch2_checkBox.Checked) selectedCount++;
+                    if (ch3_checkBox.Checked) selectedCount++;
+                    if (ch4_checkBox.Checked) selectedCount++;
+                    if (ch5_checkBox.Checked) selectedCount++;
+                    if (ch6_checkBox.Checked) selectedCount++;
+                    if (ch7_checkBox.Checked) selectedCount++;
+                    if (ch8_checkBox.Checked) selectedCount++;
+
+                    // 判断是否仅选择一个
+                    if (selectedCount != 1)
+                    {
+                        MessageBox.Show("请只选择一个接收通道！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // 终止方法
+                    }
+                    string numToString = ToSixBitBinaryString(num);
+                    // 分别设置通道值
+                    string ch1send = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2send = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3send = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4send = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5send = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6send = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7send = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8send = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + "0" + numToString + "000000" + "000000" + "000000" + ch1send;
+                    string ch2 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch2send;
+                    string ch3 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch3send;
+                    string ch4 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch4send;
+                    string ch5 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch5send;
+                    string ch6 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch6send;
+                    string ch7 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch7send;
+                    string ch8 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch8send;
+                    string model = "00";
+                    string model_stc = model + "000000" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 01 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+                    LogToConsole(numToString);
                 }
                 catch (Exception ex)
                 {

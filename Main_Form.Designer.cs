@@ -99,6 +99,8 @@
             this.button13 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.console_textBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.jsbc_textBox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -622,6 +624,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.jsbc_textBox);
             this.panel1.Controls.Add(this.rf_checkBox);
             this.panel1.Controls.Add(this.mod_checkBox);
             this.panel1.Controls.Add(this.label8);
@@ -926,8 +930,27 @@
             this.console_textBox.Location = new System.Drawing.Point(0, 0);
             this.console_textBox.Multiline = true;
             this.console_textBox.Name = "console_textBox";
+            this.console_textBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.console_textBox.Size = new System.Drawing.Size(1139, 74);
             this.console_textBox.TabIndex = 0;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(952, 7);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(90, 21);
+            this.label9.TabIndex = 116;
+            this.label9.Text = "接收补偿：";
+            // 
+            // jsbc_textBox
+            // 
+            this.jsbc_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.jsbc_textBox.Location = new System.Drawing.Point(1045, 8);
+            this.jsbc_textBox.Name = "jsbc_textBox";
+            this.jsbc_textBox.Size = new System.Drawing.Size(88, 29);
+            this.jsbc_textBox.TabIndex = 117;
             // 
             // Main_Form
             // 
@@ -1035,5 +1058,7 @@
         private System.Windows.Forms.CheckBox mod_checkBox;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox console_textBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox jsbc_textBox;
     }
 }
