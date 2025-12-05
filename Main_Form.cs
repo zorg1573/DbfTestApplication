@@ -220,9 +220,9 @@ namespace DbfTest
                     await powerMeter.SendCommandAsync($":SENS:FREQ {freqHz}");
                     await powerMeter.SendCommandAsync(":INIT:IMM");         // 开始测量
                     await powerMeter.SendCommandAsync("*WAI");              // 等待测量完成
-                    await Task.Delay(500); // 延时保证设备稳定
+                    await Task.Delay(800); // 延时保证设备稳定
                     await powerMeter.ReadPulsePowerArrayAsync(); // 预读取一次丢弃
-
+                    await powerMeter.ReadPulsePowerArrayAsync(); // 预读取一次丢弃
                     // 读取功率计峰值功率（dBm）
                     double[] pulsePower = await powerMeter.ReadPulsePowerArrayAsync();
                     double positiveDur = await powerMeter.GetPositiveDuration() * 1e6 ?? -1;
