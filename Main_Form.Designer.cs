@@ -74,6 +74,8 @@
             this.button11 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.jsbc_textBox = new System.Windows.Forms.TextBox();
             this.rf_checkBox = new System.Windows.Forms.CheckBox();
             this.mod_checkBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -99,8 +101,6 @@
             this.button13 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.console_textBox = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.jsbc_textBox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -655,6 +655,24 @@
             this.panel1.Size = new System.Drawing.Size(1139, 73);
             this.panel1.TabIndex = 1;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label9.Location = new System.Drawing.Point(952, 7);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(90, 21);
+            this.label9.TabIndex = 116;
+            this.label9.Text = "接收补偿：";
+            // 
+            // jsbc_textBox
+            // 
+            this.jsbc_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.jsbc_textBox.Location = new System.Drawing.Point(1045, 8);
+            this.jsbc_textBox.Name = "jsbc_textBox";
+            this.jsbc_textBox.Size = new System.Drawing.Size(88, 29);
+            this.jsbc_textBox.TabIndex = 117;
+            // 
             // rf_checkBox
             // 
             this.rf_checkBox.AutoSize = true;
@@ -933,24 +951,6 @@
             this.console_textBox.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.console_textBox.Size = new System.Drawing.Size(1139, 74);
             this.console_textBox.TabIndex = 0;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(952, 7);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(90, 21);
-            this.label9.TabIndex = 116;
-            this.label9.Text = "接收补偿：";
-            // 
-            // jsbc_textBox
-            // 
-            this.jsbc_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.jsbc_textBox.Location = new System.Drawing.Point(1045, 8);
-            this.jsbc_textBox.Name = "jsbc_textBox";
-            this.jsbc_textBox.Size = new System.Drawing.Size(88, 29);
-            this.jsbc_textBox.TabIndex = 117;
             // 
             // Main_Form
             // 

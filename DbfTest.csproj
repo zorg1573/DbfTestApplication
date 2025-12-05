@@ -95,7 +95,7 @@
       <HintPath>packages\SharpZipLib.1.4.2\lib\netstandard2.0\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Interop.Excel">
-      <HintPath>..\TestApp-master\obj\Debug\Interop.Excel.dll</HintPath>
+      <HintPath>..\..\..\Environment\DsoFramer-master\Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Ivi.Driver, Version=1.5.0.0, Culture=neutral, PublicKeyToken=a128c98f1d7717c1, processorArchitecture=MSIL">
@@ -314,12 +314,6 @@
     <Compile Include="PAGE\DeviceAddressNew_Form.Designer.cs">
       <DependentUpon>DeviceAddressNew_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="PAGE\DeviceList_Add_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PAGE\DeviceList_Add_Form.Designer.cs">
-      <DependentUpon>DeviceList_Add_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="FUNCTION\ConfigLoader.cs" />
     <Compile Include="FUNCTION\Datalogger.cs" />
     <Compile Include="FUNCTION\DeviceConnectionManager.cs" />
@@ -342,23 +336,11 @@
     <Compile Include="PAGE\DeviceFiles_Form.Designer.cs">
       <DependentUpon>DeviceFiles_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="PAGE\DeviceManage_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PAGE\DeviceManage_Form.Designer.cs">
-      <DependentUpon>DeviceManage_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="PAGE\ManualSend_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PAGE\ManualSend_Form.Designer.cs">
       <DependentUpon>ManualSend_Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PAGE\SerialSet_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PAGE\SerialSet_Form.Designer.cs">
-      <DependentUpon>SerialSet_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="PAGE\TestSet_Form.cs">
       <SubType>Form</SubType>
@@ -377,52 +359,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ViewControl\SpectrumControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ViewControl\SpectrumControl.Designer.cs">
-      <DependentUpon>SpectrumControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControl\VnaControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ViewControl\VnaControl.Designer.cs">
-      <DependentUpon>VnaControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControl\ChargeControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ViewControl\ChargeControl.Designer.cs">
-      <DependentUpon>ChargeControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewControl\DeviceListControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ViewControl\DeviceListControl.Designer.cs">
-      <DependentUpon>DeviceListControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="FUNCTION\LanScanFunc.cs" />
-    <Compile Include="Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PAGE\LANSet_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PAGE\LANSet_Form.Designer.cs">
-      <DependentUpon>LANSet_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="MODEL\LanScanConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewControl\PsgControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ViewControl\PsgControl.Designer.cs">
-      <DependentUpon>PsgControl.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Main_Form.resx">
       <DependentUpon>Main_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -465,9 +405,6 @@
     <EmbeddedResource Include="PAGE\DeviceAddressNew_Form.resx">
       <DependentUpon>DeviceAddressNew_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PAGE\DeviceList_Add_Form.resx">
-      <DependentUpon>DeviceList_Add_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PAGE\DeviceAddres_Form.resx">
       <DependentUpon>DeviceAddres_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -477,40 +414,16 @@
     <EmbeddedResource Include="PAGE\ManualSend_Form.resx">
       <DependentUpon>ManualSend_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PAGE\SerialSet_Form.resx">
-      <DependentUpon>SerialSet_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PAGE\TestSet_Form.resx">
       <DependentUpon>TestSet_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\VNAFile_Form_Old.resx">
       <DependentUpon>VNAFile_Form_Old.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewControl\SpectrumControl.resx">
-      <DependentUpon>SpectrumControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewControl\VnaControl.resx">
-      <DependentUpon>VnaControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewControl\ChargeControl.resx">
-      <DependentUpon>ChargeControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewControl\DeviceListControl.resx">
-      <DependentUpon>DeviceListControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PAGE\LANSet_Form.resx">
-      <DependentUpon>LANSet_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewControl\PsgControl.resx">
-      <DependentUpon>PsgControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

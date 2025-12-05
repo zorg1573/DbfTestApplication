@@ -43,7 +43,7 @@ namespace DbfTest.PAGE
         {
             try
             {
-                string filePath = "DeviceAddressNew.json";
+                string filePath = "DeviceAddress_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -66,7 +66,7 @@ namespace DbfTest.PAGE
         {
             try
             {
-                string filePath = "DeviceFiles.json";
+                string filePath = "DeviceFiles_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -82,7 +82,7 @@ namespace DbfTest.PAGE
             }
             catch (Exception ex)
             {
-                MessageBox.Show("加载DeviceFiles.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("加载DeviceFiles_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void SaveToJson()

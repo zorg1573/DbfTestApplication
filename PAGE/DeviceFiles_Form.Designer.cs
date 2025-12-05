@@ -173,9 +173,9 @@
             this.label7.Location = new System.Drawing.Point(15, 471);
             this.label7.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(160, 21);
+            this.label7.Size = new System.Drawing.Size(122, 21);
             this.label7.TabIndex = 27;
-            this.label7.Text = "Excel模板文件路径：";
+            this.label7.Text = "配置文件路径：";
             // 
             // button3
             // 

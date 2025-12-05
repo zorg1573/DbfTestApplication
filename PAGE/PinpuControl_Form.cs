@@ -34,7 +34,7 @@ namespace DbfTest.PAGE
         {
             try
             {
-                string filePath = "DeviceAddressNew.json";
+                string filePath = "DeviceAddress_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 

@@ -50,12 +50,12 @@ namespace DbfTest.PAGE
             }
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("DeviceFiles.json", json);
+            File.WriteAllText("DeviceFiles_DBF.json", json);
         }
 
         private void LoadFromJson()
         {
-            string filePath = "DeviceFiles.json";
+            string filePath = "DeviceFiles_DBF.json";
             if (!File.Exists(filePath))
                 return;
 
@@ -133,15 +133,14 @@ namespace DbfTest.PAGE
 
         private void button4_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            using (var dialog = new FolderBrowserDialog())
             {
-                dialog.Title = "请选择一个 Excel 模板";
-                dialog.Filter = "Excel 模板 (*.xlt)|*.xlt|所有文件 (*.*)|*.*";
-                dialog.Multiselect = false;
+                dialog.Description = "请选择一个文件夹";
+                dialog.ShowNewFolderButton = true;
 
-                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.FileName))
+                if (dialog.ShowDialog() == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
                 {
-                    textBox7.Text = dialog.FileName;
+                    textBox7.Text = dialog.SelectedPath;
                 }
             }
         }

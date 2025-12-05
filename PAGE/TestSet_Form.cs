@@ -58,11 +58,11 @@ namespace DbfTest.PAGE
             }
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("TestSet.json", json);
+            File.WriteAllText("TestSet_DBF.json", json);
         }
         private void LoadFromJson()
         {
-            string filePath = "TestSet.json";
+            string filePath = "TestSet_DBF.json";
             if (!File.Exists(filePath))
                 return;
 

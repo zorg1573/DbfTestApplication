@@ -43,12 +43,12 @@ namespace DbfTest.PAGE
             }
 
             string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText("DeviceAddressNew.json", json);
+            File.WriteAllText("DeviceAddress_DBF.json", json);
         }
 
         private void LoadFromJson()
         {
-            string filePath = "DeviceAddressNew.json";
+            string filePath = "DeviceAddress_DBF.json";
             if (!File.Exists(filePath))
                 return;
 

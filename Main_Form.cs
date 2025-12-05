@@ -26,7 +26,7 @@ namespace DbfTest
     public partial class Main_Form : MetroForm
     {
         #region 全局变量
-        //DeviceAddressNew.json
+        //DeviceAddress_DBF.json
         string chargeAddress = "";
         string vnaAddress = "";
         string gonglvAddress = "";
@@ -34,7 +34,7 @@ namespace DbfTest
         string xinhaoBenzhenAddress = "";
         string pinpuAddress = "";
 
-        //TestSetNew.json
+        //TestSet_DBF.json
         double power = -1;
         double powerBenzhen = -1;
         double startFreq = -1;
@@ -45,10 +45,10 @@ namespace DbfTest
         double ch2_vol = -1;
         double ch2_cur = -1;
 
-        //DeviceFiles.json
+        //DeviceFiles_DBF.json
         string excelPath = "";
         string vnaFilePath = "";
-        string excelMobanPath = "";
+        string jsonPath = "";
         string buchangFilePath = "";
         string shiwangChaSunPath = ""; //矢网差损文件路径
         string pinpuZhupuStatePath = ""; //频谱分析仪主谱状态文件
@@ -2237,7 +2237,7 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync(1) ?? double.NaN;
                     markPower6 = await pinpuDevice.ReadMarkerPowerAsync(6) ?? double.NaN;
                     markPower7 = await pinpuDevice.ReadMarkerPowerAsync(7) ?? double.NaN;
-                    gain[i] = (markPower + 60).ToString("F2");
+                    gain[i] = (markPower + double.Parse(jsbc_textBox.Text)).ToString("F2");
                     refGains[i] = markPower;
                     refGains2[i] = markPower;
 
@@ -2269,7 +2269,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -2292,7 +2292,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -2339,7 +2339,7 @@ namespace DbfTest
 
                     num++;
                     progressBar1.Value++;
-                    label6.Text = ((double)num / pointCount * 3 * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
 
@@ -2536,7 +2536,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = "TestSetNew.json";
+                string filePath = "TestSet_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -2619,14 +2619,14 @@ namespace DbfTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("加载TestSetNew.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("加载TestSet_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void GetAddress()
         {
             try
             {
-                string filePath = "DeviceAddressNew.json";
+                string filePath = "DeviceAddress_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -2710,7 +2710,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = "DeviceFiles.json";
+                string filePath = "DeviceFiles_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -2732,7 +2732,7 @@ namespace DbfTest
                 data.TryGetValue("textBox7", out object value3);
                 if (value3 != null)
                 {
-                    excelMobanPath = value3.ToString();
+                    jsonPath = value3.ToString();
                 }
 
                 data.TryGetValue("textBox8", out object value4);
@@ -2763,7 +2763,7 @@ namespace DbfTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("加载DeviceFiles.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("加载DeviceFiles_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -4488,5 +4488,6 @@ namespace DbfTest
         }
 
         #endregion
+
     }
 }
