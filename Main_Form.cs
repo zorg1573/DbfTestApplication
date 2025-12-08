@@ -26,6 +26,11 @@ namespace DbfTest
     public partial class Main_Form : MetroForm
     {
         #region 全局变量
+        //JsonSet_DBF.json
+        string deviceAddressPath = "";
+        string deviceFilesPath = "";
+        string testSetPath = "";
+
         //DeviceAddress_DBF.json
         string chargeAddress = "";
         string vnaAddress = "";
@@ -175,8 +180,7 @@ namespace DbfTest
                 return;
             }
             int num = 0;
-            progressBar1.Maximum = pointCount;
-            progressBar1.Value = 0;
+            SafeSetProgressBarMaximum(pointCount, 0);
 
             string[] freqArray = new string[pointCount];
             string[] pulsePowerString = new string[pointCount];
@@ -246,7 +250,7 @@ namespace DbfTest
                     xiaolvString[i] = PowerWatt * 0.2 / chargePower * 10 + "%"; // 计算效率百分比
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
 
@@ -364,8 +368,7 @@ namespace DbfTest
             int chNum = 0;
 
             int num = 0;
-            progressBar1.Maximum = 64;
-            progressBar1.Value = 0;
+            SafeSetProgressBarMaximum(64, 0);
 
 
             if (ch1_checkBox.Checked)
@@ -503,7 +506,7 @@ namespace DbfTest
                 //unwrappedPhases.Add(currentPhase.ToArray());
 
                 num++;
-                progressBar1.Value++;
+                SafeIncrementProgressBar();
                 label6.Text = ((double)num / 64 * 100).ToString("f2") + "%";
                 label6.Refresh();
             }
@@ -541,8 +544,7 @@ namespace DbfTest
                 int chNum = 0;
 
                 int num = 0;
-                progressBar1.Maximum = pointCount * 3;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount * 3, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -647,7 +649,7 @@ namespace DbfTest
                     zhupuP[i] = power;
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -697,7 +699,7 @@ namespace DbfTest
                     dwyzP[i] = Math.Max(power1, power2);
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -708,7 +710,7 @@ namespace DbfTest
                     LogToConsole("发射抑制测试:" + freqArray[i] + ": " + zhupuP[i] + " - " + dwyzP[i] + " = " + result);
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -849,8 +851,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount, 0);
 
                 double step = (stopFreq - startFreq) / (pointCount - 1);
                 string[] freqArray = new string[pointCount];
@@ -874,7 +875,7 @@ namespace DbfTest
                     gain[i] = (markPower + double.Parse(jsbc_textBox.Text)).ToString("F2");
 
                     num++;
-                    progressBar1.Value ++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -918,8 +919,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -974,7 +974,7 @@ namespace DbfTest
                     NFData[i] = data.ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1013,8 +1013,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount*3;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount * 3, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -1124,7 +1123,7 @@ namespace DbfTest
                     found[i] = false;
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1154,7 +1153,7 @@ namespace DbfTest
                     }
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1176,7 +1175,7 @@ namespace DbfTest
                     pset[i] = markPower.ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1217,8 +1216,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount*2;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount * 2, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -1321,7 +1319,7 @@ namespace DbfTest
                     refGains[i] = markPower;
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1345,7 +1343,7 @@ namespace DbfTest
                     jpyz[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1385,8 +1383,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -1500,7 +1497,7 @@ namespace DbfTest
                     m45[i] = (Math.Min(markPower2, markPower3) - markPower).ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1620,8 +1617,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            progressBar1.Maximum = pointCount * 64;
-            progressBar1.Value = 0;
+            SafeSetProgressBarMaximum(pointCount * 64, 0);
 
             double step = (stopFreq - startFreq) / (pointCount - 1);
             //string[] freqArray = new string[pointCount];
@@ -1686,7 +1682,7 @@ namespace DbfTest
                     gain[i] = markPower;
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 64) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1730,8 +1726,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount*2;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount * 2, 0);
 
 
                 if (ch1_checkBox.Checked)
@@ -1840,7 +1835,7 @@ namespace DbfTest
                     refGains[i] = markPower;
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1886,7 +1881,7 @@ namespace DbfTest
                     mgc[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 2) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -1921,8 +1916,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -2065,7 +2059,7 @@ namespace DbfTest
                     m40[i] = (markPower - Math.Min(markPower4, markPower5)).ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / pointCount * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -2102,8 +2096,7 @@ namespace DbfTest
 
                 //进度条
                 int num = 0;
-                progressBar1.Maximum = pointCount * 3;
-                progressBar1.Value = 0;
+                SafeSetProgressBarMaximum(pointCount * 3, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -2234,7 +2227,6 @@ namespace DbfTest
 
                     await Task.Delay(1000); // 让设备处理
                     markPower = await pinpuDevice.ReadMarkerPowerAsync(1) ?? double.NaN;
-                    markPower = await pinpuDevice.ReadMarkerPowerAsync(1) ?? double.NaN;
                     markPower6 = await pinpuDevice.ReadMarkerPowerAsync(6) ?? double.NaN;
                     markPower7 = await pinpuDevice.ReadMarkerPowerAsync(7) ?? double.NaN;
                     gain[i] = (markPower + double.Parse(jsbc_textBox.Text)).ToString("F2");
@@ -2268,7 +2260,7 @@ namespace DbfTest
                     m40[i] = (markPower - Math.Min(markPower4, markPower5)).ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -2291,7 +2283,7 @@ namespace DbfTest
                     jpyz[i] = refGains[i].ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -2314,7 +2306,7 @@ namespace DbfTest
                 string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
                 string model_stc = model + "000000" + "1";
-                string buling = new string('0', 55);
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -2338,7 +2330,7 @@ namespace DbfTest
                     mgc[i] = refGains2[i].ToString("F2");
 
                     num++;
-                    progressBar1.Value++;
+                    SafeIncrementProgressBar();
                     label6.Text = ((double)num / (pointCount * 3) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
@@ -2367,6 +2359,94 @@ namespace DbfTest
         #endregion
 
         #region 通用方法
+        /// <summary>
+        /// 安全地设置进度条的值，确保值在有效范围内
+        /// </summary>
+        /// <param name="value">要设置的值</param>
+        private void SafeSetProgressBarValue(int value)
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke(new Action(() => SafeSetProgressBarValue(value)));
+                return;
+            }
+
+            try
+            {
+                if (value < progressBar1.Minimum)
+                    value = progressBar1.Minimum;
+                else if (value > progressBar1.Maximum)
+                    value = progressBar1.Maximum;
+
+                progressBar1.Value = value;
+            }
+            catch (Exception ex)
+            {
+                // 记录错误但不中断程序
+                LogToConsole($"进度条更新错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 安全地增加进度条的值
+        /// </summary>
+        private void SafeIncrementProgressBar()
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke(new Action(SafeIncrementProgressBar));
+                return;
+            }
+
+            try
+            {
+                int newValue = progressBar1.Value + 1;
+                if (newValue > progressBar1.Maximum)
+                    newValue = progressBar1.Maximum;
+
+                progressBar1.Value = newValue;
+            }
+            catch (Exception ex)
+            {
+                // 记录错误但不中断程序
+                LogToConsole($"进度条递增错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 安全地设置进度条的最大值和当前值
+        /// </summary>
+        /// <param name="maximum">最大值</param>
+        /// <param name="value">当前值，默认为0</param>
+        private void SafeSetProgressBarMaximum(int maximum, int value = 0)
+        {
+            if (progressBar1.InvokeRequired)
+            {
+                progressBar1.Invoke(new Action(() => SafeSetProgressBarMaximum(maximum, value)));
+                return;
+            }
+
+            try
+            {
+                if (maximum < progressBar1.Minimum)
+                    maximum = progressBar1.Minimum;
+
+                progressBar1.Maximum = maximum;
+
+                if (value < progressBar1.Minimum)
+                    value = progressBar1.Minimum;
+                else if (value > progressBar1.Maximum)
+                    value = progressBar1.Maximum;
+
+                progressBar1.Value = value;
+            }
+            catch (Exception ex)
+            {
+                // 记录错误但不中断程序
+                LogToConsole($"进度条设置最大值错误: {ex.Message}");
+            }
+        }
+
         private AxFramerControl _axFramerControl;
         private void InitializeDSO()
         {
@@ -2536,7 +2616,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = "TestSet_DBF.json";
+                string filePath = testSetPath;
                 if (!File.Exists(filePath))
                     return;
 
@@ -2622,11 +2702,47 @@ namespace DbfTest
                 MessageBox.Show("加载TestSet_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void GetJsonPath()
+        {
+            try
+            {
+                string filePath = "JsonSet_DBF.json";
+                if (!File.Exists(filePath))
+                    return;
+
+                string json = File.ReadAllText(filePath);
+                var data = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+
+                data.TryGetValue("deviceAddress_textBox", out object path1);
+                if (path1 != null)
+                {
+                    deviceAddressPath = path1.ToString();
+                }
+
+                data.TryGetValue("deviceFiles_textBox", out object path2);
+                if (path2 != null)
+                {
+                    deviceFilesPath = path2.ToString();
+                }
+
+                data.TryGetValue("testSet_textBox", out object path3);
+                if (path3 != null)
+                {
+                    testSetPath = path3.ToString();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("加载JsonSet_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
         private void GetAddress()
         {
             try
             {
-                string filePath = "DeviceAddress_DBF.json";
+                string filePath = deviceAddressPath;
                 if (!File.Exists(filePath))
                     return;
 
@@ -2710,7 +2826,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = "DeviceFiles_DBF.json";
+                string filePath = deviceFilesPath;
                 if (!File.Exists(filePath))
                     return;
 
@@ -4464,7 +4580,17 @@ namespace DbfTest
             Form form = new SqlSet_Form();
             form.ShowDialog();
         }
-
+        private void 配置文件设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new JsonSet_Form();
+            form.ShowDialog();
+        }
+        private void 配置刷新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetAddress();
+            GetDeviceFilesJson();
+            GetTestSetNewJson();
+        }
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
@@ -4487,7 +4613,9 @@ namespace DbfTest
             this.Close();
         }
 
+
         #endregion
+
 
     }
 }

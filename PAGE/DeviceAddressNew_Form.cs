@@ -38,7 +38,10 @@ namespace DbfTest.PAGE
             {
                 if (ctrl is TextBox textBox)
                 {
-                    data[textBox.Name] = textBox.Text;
+                    if (!textBox.Name.Contains("Name"))
+                    {
+                        data[textBox.Name] = textBox.Text;
+                    }
                 }
             }
 
