@@ -2623,15 +2623,15 @@ namespace DbfTest
                     {
                         if (sheetName.Equals($"接收通道相移精度测试结果{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 9].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 7].Value = rms.ToString();
                         }
                         if (sheetName.Equals($"接收通道衰减精度测试结果{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 10].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 9].Value = rms.ToString();
                         }
                         if (sheetName.Equals($"发射通道相移精度测试结果{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 13].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 14].Value = rms.ToString();
                         }
                     }
 
@@ -2762,15 +2762,15 @@ namespace DbfTest
                     {
                         if (sheetName.Equals($"接收寄生调幅{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 11].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 8].Value = rms.ToString();
                         }
                         if (sheetName.Equals($"接收寄生调相{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 12].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 10].Value = rms.ToString();
                         }
                         if (sheetName.Equals($"发射寄生调幅{chNum}"))
                         {
-                            resultSheet.Cells[resultRow, 24].Value = rms.ToString();
+                            resultSheet.Cells[resultRow, 15].Value = rms.ToString();
                         }
                     }
 
@@ -3246,7 +3246,7 @@ namespace DbfTest
                     string ch2recieve = ch2_checkBox.Checked ? "1" : "0";
                     string ch3recieve = ch3_checkBox.Checked ? "1" : "0";
                     string ch4recieve = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
+                    string tr = ch4recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3297,7 +3297,7 @@ namespace DbfTest
                     string ch2send = ch2_checkBox.Checked ? "1" : "0";
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
-                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
+                    string tr = "0" + ch4send + "0" + ch2send + "0" + ch3send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3397,7 +3397,7 @@ namespace DbfTest
                     string ch3recieve = ch3_checkBox.Checked ? "1" : "0";
                     string ch4recieve = ch4_checkBox.Checked ? "1" : "0";
 
-                    string tr = ch4recieve + "0" + ch3recieve + "0" + ch2recieve + "0" + ch1recieve + "0";
+                    string tr = ch4recieve + "0" + ch2recieve + "0" + ch3recieve + "0" + ch1recieve + "0";
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3450,7 +3450,7 @@ namespace DbfTest
                     string ch3send = ch3_checkBox.Checked ? "1" : "0";
                     string ch4send = ch4_checkBox.Checked ? "1" : "0";
 
-                    string tr = "0" + ch4send + "0" + ch3send + "0" + ch2send + "0" + ch1send;
+                    string tr = "0" + ch4send + "0" + ch2send + "0" + ch3send + "0" + ch1send;
                     string ta = new string('0', 24);
                     string tp = new string('0', 24);
                     string ra = new string('0', 24);
@@ -3764,41 +3764,33 @@ namespace DbfTest
 
             try
             {
-                // ---------- 1️⃣ 清空第一个sheet ----------
-                Excel.Worksheet sheet1 = (Excel.Worksheet)workbook.Worksheets[1];
-                Excel.Range range1 = sheet1.Range["B8", "Q" + sheet1.Rows.Count]; // 从第9行到最后一行
-                range1.ClearContents(); // 清空文本内容
-
-                // ---------- 2️⃣ 第二个sheet ----------
-                Excel.Worksheet sheet2 = (Excel.Worksheet)workbook.Worksheets[2];
-                Excel.Range range2a = sheet2.Range["B4", "BM16"];
-                Excel.Range range2b = sheet2.Range["B23", "BM35"];
-                range2a.Value2 = 0;
-                range2b.Value2 = 0;
-
-                // ---------- 3️⃣ 第三个sheet ----------
-                Excel.Worksheet sheet3 = (Excel.Worksheet)workbook.Worksheets[3];
-                Excel.Range range3a = sheet3.Range["B4", "BM124"];
-                Excel.Range range3b = sheet3.Range["B131", "BM251"];
-                range3a.Value2 = 0;
-                range3b.Value2 = 0;
-                for (int i = 4; i <= 17; i++)
+                for (int baseIndex = 1; baseIndex <= 28; baseIndex += 7)
                 {
-                    if (i % 2 == 0)
-                    {
-                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
-                        Excel.Range range = sheet.Range["B8", "Q" + sheet.Rows.Count]; // 从第9行到最后一行
-                        range.ClearContents(); // 清空文本内容
-                    }
-                    else
-                    {
-                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
-                        Excel.Range rangea = sheet.Range["B4", "BM16"];
-                        Excel.Range rangeb = sheet.Range["B23", "BM35"];
-                        rangea.Value2 = 0;
-                        rangeb.Value2 = 0;
-                    }
+                    Excel.Worksheet sheet1 = workbook.Worksheets[baseIndex + 0];
+                    sheet1.Range["B8", "U" + sheet1.Rows.Count].ClearContents();
+
+                    Excel.Worksheet sheet2 = workbook.Worksheets[baseIndex + 1];
+                    sheet2.Range["B4", "BM204"].Value2 = 0;
+                    sheet2.Range["B209", "BM409"].Value2 = 0;
+
+                    Excel.Worksheet sheet3 = workbook.Worksheets[baseIndex + 2];
+                    sheet3.Range["B4", "BM204"].Value2 = 0;
+                    sheet3.Range["B209", "BM409"].Value2 = 0;
+
+                    Excel.Worksheet sheet4 = workbook.Worksheets[baseIndex + 3];
+                    sheet4.Range["B4", "BM204"].Value2 = 0;
+
+                    Excel.Worksheet sheet5 = workbook.Worksheets[baseIndex + 4];
+                    sheet5.Range["B4", "BM204"].Value2 = 0;
+
+                    Excel.Worksheet sheet6 = workbook.Worksheets[baseIndex + 5];
+                    sheet6.Range["B4", "BM204"].Value2 = 0;
+                    sheet6.Range["B209", "BM409"].Value2 = 0;
+
+                    Excel.Worksheet sheet7 = workbook.Worksheets[baseIndex + 6];
+                    sheet7.Range["B4", "BM204"].Value2 = 0;
                 }
+
                 // ---------- 保存 ----------
                 workbook.Save();
 
