@@ -26,7 +26,7 @@ namespace DbfTest
     public partial class Main_Form : MetroForm
     {
         #region 全局变量
-        //DeviceAddressNew.json
+        //DeviceAddress_KU.json
         string chargeAddress = "";
         string vnaAddress = "";
         string gonglvAddress = "";
@@ -1742,7 +1742,7 @@ namespace DbfTest
 
                 // Excel 文件路径
 
-                excelPath = Path.Combine(excelPath, "测试模板.xls");
+                excelPath = Path.Combine(excelPath, "测试模板Ku.xls");
 
                 if (File.Exists(excelPath))
                 {
@@ -1975,7 +1975,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = "DeviceAddressNew.json";
+                string filePath = "DeviceAddress_KU.json";
                 if (!File.Exists(filePath))
                     return;
 
