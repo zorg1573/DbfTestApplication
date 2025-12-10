@@ -72,6 +72,7 @@ namespace DbfTest
             operator_textBox.Text = "操作员";
             componentName_textBox.Text = "DBF";
             jsbc_textBox.Text = "60";
+            GetJsonPath();
             GetAddress();
             GetDeviceFilesJson();
             GetTestSetNewJson();
