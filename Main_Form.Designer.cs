@@ -56,7 +56,7 @@
             this.调用文件设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.数据库设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.配置文件设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.配置刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -102,7 +102,6 @@
             this.button13 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.console_textBox = new System.Windows.Forms.TextBox();
-            this.配置刷新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -198,7 +197,7 @@
             // 手动发码ToolStripMenuItem
             // 
             this.手动发码ToolStripMenuItem.Name = "手动发码ToolStripMenuItem";
-            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.手动发码ToolStripMenuItem.Text = "手动发码";
             this.手动发码ToolStripMenuItem.Click += new System.EventHandler(this.手动发码ToolStripMenuItem_Click);
             // 
@@ -210,7 +209,7 @@
             this.发射加电ToolStripMenuItem,
             this.关电ToolStripMenuItem});
             this.电源设置ToolStripMenuItem.Name = "电源设置ToolStripMenuItem";
-            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.电源设置ToolStripMenuItem.Text = "电源设置";
             // 
             // 参数设置ToolStripMenuItem
@@ -248,7 +247,7 @@
             this.调用矢网移相状态文件ToolStripMenuItem,
             this.打开矢网差损文件ToolStripMenuItem});
             this.矢网设置ToolStripMenuItem.Name = "矢网设置ToolStripMenuItem";
-            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.矢网设置ToolStripMenuItem.Text = "矢网设置";
             // 
             // 调用矢网信号源文件ToolStripMenuItem
@@ -278,7 +277,7 @@
             this.参数设置ToolStripMenuItem1,
             this.调用主谱状态文件ToolStripMenuItem});
             this.频谱分析仪设置ToolStripMenuItem.Name = "频谱分析仪设置ToolStripMenuItem";
-            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.频谱分析仪设置ToolStripMenuItem.Text = "频谱分析仪设置";
             // 
             // 参数设置ToolStripMenuItem1
@@ -300,7 +299,7 @@
             this.功率计设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.调用功率计状态文件ToolStripMenuItem});
             this.功率计设置ToolStripMenuItem.Name = "功率计设置ToolStripMenuItem";
-            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.功率计设置ToolStripMenuItem.Text = "功率计设置";
             // 
             // 调用功率计状态文件ToolStripMenuItem
@@ -313,7 +312,7 @@
             // 信号发生器设置ToolStripMenuItem
             // 
             this.信号发生器设置ToolStripMenuItem.Name = "信号发生器设置ToolStripMenuItem";
-            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.信号发生器设置ToolStripMenuItem.Text = "信号发生器设置";
             // 
             // toolStripDropDownButton2
@@ -324,7 +323,6 @@
             this.调用文件设置ToolStripMenuItem,
             this.测试设置ToolStripMenuItem,
             this.数据库设置ToolStripMenuItem,
-            this.配置文件设置ToolStripMenuItem,
             this.配置刷新ToolStripMenuItem});
             this.toolStripDropDownButton2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
@@ -361,12 +359,12 @@
             this.数据库设置ToolStripMenuItem.Text = "数据库设置";
             this.数据库设置ToolStripMenuItem.Click += new System.EventHandler(this.数据库设置ToolStripMenuItem_Click);
             // 
-            // 配置文件设置ToolStripMenuItem
+            // 配置刷新ToolStripMenuItem
             // 
-            this.配置文件设置ToolStripMenuItem.Name = "配置文件设置ToolStripMenuItem";
-            this.配置文件设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.配置文件设置ToolStripMenuItem.Text = "配置文件设置";
-            this.配置文件设置ToolStripMenuItem.Click += new System.EventHandler(this.配置文件设置ToolStripMenuItem_Click);
+            this.配置刷新ToolStripMenuItem.Name = "配置刷新ToolStripMenuItem";
+            this.配置刷新ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.配置刷新ToolStripMenuItem.Text = "配置刷新";
+            this.配置刷新ToolStripMenuItem.Click += new System.EventHandler(this.配置刷新ToolStripMenuItem_Click);
             // 
             // toolStripButton1
             // 
@@ -964,13 +962,6 @@
             this.console_textBox.Size = new System.Drawing.Size(1139, 74);
             this.console_textBox.TabIndex = 0;
             // 
-            // 配置刷新ToolStripMenuItem
-            // 
-            this.配置刷新ToolStripMenuItem.Name = "配置刷新ToolStripMenuItem";
-            this.配置刷新ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.配置刷新ToolStripMenuItem.Text = "配置刷新";
-            this.配置刷新ToolStripMenuItem.Click += new System.EventHandler(this.配置刷新ToolStripMenuItem_Click);
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1079,7 +1070,6 @@
         private System.Windows.Forms.TextBox console_textBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox jsbc_textBox;
-        private System.Windows.Forms.ToolStripMenuItem 配置文件设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 配置刷新ToolStripMenuItem;
     }
 }

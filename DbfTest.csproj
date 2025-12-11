@@ -237,12 +237,6 @@
     <Compile Include="MODEL\MeasurementBatch.cs" />
     <Compile Include="MODEL\MeasurementResult.cs" />
     <Compile Include="MODEL\OperateLog.cs" />
-    <Compile Include="PAGE\JsonSet_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PAGE\JsonSet_Form.Designer.cs">
-      <DependentUpon>JsonSet_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="PAGE\GonglvSet_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -372,9 +366,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Main_Form.resx">
       <DependentUpon>Main_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PAGE\JsonSet_Form.resx">
-      <DependentUpon>JsonSet_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\GonglvSet_Form.resx">
       <DependentUpon>GonglvSet_Form.cs</DependentUpon>

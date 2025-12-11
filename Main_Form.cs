@@ -2617,7 +2617,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = testSetPath;
+                string filePath = "TestSet_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -2703,47 +2703,12 @@ namespace DbfTest
                 MessageBox.Show("加载TestSet_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void GetJsonPath()
-        {
-            try
-            {
-                string filePath = "JsonSet_DBF.json";
-                if (!File.Exists(filePath))
-                    return;
 
-                string json = File.ReadAllText(filePath);
-                var data = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-
-                data.TryGetValue("deviceAddress_textBox", out object path1);
-                if (path1 != null)
-                {
-                    deviceAddressPath = path1.ToString();
-                }
-
-                data.TryGetValue("deviceFiles_textBox", out object path2);
-                if (path2 != null)
-                {
-                    deviceFilesPath = path2.ToString();
-                }
-
-                data.TryGetValue("testSet_textBox", out object path3);
-                if (path3 != null)
-                {
-                    testSetPath = path3.ToString();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("加载JsonSet_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
         private void GetAddress()
         {
             try
             {
-                string filePath = deviceAddressPath;
+                string filePath = "DeviceAddress_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -2819,7 +2784,7 @@ namespace DbfTest
             }
             catch (Exception ex)
             {
-                MessageBox.Show("加载DeviceAddress.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("加载DeviceAddress_DBF.json失败: " + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
@@ -2827,7 +2792,7 @@ namespace DbfTest
         {
             try
             {
-                string filePath = deviceFilesPath;
+                string filePath = "DeviceFiles_DBF.json";
                 if (!File.Exists(filePath))
                     return;
 
@@ -4581,11 +4546,7 @@ namespace DbfTest
             Form form = new SqlSet_Form();
             form.ShowDialog();
         }
-        private void 配置文件设置ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form form = new JsonSet_Form();
-            form.ShowDialog();
-        }
+
         private void 配置刷新ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             GetAddress();
