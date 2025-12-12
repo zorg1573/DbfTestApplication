@@ -1144,7 +1144,7 @@ namespace DbfTest
                         await Task.Delay(800);
                         markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                         markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-                        if ((power + 60) - (markPower - refGains[i]) > 1)
+                        if ((power + double.Parse(jsbc_textBox.Text)) - (markPower - refGains[i]) > 1)
                         {
                             //yasuodian[i] = (markPower+ compensationTable[freqGHz]).ToString("F2");
                             yasuodian[i] = (markPower).ToString("F2");
