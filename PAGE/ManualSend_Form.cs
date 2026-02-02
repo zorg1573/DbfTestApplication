@@ -175,17 +175,17 @@ namespace DbfTest.PAGE
                     string ch6send = checkBox_ch6.Checked ? "1" : "0";
                     string ch7send = checkBox_ch7.Checked ? "1" : "0";
                     string ch8send = checkBox_ch8.Checked ? "1" : "0";
-                    string ch1 = new string('0', 28) + "00" + "0" + ch1Yixiang + "000000" + "000000" + "000000" + ch1send;
-                    string ch2 = "00" + "0" + ch2Yixiang + "000000" + "000000" + "000000" + ch2send;
-                    string ch3 = "00" + "0" + ch3Yixiang + "000000" + "000000" + "000000" + ch3send;
-                    string ch4 = "00" + "0" + ch4Yixiang + "000000" + "000000" + "000000" + ch4send;
-                    string ch5 = "00" + "0" + ch5Yixiang + "000000" + "000000" + "000000" + ch5send;
-                    string ch6 = "00" + "0" + ch6Yixiang + "000000" + "000000" + "000000" + ch6send;
-                    string ch7 = "00" + "0" + ch7Yixiang + "000000" + "000000" + "000000" + ch7send;
-                    string ch8 = "00" + "0" + ch8Yixiang + "000000" + "000000" + "000000" + ch8send;
+                    string ch1 = ch1send + ch1Yixiang;
+                    string ch2 = ch2send + ch2Yixiang;
+                    string ch3 = ch3send + ch3Yixiang;
+                    string ch4 = ch4send + ch4Yixiang;
+                    string ch5 = ch5send + ch5Yixiang;
+                    string ch6 = ch6send + ch6Yixiang;
+                    string ch7 = ch7send + ch7Yixiang;
+                    string ch8 = ch8send + ch8Yixiang;
                     string model = "00";
                     string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -203,17 +203,17 @@ namespace DbfTest.PAGE
                     string ch6recive = checkBox_ch6.Checked ? "1" : "0";
                     string ch7recive = checkBox_ch7.Checked ? "1" : "0";
                     string ch8recive = checkBox_ch8.Checked ? "1" : "0";
-                    string ch1 = new string('0', 28) + "00" + ch1recive + ch1Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch2 = "00" + ch2recive + ch2Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch3 = "00" + ch3recive + ch3Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch4 = "00" + ch4recive + ch4Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch5 = "00" + ch5recive + ch5Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch6 = "00" + ch6recive + ch6Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch7 = "00" + ch7recive + ch7Yixiang + "000000" + "000000" + "000000" + "0";
-                    string ch8 = "00" + ch8recive + ch8Yixiang + "000000" + "000000" + "000000" + "0";
+                    string ch1 = ch1recive + ch1Yixiang;
+                    string ch2 = ch2recive + ch2Yixiang;
+                    string ch3 = ch3recive + ch3Yixiang;
+                    string ch4 = ch4recive + ch4Yixiang;
+                    string ch5 = ch5recive + ch5Yixiang;
+                    string ch6 = ch6recive + ch6Yixiang;
+                    string ch7 = ch7recive + ch7Yixiang;
+                    string ch8 = ch8recive + ch8Yixiang;
                     string model = "10";
                     string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
                     mainForm.LogToConsole(ch1Yixiang);
@@ -224,15 +224,15 @@ namespace DbfTest.PAGE
                 {
                     mainForm.LogToConsole("负载模式");
                     string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "0" + "000000";
+                    string ch3 = "0" + "000000";
+                    string ch4 = "0" + "000000";
+                    string ch5 = "0" + "000000";
+                    string ch6 = "0" + "000000";
+                    string ch7 = "0" + "000000";
+                    string ch8 = "0" + "000000";
                     string model_stc = "01" + "000000" + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    string buling = new string('0', 55);
                     modelValue = StringToByteArray("01 03 03 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
@@ -316,10 +316,10 @@ namespace DbfTest.PAGE
 
         static byte[] GenerateCodeValueFromBits(string[] bitStrings)
         {
-/*            if (bitStrings.Length != 10)
-                throw new ArgumentException("应包含10个通道的比特串");*/
+            /*            if (bitStrings.Length != 10)
+                            throw new ArgumentException("应包含10个通道的比特串");*/
 
-            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59};
+            int[] expectedLengths = { 7, 7, 7, 7, 7, 7, 7, 7, 9, 55 };
             string allBits = "";
 
             for (int i = 0; i < 10; i++)
@@ -331,12 +331,12 @@ namespace DbfTest.PAGE
                 allBits += bits;
             }
 
-            if (allBits.Length != 320)
-                throw new ArgumentException($"总位数应为320，但现在是 {allBits.Length}");
+            if (allBits.Length != 120)
+                throw new ArgumentException($"总位数应为120，但现在是 {allBits.Length}");
 
             // 输出 15 字节（120 位）
-            byte[] codeBytes = new byte[40];
-            for (int i = 0; i < 40; i++)
+            byte[] codeBytes = new byte[15];
+            for (int i = 0; i < 15; i++)
             {
                 string byteStr = allBits.Substring(i * 8, 8);
                 codeBytes[i] = Convert.ToByte(byteStr, 2);
