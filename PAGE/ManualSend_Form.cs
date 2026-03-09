@@ -319,7 +319,7 @@ namespace DbfTest.PAGE
             /*            if (bitStrings.Length != 10)
                             throw new ArgumentException("应包含10个通道的比特串");*/
 
-            int[] expectedLengths = { 7, 7, 7, 7, 7, 7, 7, 7, 9, 55 };
+            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59 };
             string allBits = "";
 
             for (int i = 0; i < 10; i++)
@@ -331,12 +331,12 @@ namespace DbfTest.PAGE
                 allBits += bits;
             }
 
-            if (allBits.Length != 120)
-                throw new ArgumentException($"总位数应为120，但现在是 {allBits.Length}");
+            if (allBits.Length != 320)
+                throw new ArgumentException($"总位数应为320，但现在是 {allBits.Length}");
 
             // 输出 15 字节（120 位）
-            byte[] codeBytes = new byte[15];
-            for (int i = 0; i < 15; i++)
+            byte[] codeBytes = new byte[40];
+            for (int i = 0; i < 40; i++)
             {
                 string byteStr = allBits.Substring(i * 8, 8);
                 codeBytes[i] = Convert.ToByte(byteStr, 2);

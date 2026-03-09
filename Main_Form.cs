@@ -3781,7 +3781,7 @@ namespace DbfTest
             /*            if (bitStrings.Length != 10)
                             throw new ArgumentException("应包含10个通道的比特串");*/
 
-            int[] expectedLengths = { 7, 7, 7, 7, 7, 7, 7, 7, 9, 55 };
+            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59 };
             string allBits = "";
 
             for (int i = 0; i < 10; i++)
@@ -4032,17 +4032,17 @@ namespace DbfTest
                     string ch6send = ch6_checkBox.Checked ? "1" : "0";
                     string ch7send = ch7_checkBox.Checked ? "1" : "0";
                     string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                    string ch1 = ch1send + numToString;
-                    string ch2 = ch2send + numToString;
-                    string ch3 = ch3send + numToString;
-                    string ch4 = ch4send + numToString;
-                    string ch5 = ch5send + numToString;
-                    string ch6 = ch6send + numToString;
-                    string ch7 = ch7send + numToString;
-                    string ch8 = ch8send + numToString;
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + numToString + "000000" + ch1send;
+                    string ch2 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch2send;
+                    string ch3 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch3send;
+                    string ch4 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch4send;
+                    string ch5 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch5send;
+                    string ch6 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch6send;
+                    string ch7 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch7send;
+                    string ch8 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch8send;
                     string model = "00";
                     string model_stc = model + "000000" + "0";
-                    string buling = new string('0', 55);
+                    string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
@@ -4062,16 +4062,16 @@ namespace DbfTest
                 try
                 {
                     LogToConsole("切换至负载态");
-                    string ch1 = "0" + "000000";
-                    string ch2 = "0" + "000000";
-                    string ch3 = "0" + "000000";
-                    string ch4 = "0" + "000000";
-                    string ch5 = "0" + "000000";
-                    string ch6 = "0" + "000000";
-                    string ch7 = "0" + "000000";
-                    string ch8 = "0" + "000000";
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
                     string model_stc = "01" + "000000" + "0";
-                    string buling = new string('0', 55);
+                    string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 03 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
