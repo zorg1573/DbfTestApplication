@@ -357,6 +357,7 @@
             this.数据库设置ToolStripMenuItem.Name = "数据库设置ToolStripMenuItem";
             this.数据库设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.数据库设置ToolStripMenuItem.Text = "数据库设置";
+            this.数据库设置ToolStripMenuItem.Visible = false;
             this.数据库设置ToolStripMenuItem.Click += new System.EventHandler(this.数据库设置ToolStripMenuItem_Click);
             // 
             // 配置刷新ToolStripMenuItem

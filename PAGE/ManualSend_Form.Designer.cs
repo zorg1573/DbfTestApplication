@@ -308,7 +308,7 @@
             this.shuaijian_textBox.Name = "shuaijian_textBox";
             this.shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
             this.shuaijian_textBox.TabIndex = 12;
-            this.shuaijian_textBox.Text = "000000";
+            this.shuaijian_textBox.Text = "111111";
             // 
             // label5
             // 

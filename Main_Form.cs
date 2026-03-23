@@ -40,8 +40,8 @@ namespace DbfTest
         string pinpuAddress = "";
 
         //TestSet_DBF.json
-        double power = -1;
-        double powerBenzhen = -1;
+        double _Power = -1;
+        double _PowerBenzhen = -1;
         double startFreq = -1;
         double stopFreq = -1;
         int pointCount = -1;
@@ -116,7 +116,7 @@ namespace DbfTest
             LogToConsole("开始发射测试...");
             await ChargeSendPowerON(); // 发射加电
 
-            await changeToFuZaiTai();
+            await CloseFPGA();
             await Task.Delay(500);
             I_DQ5 = await GetCurrent(2);
             await RecieveTestUDP();
@@ -1651,7 +1651,7 @@ namespace DbfTest
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500); // 让设备处理
-                double[] gain = new double[13];
+                double[] gain = new double[pointCount];
                 double lastPower = double.NaN;
                 for (int i = 0; i < pointCount; i++)
                 {
@@ -1665,19 +1665,19 @@ namespace DbfTest
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     await Task.Delay(800); // 让设备处理
                                            // 读取 Marker 的功率值
-                    /*                    for (int j = 0; j < 10; j++)
-                                        {
-                                            // 将 marker 设置为最大点
-                                            await pinpuDevice.SendCommandAsync(":CALC:MARK1:MAX");
-                                            await Task.Delay(100); // 让设备处理
-                                                                   // 读取 Marker 的功率值
-                                            lastPower = markPower;
-                                            markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+                    for (int j = 0; j < 10; j++)
+                    {
+                        // 将 marker 设置为最大点
+                        await pinpuDevice.SendCommandAsync(":CALC:MARK1:MAX");
+                        await Task.Delay(100); // 让设备处理
+                                               // 读取 Marker 的功率值
+                        lastPower = markPower;
+                        markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
 
-                                            // 判断是否为有效功率
-                                            if (markPower > -80 && markPower > lastPower)
-                                                break;
-                                        }*/
+                        // 判断是否为有效功率
+                        if (markPower > -80 && markPower > lastPower)
+                            break;
+                    }
                     markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                     gain[i] = markPower;
 
@@ -1856,7 +1856,7 @@ namespace DbfTest
                 string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
-                string model_stc = model + "000000" + "1";
+                string model_stc = model + "111111" + "1";
                 string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -2305,7 +2305,7 @@ namespace DbfTest
                 string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                 string model = "10";
-                string model_stc = model + "000000" + "1";
+                string model_stc = model + "111111" + "1";
                 string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
                 var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -2568,19 +2568,39 @@ namespace DbfTest
             char[] reversed = binary.ToCharArray();
             Array.Reverse(reversed);
             return new string(reversed);
-            //return binary;
         }
+        /*        public string ToSixBitBinaryString2(int number)
+                {
+                    if (number < 0 || number > 63)
+                        throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
+
+                    //return Convert.ToString(number, 2).PadLeft(6, '0');
+                    string binary = Convert.ToString(number, 2).PadLeft(6, '0');
+                    //char[] reversed = binary.ToCharArray();
+                    //Array.Reverse(reversed);
+                    //return new string(reversed);
+                    return binary;
+                }*/
+
         public string ToSixBitBinaryString2(int number)
         {
             if (number < 0 || number > 63)
                 throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
 
-            //return Convert.ToString(number, 2).PadLeft(6, '0');
+            // 1️⃣ 转6位二进制
             string binary = Convert.ToString(number, 2).PadLeft(6, '0');
-            //char[] reversed = binary.ToCharArray();
-            //Array.Reverse(reversed);
-            //return new string(reversed);
-            return binary;
+
+            // 2️⃣ 反转
+            char[] reversed = binary.ToCharArray();
+            Array.Reverse(reversed);
+
+            // 3️⃣ 取反（0->1, 1->0）
+            for (int i = 0; i < reversed.Length; i++)
+            {
+                reversed[i] = reversed[i] == '0' ? '1' : '0';
+            }
+
+            return new string(reversed);
         }
 
         private string[] GetFilterFreqArray(int countNum)
@@ -2664,13 +2684,13 @@ namespace DbfTest
                 data.TryGetValue("power_textBox", out object _power);
                 if (_power != null)
                 {
-                    power = double.Parse(_power.ToString());
+                    _Power = double.Parse(_power.ToString());
                 }
 
                 data.TryGetValue("power2_textBox", out object _power2);
                 if (_power2 != null)
                 {
-                    powerBenzhen = double.Parse(_power2.ToString());
+                    _PowerBenzhen = double.Parse(_power2.ToString());
                 }
 
                 data.TryGetValue("ch1_vol_textBox", out object ch1v);
@@ -2924,7 +2944,7 @@ namespace DbfTest
                 ClearExcelColumnBelowRow(worksheet, columnIndex, 8);
 
                 // 写入数据 (仅 8–20 行)
-                for (int i = 0; i < cleanedData.Length && i < 13; i++) // 8~20 共 13 行
+                for (int i = 0; i < cleanedData.Length && i < pointCount; i++) // 8~20 共 13 行
                 {
                     int row = 8 + i;
 
@@ -3257,7 +3277,7 @@ namespace DbfTest
                     continue;
 
                 // 遍历所有频率行（第 4 到 124 行）
-                for (int row = 4; row <= 124; row++)
+                for (int row = 4; row <= 204; row++)
                 {
                     // A 列（第 1 列）存频率
                     object freqObj = phaseSheet.Cells[row, 1].Value;
@@ -3281,7 +3301,7 @@ namespace DbfTest
                         double result = measuredValue - standardValue;
 
                         // 对应写入 209+(row-4)
-                        int targetRow = 131 + (row - 4);
+                        int targetRow = 211 + (row - 4);
                         phaseSheet.Cells[targetRow, col].Value = result;
                     }
                 }
@@ -3307,13 +3327,13 @@ namespace DbfTest
                     continue; // 跳过该列
 
                 // 遍历第4~154行
-                for (int row = 4; row <= 16; row++)
+                for (int row = 4; row <= 24; row++)
                 {
                     object cellValueObj = phaseSheet.Cells[row, col].Value;
                     if (cellValueObj != null && double.TryParse(cellValueObj.ToString(), out double measuredValue))
                     {
                         double result = measuredValue - standardValue;
-                        int targetRow = 23 + (row - 4);
+                        int targetRow = 31 + (row - 4);
                         phaseSheet.Cells[targetRow, col].Value = result;
                     }
                 }
@@ -3333,7 +3353,7 @@ namespace DbfTest
                 Excel.Worksheet resultSheet = workbook.Sheets[$"测试结果{chNum}"];
 
                 // 获取频率点行数
-                int startRow = 131;
+                int startRow = 211;
                 int currentRow = startRow;
 
                 while (true)
@@ -3472,7 +3492,7 @@ namespace DbfTest
         {
             try
             {
-                await changeToFuZaiTai();
+                await CloseFPGA();
                 string visaAddress = chargeAddress;
 
                 ScpiDevice scpiDevice = new ScpiDevice();
@@ -3764,9 +3784,9 @@ namespace DbfTest
                 device.SendPacket(ethernetPacket);
                 device.Close();
 
-                LogToConsole($"发送数据包：Payload长度={payload.Length}字节");
-                LogToConsole($"Payload (Hex): {BitConverter.ToString(payload).Replace("-", " ")}");
-                LogToConsole("数据包已发送。\n");
+                //LogToConsole($"发送数据包：Payload长度={payload.Length}字节");
+                LogToConsole($"数据包已发送: {BitConverter.ToString(codeValue).Replace("-", " ")}");
+                //LogToConsole("数据包已发送。\n");
             }
             catch (Exception ex)
             {
@@ -3826,26 +3846,6 @@ namespace DbfTest
 
         }
 
-        private async Task changeToFuZaiTai()
-        {
-            await Task.Run(() =>
-            {
-                string ch1 = "0" + "000000";
-                string ch2 = "0" + "000000";
-                string ch3 = "0" + "000000";
-                string ch4 = "0" + "000000";
-                string ch5 = "0" + "000000";
-                string ch6 = "0" + "000000";
-                string ch7 = "0" + "000000";
-                string ch8 = "0" + "000000";
-                string model_stc = "01" + "000000" + "0";
-                string buling = new string('0', 55);
-                modelValue = StringToByteArray("01 03 03 00");
-                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
-
-                SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
-            });
-        }
         private async Task RecieveTestUDP()
         {
             await Task.Run(() =>
@@ -3869,7 +3869,7 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "000000" + "0";
+                    string model_stc = model + "111111" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -3943,7 +3943,7 @@ namespace DbfTest
                     string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch7send;
                     string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "000000" + "0";
+                    string model_stc = model + "111111" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4041,7 +4041,7 @@ namespace DbfTest
                     string ch7 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch7send;
                     string ch8 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "000000" + "0";
+                    string model_stc = model + "111111" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4367,15 +4367,15 @@ namespace DbfTest
 
                 // ---------- 2️⃣ 第二个sheet ----------
                 Excel.Worksheet sheet2 = (Excel.Worksheet)workbook.Worksheets[2];
-                Excel.Range range2a = sheet2.Range["B4", "BM16"];
-                Excel.Range range2b = sheet2.Range["B23", "BM35"];
+                Excel.Range range2a = sheet2.Range["B4", "BM24"];
+                Excel.Range range2b = sheet2.Range["B31", "BM51"];
                 range2a.Value2 = 0;
                 range2b.Value2 = 0;
 
                 // ---------- 3️⃣ 第三个sheet ----------
                 Excel.Worksheet sheet3 = (Excel.Worksheet)workbook.Worksheets[3];
-                Excel.Range range3a = sheet3.Range["B4", "BM124"];
-                Excel.Range range3b = sheet3.Range["B131", "BM251"];
+                Excel.Range range3a = sheet3.Range["B4", "BM204"];
+                Excel.Range range3b = sheet3.Range["B211", "BM411"];
                 range3a.Value2 = 0;
                 range3b.Value2 = 0;
                 for (int i = 4; i <= 17; i++)
@@ -4389,8 +4389,8 @@ namespace DbfTest
                     else
                     {
                         Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
-                        Excel.Range rangea = sheet.Range["B4", "BM16"];
-                        Excel.Range rangeb = sheet.Range["B23", "BM35"];
+                        Excel.Range rangea = sheet.Range["B4", "BM24"];
+                        Excel.Range rangeb = sheet.Range["B31", "BM51"];
                         rangea.Value2 = 0;
                         rangeb.Value2 = 0;
                     }

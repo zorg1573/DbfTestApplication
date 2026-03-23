@@ -1,4 +1,4 @@
-﻿using MetroFramework.Forms;
+using MetroFramework.Forms;
 using PacketDotNet;
 using SharpPcap;
 using System;
@@ -65,6 +65,17 @@ namespace DbfTest.PAGE
             this.mainForm = mainForm;
             this.Load += ManualSend_Form_Load;
             mgc_comboBox.SelectedIndex = 0;
+
+            // 限制相关文本框长度为固定 6 位
+            ch1_yixiang_textBox.MaxLength = 6;
+            ch2_yixiang_textBox.MaxLength = 6;
+            ch3_yixiang_textBox.MaxLength = 6;
+            ch4_yixiang_textBox.MaxLength = 6;
+            ch5_yixiang_textBox.MaxLength = 6;
+            ch6_yixiang_textBox.MaxLength = 6;
+            ch7_yixiang_textBox.MaxLength = 6;
+            ch8_yixiang_textBox.MaxLength = 6;
+            shuaijian_textBox.MaxLength = 6;
         }
         private void ManualSend_Form_Load(object sender, EventArgs e)
         {
@@ -127,6 +138,54 @@ namespace DbfTest.PAGE
                     MessageBox.Show("请选择发送或接收模式！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                // 校验文本框长度必须为 6 位（如果不为空）
+                if (!string.IsNullOrEmpty(ch1_yixiang_textBox.Text) && ch1_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道1移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch2_yixiang_textBox.Text) && ch2_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道2移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch3_yixiang_textBox.Text) && ch3_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道3移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch4_yixiang_textBox.Text) && ch4_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道4移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch5_yixiang_textBox.Text) && ch5_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道5移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch6_yixiang_textBox.Text) && ch6_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道6移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch7_yixiang_textBox.Text) && ch7_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道7移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch8_yixiang_textBox.Text) && ch8_yixiang_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道8移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(shuaijian_textBox.Text) && shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (ch1_yixiang_textBox.Text != "")
                 {
                     ch1Yixiang = ch1_yixiang_textBox.Text;
