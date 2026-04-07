@@ -1624,7 +1624,7 @@ namespace DbfTest
 
             for (int idx = 0; idx < 64; idx++)
             {
-                string numToString = ToSixBitBinaryString2(idx);
+                string numToString = ToSixBitBinaryString(idx);
 
                 LogToConsole("idx:" + idx + ",bitString:" + numToString);
                 string ch1recive = ch1_checkBox.Checked ? "1" : "0";

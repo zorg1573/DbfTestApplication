@@ -197,7 +197,7 @@
             // 手动发码ToolStripMenuItem
             // 
             this.手动发码ToolStripMenuItem.Name = "手动发码ToolStripMenuItem";
-            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.手动发码ToolStripMenuItem.Text = "手动发码";
             this.手动发码ToolStripMenuItem.Click += new System.EventHandler(this.手动发码ToolStripMenuItem_Click);
             // 
@@ -209,7 +209,7 @@
             this.发射加电ToolStripMenuItem,
             this.关电ToolStripMenuItem});
             this.电源设置ToolStripMenuItem.Name = "电源设置ToolStripMenuItem";
-            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.电源设置ToolStripMenuItem.Text = "电源设置";
             // 
             // 参数设置ToolStripMenuItem
@@ -247,7 +247,7 @@
             this.调用矢网移相状态文件ToolStripMenuItem,
             this.打开矢网差损文件ToolStripMenuItem});
             this.矢网设置ToolStripMenuItem.Name = "矢网设置ToolStripMenuItem";
-            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.矢网设置ToolStripMenuItem.Text = "矢网设置";
             // 
             // 调用矢网信号源文件ToolStripMenuItem
@@ -277,7 +277,7 @@
             this.参数设置ToolStripMenuItem1,
             this.调用主谱状态文件ToolStripMenuItem});
             this.频谱分析仪设置ToolStripMenuItem.Name = "频谱分析仪设置ToolStripMenuItem";
-            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.频谱分析仪设置ToolStripMenuItem.Text = "频谱分析仪设置";
             // 
             // 参数设置ToolStripMenuItem1
@@ -299,7 +299,7 @@
             this.功率计设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.调用功率计状态文件ToolStripMenuItem});
             this.功率计设置ToolStripMenuItem.Name = "功率计设置ToolStripMenuItem";
-            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.功率计设置ToolStripMenuItem.Text = "功率计设置";
             // 
             // 调用功率计状态文件ToolStripMenuItem
@@ -312,7 +312,7 @@
             // 信号发生器设置ToolStripMenuItem
             // 
             this.信号发生器设置ToolStripMenuItem.Name = "信号发生器设置ToolStripMenuItem";
-            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.信号发生器设置ToolStripMenuItem.Text = "信号发生器设置";
             // 
             // toolStripDropDownButton2
@@ -974,7 +974,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_Form";
             this.Padding = new System.Windows.Forms.Padding(23, 75, 23, 25);
-            this.Text = "DBF测试";
+            this.Text = "XDBF测试";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
