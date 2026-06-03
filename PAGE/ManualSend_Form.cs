@@ -38,6 +38,12 @@ namespace DbfTest.PAGE
         //byte[] modelValue = StringToByteArray("01 03 01 00");
         byte[] modelValue;
         byte[] emptyValue = StringToByteArray("00 00 00 00 00 00 00 00");
+        const int ApplicationHeaderLength = 40;
+        const int ModelValueLength = 4;
+        const int ReservedValueLength = 8;
+        const int CodeValueLength = 40;
+        const int ControlBitCount = 214;
+        const int ControlCodeStartIndex = 13;
         private Main_Form mainForm;
         string ch1Yixiang = "000000";
         string ch2Yixiang = "000000";
@@ -47,10 +53,15 @@ namespace DbfTest.PAGE
         string ch6Yixiang = "000000";
         string ch7Yixiang = "000000";
         string ch8Yixiang = "000000";
+        string zhongpinShuaijian = "000000";
         string ch1Shuaijian = "000000";
         string ch2Shuaijian = "000000";
         string ch3Shuaijian = "000000";
         string ch4Shuaijian = "000000";
+        string ch5Shuaijian = "000000";
+        string ch6Shuaijian = "000000";
+        string ch7Shuaijian = "000000";
+        string ch8Shuaijian = "000000";
         private OperateLog_DAL operateLog_DAL = new OperateLog_DAL();
         /*        public ManualSend_Form()
                 {
@@ -64,7 +75,6 @@ namespace DbfTest.PAGE
             InitializeComponent();
             this.mainForm = mainForm;
             this.Load += ManualSend_Form_Load;
-            mgc_comboBox.SelectedIndex = 0;
 
             // 限制相关文本框长度为固定 6 位
             ch1_yixiang_textBox.MaxLength = 6;
@@ -76,6 +86,14 @@ namespace DbfTest.PAGE
             ch7_yixiang_textBox.MaxLength = 6;
             ch8_yixiang_textBox.MaxLength = 6;
             shuaijian_textBox.MaxLength = 6;
+            ch1_shuaijian_textBox.MaxLength = 6;
+            ch2_shuaijian_textBox.MaxLength = 6;
+            ch3_shuaijian_textBox.MaxLength = 6;
+            ch4_shuaijian_textBox.MaxLength = 6;
+            ch5_shuaijian_textBox.MaxLength = 6;
+            ch6_shuaijian_textBox.MaxLength = 6;
+            ch7_shuaijian_textBox.MaxLength = 6;
+            ch8_shuaijian_textBox.MaxLength = 6;
         }
         private void ManualSend_Form_Load(object sender, EventArgs e)
         {
@@ -94,10 +112,9 @@ namespace DbfTest.PAGE
                 data.TryGetValue("pc_mac_textBox", out object pcMac);
                 if (pcMac != null)
                 {
-                    srcMacStr = pcMac.ToString().Replace(":", " ");
+                    srcMacStr = MacToHexString(pcMac.ToString());
                     srcMacAddress = pcMac.ToString();
                 }
-                headValue = StringToByteArray("00 0a 35 01 fe c0 " + srcMacStr + " 08 00 45 00 b4 68 00 00 80 11 00 00 c0 a8 00 03 c0 a8 00 02 1f 90 1f 90 00 23 81 70");
 
                 data.TryGetValue("pc_jiekou_textBox", out object pcJiekou);
                 if (pcJiekou != null)
@@ -122,6 +139,8 @@ namespace DbfTest.PAGE
                 {
                     dstMacStr = fpgaMac.ToString();
                 }
+
+                headValue = BuildApplicationHeader();
             }
             catch (Exception ex)
             {
@@ -185,6 +204,46 @@ namespace DbfTest.PAGE
                     MessageBox.Show("衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+                if (!string.IsNullOrEmpty(ch1_shuaijian_textBox.Text) && ch1_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道1衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch2_shuaijian_textBox.Text) && ch2_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道2衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch3_shuaijian_textBox.Text) && ch3_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道3衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch4_shuaijian_textBox.Text) && ch4_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道4衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch5_shuaijian_textBox.Text) && ch5_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道5衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch6_shuaijian_textBox.Text) && ch6_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道6衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch7_shuaijian_textBox.Text) && ch7_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道7衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                if (!string.IsNullOrEmpty(ch8_shuaijian_textBox.Text) && ch8_shuaijian_textBox.Text.Length != 6)
+                {
+                    MessageBox.Show("通道8衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 if (ch1_yixiang_textBox.Text != "")
                 {
@@ -220,33 +279,52 @@ namespace DbfTest.PAGE
                 }
                 if (shuaijian_textBox.Text != "")
                 {
-                    ch1Shuaijian = shuaijian_textBox.Text;
+                    zhongpinShuaijian = shuaijian_textBox.Text;
                 }
+                if (ch1_shuaijian_textBox.Text != "")
+                {
+                    ch1Shuaijian = ch1_shuaijian_textBox.Text;
+                }
+                if (ch2_shuaijian_textBox.Text != "")
+                {
+                    ch2Shuaijian = ch2_shuaijian_textBox.Text;
+                }
+                if (ch3_shuaijian_textBox.Text != "")
+                {
+                    ch3Shuaijian = ch3_shuaijian_textBox.Text;
+                }
+                if (ch4_shuaijian_textBox.Text != "")
+                {
+                    ch4Shuaijian = ch4_shuaijian_textBox.Text;
+                }
+                if (ch5_shuaijian_textBox.Text != "")
+                {
+                    ch5Shuaijian = ch5_shuaijian_textBox.Text;
+                }
+                if (ch6_shuaijian_textBox.Text != "")
+                {
+                    ch6Shuaijian = ch6_shuaijian_textBox.Text;
+                }
+                if (ch7_shuaijian_textBox.Text != "")
+                {
+                    ch7Shuaijian = ch7_shuaijian_textBox.Text;
+                }
+                if (ch8_shuaijian_textBox.Text != "")
+                {
+                    ch8Shuaijian = ch8_shuaijian_textBox.Text;
+                }
+
+                string[] phaseBits = { ch1Yixiang, ch2Yixiang, ch3Yixiang, ch4Yixiang, ch5Yixiang, ch6Yixiang, ch7Yixiang, ch8Yixiang };
+                string[] attenuationBits = { ch1Shuaijian, ch2Shuaijian, ch3Shuaijian, ch4Shuaijian, ch5Shuaijian, ch6Shuaijian, ch7Shuaijian, ch8Shuaijian };
+                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
 
                 if (radioButton2.Checked)
                 {
                     mainForm.LogToConsole("开始发射测试"); //接收开关 发射移相 接收移相 发射衰减 接收衰减 发射开关
-                    string ch1send = checkBox_ch1.Checked ? "1" : "0";
-                    string ch2send = checkBox_ch2.Checked ? "1" : "0";
-                    string ch3send = checkBox_ch3.Checked ? "1" : "0";
-                    string ch4send = checkBox_ch4.Checked ? "1" : "0";
-                    string ch5send = checkBox_ch5.Checked ? "1" : "0";
-                    string ch6send = checkBox_ch6.Checked ? "1" : "0";
-                    string ch7send = checkBox_ch7.Checked ? "1" : "0";
-                    string ch8send = checkBox_ch8.Checked ? "1" : "0";
-                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + ch1Yixiang + "000000" + ch1send;
-                    string ch2 = "00" + "0" + "000000" + "000000" + ch2Yixiang + "000000" + ch2send;
-                    string ch3 = "00" + "0" + "000000" + "000000" + ch3Yixiang + "000000" + ch3send;
-                    string ch4 = "00" + "0" + "000000" + "000000" + ch4Yixiang + "000000" + ch4send;
-                    string ch5 = "00" + "0" + "000000" + "000000" + ch5Yixiang + "000000" + ch5send;
-                    string ch6 = "00" + "0" + "000000" + "000000" + ch6Yixiang + "000000" + ch6send;
-                    string ch7 = "00" + "0" + "000000" + "000000" + ch7Yixiang + "000000" + ch7send;
-                    string ch8 = "00" + "0" + "000000" + "000000" + ch8Yixiang + "000000" + ch8send;
-                    string model = "00";
-                    string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    bool[] rxEnable = new bool[8];
+                    bool[] txEnable = GetChannelCheckedStates();
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, phaseBits, zeroBits, attenuationBits, zeroBits, rxEnable, txEnable);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}");
@@ -254,27 +332,10 @@ namespace DbfTest.PAGE
                 else if (radioButton1.Checked)
                 {
                     mainForm.LogToConsole("开始接收测试");
-                    string ch1recive = checkBox_ch1.Checked ? "1" : "0";
-                    string ch2recive = checkBox_ch2.Checked ? "1" : "0";
-                    string ch3recive = checkBox_ch3.Checked ? "1" : "0";
-                    string ch4recive = checkBox_ch4.Checked ? "1" : "0";
-                    string ch5recive = checkBox_ch5.Checked ? "1" : "0";
-                    string ch6recive = checkBox_ch6.Checked ? "1" : "0";
-                    string ch7recive = checkBox_ch7.Checked ? "1" : "0";
-                    string ch8recive = checkBox_ch8.Checked ? "1" : "0";
-                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + ch1Yixiang + "000000" + "0";
-                    string ch2 = "00" + ch2recive + "000000" + "000000" + ch2Yixiang + "000000" + "0";
-                    string ch3 = "00" + ch3recive + "000000" + "000000" + ch3Yixiang + "000000" + "0";
-                    string ch4 = "00" + ch4recive + "000000" + "000000" + ch4Yixiang + "000000" + "0";
-                    string ch5 = "00" + ch5recive + "000000" + "000000" + ch5Yixiang + "000000" + "0";
-                    string ch6 = "00" + ch6recive + "000000" + "000000" + ch6Yixiang + "000000" + "0";
-                    string ch7 = "00" + ch7recive + "000000" + "000000" + ch7Yixiang + "000000" + "0";
-                    string ch8 = "00" + ch8recive + "000000" + "000000" + ch8Yixiang + "000000" + "0";
-                    string model = "10";
-                    string model_stc = model + ch1Shuaijian + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    bool[] rxEnable = GetChannelCheckedStates();
+                    bool[] txEnable = new bool[8];
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, phaseBits, zeroBits, attenuationBits, rxEnable, txEnable);
                     mainForm.LogToConsole(ch1Yixiang);
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}");
@@ -282,18 +343,10 @@ namespace DbfTest.PAGE
                 else if (radioButton3.Checked)
                 {
                     mainForm.LogToConsole("负载模式");
-                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
-                    string model_stc = "01" + "000000" + mgc_comboBox.SelectedIndex;
-                    string buling = new string('0', 59);
+                    bool[] rxEnable = new bool[8];
+                    bool[] txEnable = new bool[8];
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, txEnable);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("负载模式","");
@@ -321,6 +374,8 @@ namespace DbfTest.PAGE
                     return;
                 }
 
+                EnsureApplicationHeader();
+                ValidatePayloadParts(headValue, modelValue, emptyValue, codeValue);
                 var payload = headValue.Concat(modelValue).Concat(emptyValue).Concat(codeValue).ToArray();
 
                 PhysicalAddress srcMac = PhysicalAddress.Parse(srcMacAddress.Trim().Replace(":", "-").ToUpperInvariant());
@@ -373,35 +428,135 @@ namespace DbfTest.PAGE
 
         }
 
-        static byte[] GenerateCodeValueFromBits(string[] bitStrings)
+        private byte[] BuildApplicationHeader()
         {
-            /*            if (bitStrings.Length != 10)
-                            throw new ArgumentException("应包含10个通道的比特串");*/
+            if (string.IsNullOrEmpty(srcMacStr))
+                return null;
 
-            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59 };
-            string allBits = "";
+            string dstMacHex = string.IsNullOrWhiteSpace(dstMacStr)
+                ? "00 0a 35 01 fe c0"
+                : MacToHexString(dstMacStr);
+            string srcIpHex = IpToHexString(string.IsNullOrWhiteSpace(srcIpStr) ? "192.168.0.3" : srcIpStr);
+            string dstIpHex = IpToHexString(string.IsNullOrWhiteSpace(dstIpStr) ? "192.168.0.2" : dstIpStr);
 
-            for (int i = 0; i < 10; i++)
+            // data_decode 只依赖这个内嵌头尾部的 81 70 同步字，内嵌头固定 40 字节。
+            return StringToByteArray($"{dstMacHex} {srcMacStr} 08 00 45 00 b4 68 00 00 80 11 00 00 {srcIpHex} {dstIpHex} 1f 90 1f 90 00 23 81 70");
+        }
+
+        private void EnsureApplicationHeader()
+        {
+            if (headValue != null && headValue.Length == ApplicationHeaderLength)
+                return;
+
+            GetAddress();
+            headValue = BuildApplicationHeader();
+            if (headValue == null || headValue.Length != ApplicationHeaderLength)
+                throw new InvalidOperationException("无法构建内嵌头，请先在设备地址设置中配置 PC/FPGA 的 MAC 和 IP。");
+        }
+
+        private static string IpToHexString(string ip)
+        {
+            return string.Join(" ", IPAddress.Parse(ip).GetAddressBytes().Select(b => b.ToString("x2")));
+        }
+
+        private static string MacToHexString(string mac)
+        {
+            return mac.Trim().Replace(":", " ").Replace("-", " ").ToLowerInvariant();
+        }
+
+        private static void ValidatePayloadParts(byte[] headValue, byte[] modelValue, byte[] emptyValue, byte[] codeValue)
+        {
+            if (headValue == null || headValue.Length != ApplicationHeaderLength)
+                throw new ArgumentException($"内嵌头应为 {ApplicationHeaderLength} 字节，并以 81 70 结束。");
+            if (headValue[ApplicationHeaderLength - 2] != 0x81 || headValue[ApplicationHeaderLength - 1] != 0x70)
+                throw new ArgumentException("内嵌头末尾必须是同步字 81 70。");
+            if (modelValue == null || modelValue.Length != ModelValueLength)
+                throw new ArgumentException($"modelValue 应为 {ModelValueLength} 字节。");
+            if (emptyValue == null || emptyValue.Length != ReservedValueLength)
+                throw new ArgumentException($"保留字段应为 {ReservedValueLength} 字节。");
+            if (codeValue == null || codeValue.Length != CodeValueLength)
+                throw new ArgumentException($"codeValue 应为 {CodeValueLength} 字节。");
+        }
+
+        private bool[] GetChannelCheckedStates()
+        {
+            return new[]
             {
-                string bits = bitStrings[i].Replace(" ", "");
-                if (bits.Length != expectedLengths[i])
-                    throw new ArgumentException($"通道 {i + 1} 应为 {expectedLengths[i]} 位，但提供了 {bits.Length} 位");
+                checkBox_ch1.Checked,
+                checkBox_ch2.Checked,
+                checkBox_ch3.Checked,
+                checkBox_ch4.Checked,
+                checkBox_ch5.Checked,
+                checkBox_ch6.Checked,
+                checkBox_ch7.Checked,
+                checkBox_ch8.Checked
+            };
+        }
 
-                allBits += bits;
+        static byte[] GenerateCodeValueFromBits(string ifAttenuationBits, string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
+        {
+            ValidateChannelArrays(txPhaseBits, rxPhaseBits, txAttenuationBits, rxAttenuationBits, rxEnable, txEnable);
+
+            List<int> controlBits = new List<int>(ControlBitCount);
+            AppendBitString(controlBits, ifAttenuationBits, 6, "中频衰减");
+
+            for (int i = 0; i < 8; i++)
+            {
+                AppendEnableBit(controlBits, rxEnable[i]);
+                AppendBitString(controlBits, txPhaseBits[i], 6, $"通道 {i + 1} 发射移相");
+                AppendBitString(controlBits, rxPhaseBits[i], 6, $"通道 {i + 1} 接收移相");
+                AppendBitString(controlBits, txAttenuationBits[i], 6, $"通道 {i + 1} 发射衰减");
+                AppendBitString(controlBits, rxAttenuationBits[i], 6, $"通道 {i + 1} 接收衰减");
+                AppendEnableBit(controlBits, txEnable[i]);
             }
 
-            if (allBits.Length != 320)
-                throw new ArgumentException($"总位数应为320，但现在是 {allBits.Length}");
+            if (controlBits.Count != ControlBitCount)
+                throw new ArgumentException($"控制字应为{ControlBitCount}位，但现在是 {controlBits.Count} 位");
 
-            // 输出 15 字节（120 位）
-            byte[] codeBytes = new byte[40];
-            for (int i = 0; i < 40; i++)
+            byte[] codeBytes = new byte[CodeValueLength];
+            for (int i = 0; i < 6; i++)
             {
-                string byteStr = allBits.Substring(i * 8, 8);
-                codeBytes[i] = Convert.ToByte(byteStr, 2);
+                if (controlBits[i] == 1)
+                    codeBytes[ControlCodeStartIndex] |= (byte)(1 << i);
+            }
+
+            for (int i = 6; i < controlBits.Count; i++)
+            {
+                int channelBitIndex = i - 6;
+                int byteIndex = ControlCodeStartIndex + 1 + channelBitIndex / 8;
+                int bitIndex = channelBitIndex % 8;
+                if (controlBits[i] == 1)
+                    codeBytes[byteIndex] |= (byte)(1 << bitIndex);
             }
 
             return codeBytes;
+        }
+
+        static void ValidateChannelArrays(string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
+        {
+            if (txPhaseBits.Length != 8 || rxPhaseBits.Length != 8 || txAttenuationBits.Length != 8 || rxAttenuationBits.Length != 8 || rxEnable.Length != 8 || txEnable.Length != 8)
+                throw new ArgumentException("通道控制参数必须包含8个通道。");
+        }
+
+        static void AppendEnableBit(List<int> bits, bool enabled)
+        {
+            bits.Add(enabled ? 1 : 0);
+        }
+
+        static void AppendBitString(List<int> bits, string bitString, int expectedLength, string fieldName)
+        {
+            string normalized = bitString.Replace(" ", "");
+            if (normalized.Length != expectedLength)
+                throw new ArgumentException($"{fieldName} 应为 {expectedLength} 位，但提供了 {normalized.Length} 位");
+
+            foreach (char bit in normalized)
+            {
+                if (bit != '0' && bit != '1')
+                    throw new ArgumentException($"{fieldName} 只能包含0或1。");
+
+                // UI字符串从左到右按协议低位到高位填写，协议低位映射到字节LSB并先串行发送。
+                bits.Add(bit == '1' ? 1 : 0);
+            }
         }
 
 
@@ -458,5 +613,6 @@ namespace DbfTest.PAGE
         {
             this.Close();
         }
+
     }
 }
