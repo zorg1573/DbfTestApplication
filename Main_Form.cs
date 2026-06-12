@@ -1630,7 +1630,7 @@ namespace DbfTest
                 bool[] rxEnable = GetChannelCheckboxStates();
                 string[] zeroBits = CreateZeroBitFields();
                 modelValue = StringToByteArray("01 03 02 00");
-                var codeValue = GenerateCodeValueFromBits(numToString, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
+                var codeValue = GenerateCodeValueFromBits(PadIfAttenuationBits(numToString), zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500); // 让设备处理
@@ -1825,7 +1825,7 @@ namespace DbfTest
                 bool[] rxEnable = GetChannelCheckboxStates();
                 string[] zeroBits = CreateZeroBitFields();
                 modelValue = StringToByteArray("01 03 02 00");
-                var codeValue = GenerateCodeValueFromBits("000000", zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
+                var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500); // 让设备处理
@@ -2257,7 +2257,7 @@ namespace DbfTest
                 bool[] rxEnable = GetChannelCheckboxStates();
                 string[] zeroBits = CreateZeroBitFields();
                 modelValue = StringToByteArray("01 03 02 00");
-                var codeValue = GenerateCodeValueFromBits("000000", zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
+                var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500); // 让设备处理
@@ -3687,9 +3687,17 @@ namespace DbfTest
         const int ApplicationHeaderLength = 40;
         const int ModelValueLength = 4;
         const int ReservedValueLength = 8;
-        const int CodeValueLength = 40;
-        const int ControlBitCount = 214;
+        const int CodeValueLength = 41;
+        const int ControlCodeByteLength = 28;
+        const int TableHeaderBitCount = 6;           // 表头[5:0]
+        const int IfAttenuationBitCount = 10;        // ATT[9:0]
+        const int ChannelFieldBitCount = 6;
+        const int ChannelControlBitCount = 26;       // RxEn + 4×6bit + TxEn
+        const int ChannelCount = 8;
+        const int ControlBitCount = TableHeaderBitCount + IfAttenuationBitCount + ChannelControlBitCount * ChannelCount;
+        const string DefaultTableHeaderBits = "010101"; // 表头[5:0] 默认值
         const int ControlCodeStartIndex = 13;
+        const string DefaultIfAttenuationBits = "0000000000";
 
         public void SendCustomPacket(byte[] headValue, byte[] modelValue, byte[] emptyValue, byte[] codeValue)
         {
@@ -3826,40 +3834,48 @@ namespace DbfTest
             return Enumerable.Repeat("000000", 8).ToArray();
         }
 
+        private static string PadIfAttenuationBits(string bits)
+        {
+            string normalized = (bits ?? string.Empty).Replace(" ", "");
+            if (normalized.Length > IfAttenuationBitCount)
+                throw new ArgumentException($"中频衰减应为 {IfAttenuationBitCount} 位，但提供了 {normalized.Length} 位");
+
+            return normalized.PadRight(IfAttenuationBitCount, '0');
+        }
+
         static byte[] GenerateCodeValueFromBits(string ifAttenuationBits, string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
         {
             ValidateChannelArrays(txPhaseBits, rxPhaseBits, txAttenuationBits, rxAttenuationBits, rxEnable, txEnable);
 
             List<int> controlBits = new List<int>(ControlBitCount);
-            AppendBitString(controlBits, ifAttenuationBits, 6, "中频衰减");
+            // 28字节控制码顺序: 表头[5:0] + ATT[9:0] + 26×8
+            AppendBitString(controlBits, ToWireBitOrder(DefaultTableHeaderBits), TableHeaderBitCount, "表头");
+            AppendBitString(controlBits, PadIfAttenuationBits(ifAttenuationBits), IfAttenuationBitCount, "ATT[9:0]");
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < ChannelCount; i++)
             {
                 AppendEnableBit(controlBits, rxEnable[i]);
-                AppendBitString(controlBits, txPhaseBits[i], 6, $"通道 {i + 1} 发射移相");
-                AppendBitString(controlBits, rxPhaseBits[i], 6, $"通道 {i + 1} 接收移相");
-                AppendBitString(controlBits, txAttenuationBits[i], 6, $"通道 {i + 1} 发射衰减");
-                AppendBitString(controlBits, rxAttenuationBits[i], 6, $"通道 {i + 1} 接收衰减");
+                AppendBitString(controlBits, txPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射移相");
+                AppendBitString(controlBits, rxPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收移相");
+                AppendBitString(controlBits, txAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射衰减");
+                AppendBitString(controlBits, rxAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收衰减");
                 AppendEnableBit(controlBits, txEnable[i]);
             }
 
             if (controlBits.Count != ControlBitCount)
-                throw new ArgumentException($"控制字应为{ControlBitCount}位，但现在是 {controlBits.Count} 位");
+                throw new ArgumentException($"控制字应为{ControlBitCount}位（{ControlCodeByteLength}字节），但现在是 {controlBits.Count} 位");
 
             byte[] codeBytes = new byte[CodeValueLength];
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < controlBits.Count; i++)
             {
-                if (controlBits[i] == 1)
-                    codeBytes[ControlCodeStartIndex] |= (byte)(1 << i);
-            }
+                if (controlBits[i] != 1)
+                    continue;
 
-            for (int i = 6; i < controlBits.Count; i++)
-            {
-                int channelBitIndex = i - 6;
-                int byteIndex = ControlCodeStartIndex + 1 + channelBitIndex / 8;
-                int bitIndex = channelBitIndex % 8;
-                if (controlBits[i] == 1)
-                    codeBytes[byteIndex] |= (byte)(1 << bitIndex);
+                int byteIndex = ControlCodeStartIndex + i / 8;
+                if (byteIndex >= CodeValueLength)
+                    throw new ArgumentException($"控制字超出 codeValue 范围：需要字节索引 {byteIndex}，但 codeValue 长度为 {CodeValueLength}。");
+
+                codeBytes[byteIndex] |= (byte)(1 << (i % 8));
             }
 
             return codeBytes;
@@ -3869,6 +3885,13 @@ namespace DbfTest
         {
             if (txPhaseBits.Length != 8 || rxPhaseBits.Length != 8 || txAttenuationBits.Length != 8 || rxAttenuationBits.Length != 8 || rxEnable.Length != 8 || txEnable.Length != 8)
                 throw new ArgumentException("通道控制参数必须包含8个通道。");
+        }
+
+        static string ToWireBitOrder(string msbToLsbBits)
+        {
+            char[] reversed = msbToLsbBits.Replace(" ", "").ToCharArray();
+            Array.Reverse(reversed);
+            return new string(reversed);
         }
 
         static void AppendEnableBit(List<int> bits, bool enabled)
@@ -3916,7 +3939,7 @@ namespace DbfTest
                     bool[] rxEnable = GetChannelCheckboxStates();
                     string[] zeroBits = CreateZeroBitFields();
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits("000000", zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
+                    var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, new bool[8]);
                     string chSum = "";
                     if (ch1_checkBox.Checked)
                     {
@@ -3979,7 +4002,7 @@ namespace DbfTest
                     bool[] txEnable = GetChannelCheckboxStates();
                     string[] zeroBits = CreateZeroBitFields();
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits("000000", zeroBits, zeroBits, zeroBits, zeroBits, new bool[8], txEnable);
+                    var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, zeroBits, zeroBits, zeroBits, zeroBits, new bool[8], txEnable);
                     string chSum = "";
                     if (ch1_checkBox.Checked)
                     {
@@ -4060,7 +4083,7 @@ namespace DbfTest
                         ? zeroBits
                         : Enumerable.Repeat(numToString, 8).ToArray();
                     modelValue = StringToByteArray("01 03 01 00");
-                    var codeValue = GenerateCodeValueFromBits("000000", txPhaseBits, zeroBits, txAttenuationBits, zeroBits, new bool[8], txEnable);
+                    var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, txPhaseBits, zeroBits, txAttenuationBits, zeroBits, new bool[8], txEnable);
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     LogToConsole(numToString);
                 }
@@ -4080,7 +4103,7 @@ namespace DbfTest
                     LogToConsole("切换至负载态");
                     string[] zeroBits = CreateZeroBitFields();
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits("000000", zeroBits, zeroBits, zeroBits, zeroBits, new bool[8], new bool[8]);
+                    var codeValue = GenerateCodeValueFromBits(DefaultIfAttenuationBits, zeroBits, zeroBits, zeroBits, zeroBits, new bool[8], new bool[8]);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 }

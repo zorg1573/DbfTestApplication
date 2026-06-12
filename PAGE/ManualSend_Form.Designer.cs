@@ -68,6 +68,7 @@
             this.ch2_shuaijian_textBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.ch1_shuaijian_textBox = new System.Windows.Forms.TextBox();
+            this.comboBox_mode = new System.Windows.Forms.ComboBox();
             this.panel3.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -315,7 +316,7 @@
             this.shuaijian_textBox.Name = "shuaijian_textBox";
             this.shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
             this.shuaijian_textBox.TabIndex = 12;
-            this.shuaijian_textBox.Text = "000000";
+            this.shuaijian_textBox.Text = "0000000000";
             // 
             // label5
             // 
@@ -472,12 +473,24 @@
             this.ch1_shuaijian_textBox.TabIndex = 40;
             this.ch1_shuaijian_textBox.Text = "000000";
             // 
+            // comboBox_mode
+            // 
+            this.comboBox_mode.FormattingEnabled = true;
+            this.comboBox_mode.Items.AddRange(new object[] {
+            "正常处理",
+            "只改中频"});
+            this.comboBox_mode.Location = new System.Drawing.Point(292, 495);
+            this.comboBox_mode.Name = "comboBox_mode";
+            this.comboBox_mode.Size = new System.Drawing.Size(100, 20);
+            this.comboBox_mode.TabIndex = 49;
+            // 
             // ManualSend_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(443, 605);
             this.ControlBox = false;
+            this.Controls.Add(this.comboBox_mode);
             this.Controls.Add(this.ch8_shuaijian_textBox);
             this.Controls.Add(this.ch7_shuaijian_textBox);
             this.Controls.Add(this.ch6_shuaijian_textBox);
@@ -563,5 +576,6 @@
         private System.Windows.Forms.TextBox ch2_shuaijian_textBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox ch1_shuaijian_textBox;
+        private System.Windows.Forms.ComboBox comboBox_mode;
     }
 }

@@ -15,6 +15,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DbfTest.DAL;
+using System.Runtime.CompilerServices;
 
 namespace DbfTest.PAGE
 {
@@ -41,8 +42,15 @@ namespace DbfTest.PAGE
         const int ApplicationHeaderLength = 40;
         const int ModelValueLength = 4;
         const int ReservedValueLength = 8;
-        const int CodeValueLength = 40;
-        const int ControlBitCount = 214;
+        const int CodeValueLength = 41;
+        const int ControlCodeByteLength = 28;
+        const int TableHeaderBitCount = 6;           // 表头[5:0]
+        const int IfAttenuationBitCount = 10;        // ATT[9:0]
+        const int ChannelFieldBitCount = 6;
+        const int ChannelControlBitCount = 26;       // RxEn + 4×6bit + TxEn
+        const int ChannelCount = 8;
+        const int ControlBitCount = TableHeaderBitCount + IfAttenuationBitCount + ChannelControlBitCount * ChannelCount;
+        string DefaultTableHeaderBits = "010101"; // 表头[5:0] 默认值
         const int ControlCodeStartIndex = 13;
         private Main_Form mainForm;
         string ch1Yixiang = "000000";
@@ -53,7 +61,7 @@ namespace DbfTest.PAGE
         string ch6Yixiang = "000000";
         string ch7Yixiang = "000000";
         string ch8Yixiang = "000000";
-        string zhongpinShuaijian = "000000";
+        string zhongpinShuaijian = "0000000000";
         string ch1Shuaijian = "000000";
         string ch2Shuaijian = "000000";
         string ch3Shuaijian = "000000";
@@ -85,7 +93,7 @@ namespace DbfTest.PAGE
             ch6_yixiang_textBox.MaxLength = 6;
             ch7_yixiang_textBox.MaxLength = 6;
             ch8_yixiang_textBox.MaxLength = 6;
-            shuaijian_textBox.MaxLength = 6;
+            shuaijian_textBox.MaxLength = IfAttenuationBitCount;
             ch1_shuaijian_textBox.MaxLength = 6;
             ch2_shuaijian_textBox.MaxLength = 6;
             ch3_shuaijian_textBox.MaxLength = 6;
@@ -199,9 +207,9 @@ namespace DbfTest.PAGE
                     MessageBox.Show("通道8移相输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                if (!string.IsNullOrEmpty(shuaijian_textBox.Text) && shuaijian_textBox.Text.Length != 6)
+                if (!string.IsNullOrEmpty(shuaijian_textBox.Text) && shuaijian_textBox.Text.Length != IfAttenuationBitCount)
                 {
-                    MessageBox.Show("衰减输入必须为 6 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"中频衰减输入必须为 {IfAttenuationBitCount} 位。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (!string.IsNullOrEmpty(ch1_shuaijian_textBox.Text) && ch1_shuaijian_textBox.Text.Length != 6)
@@ -318,12 +326,22 @@ namespace DbfTest.PAGE
                 string[] attenuationBits = { ch1Shuaijian, ch2Shuaijian, ch3Shuaijian, ch4Shuaijian, ch5Shuaijian, ch6Shuaijian, ch7Shuaijian, ch8Shuaijian };
                 string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
 
+                if (comboBox_mode.SelectedIndex == 0)
+                {
+                    DefaultTableHeaderBits = "010101";
+                }
+                else
+                {
+                    DefaultTableHeaderBits = "101010";
+                }
+
                 if (radioButton2.Checked)
                 {
                     mainForm.LogToConsole("开始发射测试"); //接收开关 发射移相 接收移相 发射衰减 接收衰减 发射开关
                     bool[] rxEnable = new bool[8];
                     bool[] txEnable = GetChannelCheckedStates();
                     modelValue = StringToByteArray("01 03 01 00");
+
                     var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, phaseBits, zeroBits, attenuationBits, zeroBits, rxEnable, txEnable);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
@@ -493,49 +511,64 @@ namespace DbfTest.PAGE
             };
         }
 
-        static byte[] GenerateCodeValueFromBits(string ifAttenuationBits, string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
+        byte[] GenerateCodeValueFromBits(string ifAttenuationBits, string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
         {
             ValidateChannelArrays(txPhaseBits, rxPhaseBits, txAttenuationBits, rxAttenuationBits, rxEnable, txEnable);
 
             List<int> controlBits = new List<int>(ControlBitCount);
-            AppendBitString(controlBits, ifAttenuationBits, 6, "中频衰减");
+            // 28字节控制码顺序: 表头[5:0] + ATT[9:0] + 26×8
+            AppendBitString(controlBits, ToWireBitOrder(DefaultTableHeaderBits), TableHeaderBitCount, "表头");
+            AppendBitString(controlBits, PadIfAttenuationBits(ifAttenuationBits), IfAttenuationBitCount, "ATT[9:0]");
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < ChannelCount; i++)
             {
                 AppendEnableBit(controlBits, rxEnable[i]);
-                AppendBitString(controlBits, txPhaseBits[i], 6, $"通道 {i + 1} 发射移相");
-                AppendBitString(controlBits, rxPhaseBits[i], 6, $"通道 {i + 1} 接收移相");
-                AppendBitString(controlBits, txAttenuationBits[i], 6, $"通道 {i + 1} 发射衰减");
-                AppendBitString(controlBits, rxAttenuationBits[i], 6, $"通道 {i + 1} 接收衰减");
+                AppendBitString(controlBits, txPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射移相");
+                AppendBitString(controlBits, rxPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收移相");
+                AppendBitString(controlBits, txAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射衰减");
+                AppendBitString(controlBits, rxAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收衰减");
                 AppendEnableBit(controlBits, txEnable[i]);
             }
 
             if (controlBits.Count != ControlBitCount)
-                throw new ArgumentException($"控制字应为{ControlBitCount}位，但现在是 {controlBits.Count} 位");
+                throw new ArgumentException($"控制字应为{ControlBitCount}位（{ControlCodeByteLength}字节），但现在是 {controlBits.Count} 位");
 
             byte[] codeBytes = new byte[CodeValueLength];
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < controlBits.Count; i++)
             {
-                if (controlBits[i] == 1)
-                    codeBytes[ControlCodeStartIndex] |= (byte)(1 << i);
-            }
+                if (controlBits[i] != 1)
+                    continue;
 
-            for (int i = 6; i < controlBits.Count; i++)
-            {
-                int channelBitIndex = i - 6;
-                int byteIndex = ControlCodeStartIndex + 1 + channelBitIndex / 8;
-                int bitIndex = channelBitIndex % 8;
-                if (controlBits[i] == 1)
-                    codeBytes[byteIndex] |= (byte)(1 << bitIndex);
+                int byteIndex = ControlCodeStartIndex + i / 8;
+                if (byteIndex >= CodeValueLength)
+                    throw new ArgumentException($"控制字超出 codeValue 范围：需要字节索引 {byteIndex}，但 codeValue 长度为 {CodeValueLength}。");
+
+                codeBytes[byteIndex] |= (byte)(1 << (i % 8));
             }
 
             return codeBytes;
+        }
+
+        static string PadIfAttenuationBits(string bits)
+        {
+            string normalized = (bits ?? string.Empty).Replace(" ", "");
+            if (normalized.Length > IfAttenuationBitCount)
+                throw new ArgumentException($"中频衰减应为 {IfAttenuationBitCount} 位，但提供了 {normalized.Length} 位");
+
+            return normalized.PadRight(IfAttenuationBitCount, '0');
         }
 
         static void ValidateChannelArrays(string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
         {
             if (txPhaseBits.Length != 8 || rxPhaseBits.Length != 8 || txAttenuationBits.Length != 8 || rxAttenuationBits.Length != 8 || rxEnable.Length != 8 || txEnable.Length != 8)
                 throw new ArgumentException("通道控制参数必须包含8个通道。");
+        }
+
+        static string ToWireBitOrder(string msbToLsbBits)
+        {
+            char[] reversed = msbToLsbBits.Replace(" ", "").ToCharArray();
+            Array.Reverse(reversed);
+            return new string(reversed);
         }
 
         static void AppendEnableBit(List<int> bits, bool enabled)
