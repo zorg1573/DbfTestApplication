@@ -362,6 +362,9 @@
     </Compile>
     <Compile Include="FUNCTION\LanScanFunc.cs" />
     <Compile Include="MODEL\LanScanConfig.cs" />
+    <Compile Include="MODEL\TemperatureReturnFrame.cs" />
+    <Compile Include="FUNCTION\TemperatureReturnParser.cs" />
+    <Compile Include="FUNCTION\TemperatureReturnReceiver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Main_Form.resx">

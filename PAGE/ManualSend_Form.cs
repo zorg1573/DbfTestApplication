@@ -102,6 +102,8 @@ namespace DbfTest.PAGE
             ch6_shuaijian_textBox.MaxLength = 6;
             ch7_shuaijian_textBox.MaxLength = 6;
             ch8_shuaijian_textBox.MaxLength = 6;
+
+            comboBox_mode.SelectedIndex = 0;
         }
         private void ManualSend_Form_Load(object sender, EventArgs e)
         {
@@ -338,11 +340,12 @@ namespace DbfTest.PAGE
                 if (radioButton2.Checked)
                 {
                     mainForm.LogToConsole("开始发射测试"); //接收开关 发射移相 接收移相 发射衰减 接收衰减 发射开关
-                    bool[] rxEnable = new bool[8];
+                    bool[] rxDisable = { true, true, true, true, true, true, true, true };
+                    bool[] txDisable = { true, true, true, true, true, true, true, true };
                     bool[] txEnable = GetChannelCheckedStates();
                     modelValue = StringToByteArray("01 03 01 00");
 
-                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, phaseBits, zeroBits, attenuationBits, zeroBits, rxEnable, txEnable);
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, phaseBits, zeroBits, attenuationBits, zeroBits, rxDisable, txEnable);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}");
@@ -351,9 +354,10 @@ namespace DbfTest.PAGE
                 {
                     mainForm.LogToConsole("开始接收测试");
                     bool[] rxEnable = GetChannelCheckedStates();
-                    bool[] txEnable = new bool[8];
+                    bool[] rxDisable = { true, true, true, true, true, true, true, true };
+                    bool[] txDisable = { true, true, true, true, true, true, true, true };
                     modelValue = StringToByteArray("01 03 02 00");
-                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, phaseBits, zeroBits, attenuationBits, rxEnable, txEnable);
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, phaseBits, zeroBits, attenuationBits, rxEnable, txDisable);
                     mainForm.LogToConsole(ch1Yixiang);
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("手动发码|接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}");
@@ -361,10 +365,10 @@ namespace DbfTest.PAGE
                 else if (radioButton3.Checked)
                 {
                     mainForm.LogToConsole("负载模式");
-                    bool[] rxEnable = new bool[8];
-                    bool[] txEnable = new bool[8];
+                    bool[] rxDisable = { true, true, true, true, true, true, true, true };
+                    bool[] txDisable = { true, true, true, true, true, true, true, true };
                     modelValue = StringToByteArray("01 03 03 00");
-                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, txEnable);
+                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, zeroBits, rxDisable, txDisable);
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                     //operateLog_DAL.InsertOperateLog_DT("负载模式","");
@@ -393,8 +397,8 @@ namespace DbfTest.PAGE
                 }
 
                 EnsureApplicationHeader();
-                ValidatePayloadParts(headValue, modelValue, emptyValue, codeValue);
-                var payload = headValue.Concat(modelValue).Concat(emptyValue).Concat(codeValue).ToArray();
+                ValidatePayloadParts(this.headValue, modelValue, emptyValue, codeValue);
+                var payload = this.headValue.Concat(modelValue).Concat(emptyValue).Concat(codeValue).ToArray();
 
                 PhysicalAddress srcMac = PhysicalAddress.Parse(srcMacAddress.Trim().Replace(":", "-").ToUpperInvariant());
                 PhysicalAddress dstMac = PhysicalAddress.Parse(dstMacStr.Trim().Replace(":", "-").ToUpperInvariant());
@@ -500,14 +504,14 @@ namespace DbfTest.PAGE
         {
             return new[]
             {
-                checkBox_ch1.Checked,
-                checkBox_ch2.Checked,
-                checkBox_ch3.Checked,
-                checkBox_ch4.Checked,
-                checkBox_ch5.Checked,
-                checkBox_ch6.Checked,
-                checkBox_ch7.Checked,
-                checkBox_ch8.Checked
+                !checkBox_ch1.Checked,
+                !checkBox_ch2.Checked,
+                !checkBox_ch3.Checked,
+                !checkBox_ch4.Checked,
+                !checkBox_ch5.Checked,
+                !checkBox_ch6.Checked,
+                !checkBox_ch7.Checked,
+                !checkBox_ch8.Checked
             };
         }
 

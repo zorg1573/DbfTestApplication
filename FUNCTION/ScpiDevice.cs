@@ -8,9 +8,18 @@ using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DbfTest.MODEL;
+using System.Net.Sockets;
 
 namespace DbfTest.FUNCTION
 {
+/*    
+      电源1        keysight    E36312A     TCPIP0::192.168.0.100::inst0::INSTR ch1 5V 0.5A
+      电源2        keysight    E36312A     TCPIP0::192.168.0.105::inst0::INSTR ch1 28V 2A ch2 5V 0.5A
+      频谱         ceyear      4052H       TCPIP0::192.168.0.106::inst0::INSTR
+      矢网         keysight    N5244B      TCPIP0::192.168.0.101::inst0::INSTR
+      信号发生器    玖锦        ASG3000B    TCPIP0::192.168.0.102::5010::SOCKET
+      功率计       ceyear      87234D	   USB0::0x3399::0x3800::QZMD000089::INSTR
+*/
     public class ScpiDevice
     {
         private IMessageBasedSession _visaSession;
@@ -124,11 +133,43 @@ namespace DbfTest.FUNCTION
         public async Task DisableOutput() => await SendCommandAsync(":OUTP OFF");
         public async Task ModON() => await SendCommandAsync(":OUTP:MOD ON");
         public async Task ModOFF() => await SendCommandAsync(":OUTP:MOD OFF");
+
+        #region 信号源（_xinhaoAddress）专用：AMPL / RF:STAT
+        /// <summary>设置功率（dBm）。指令：AMPL &lt;amplitude&gt;，范围约 -120～+20/+18 dBm。</summary>
+        public async Task SetAmplitude(double amplitudeDb) => await SendCommandAsync($"AMPL {amplitudeDb}");
+        public async Task SetAmplitudeMaximum() => await SendCommandAsync("AMPL MAX");
+        public async Task SetAmplitudeMinimum() => await SendCommandAsync("AMPL MIN");
+        public async Task AmplitudeUp() => await SendCommandAsync("AMPL UP");
+        public async Task AmplitudeDown() => await SendCommandAsync("AMPL DOWN");
+        public async Task<double?> ReadAmplitude()
+        {
+            string resp = await QueryAsync("AMPL?");
+            return double.TryParse(resp?.Trim(), out double val) ? (double?)val : null;
+        }
+
+        /// <summary>使能 RF 输出。指令：:RF:STAT 1</summary>
+        public async Task EnableRfOutput() => await SendCommandAsync(":RF:STAT 1");
+        /// <summary>关闭 RF 输出。指令：:RF:STAT 0</summary>
+        public async Task DisableRfOutput() => await SendCommandAsync(":RF:STAT 0");
+        public async Task SetRfState(bool enable) => await SendCommandAsync($":RF:STAT {(enable ? 1 : 0)}");
+        public async Task<bool?> QueryRfState()
+        {
+            string resp = (await QueryAsync(":RF:STAT?"))?.Trim();
+            if (string.IsNullOrEmpty(resp))
+                return null;
+            if (resp == "1" || resp.Equals("ON", StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (resp == "0" || resp.Equals("OFF", StringComparison.OrdinalIgnoreCase))
+                return false;
+            return null;
+        }
+        #endregion
+
         public async Task QueryOpc()
         {
             // 发出操作完成查询命令，直到设备响应
             string result = await QueryAsync("*OPC?");
-            if (!result.Trim().Equals("1"))
+            if (string.IsNullOrWhiteSpace(result) || !result.Trim().Equals("1"))
                 throw new Exception("设备未返回 *OPC 完成标志");
         }
 
@@ -276,7 +317,7 @@ namespace DbfTest.FUNCTION
         public async Task EnterNoiseFigureModeAsync() => await SendCommandAsync(":INST:SEL NFIGURE");
 
         // 加载噪声系数测量预设状态文件
-        public async Task LoadPinpuStateAsync(string filePath) => await SendCommandAsync($":MMEM:LOAD:STAT 1,'{filePath}'");
+        public async Task LoadPinpuStateAsync(string filePath) => await SendCommandAsync($":MMEMory:LOAD:STATe \"{filePath}\"");
 
         // 设置是否连续测量
         public async Task SetContinuousMeasurementAsync(bool enable) =>
@@ -289,7 +330,7 @@ namespace DbfTest.FUNCTION
         public async Task<bool> QueryOperationCompleteAsync()
         {
             var response = await QueryAsync("*OPC?");
-            return response.Trim() == "1";
+            return !string.IsNullOrWhiteSpace(response) && response.Trim() == "1";
         }
 
         // 获取已校正的噪声系数结果（单位 dB）
@@ -343,73 +384,108 @@ namespace DbfTest.FUNCTION
                      .ToArray();
                  return values;
              }*/
-        public async Task<string[]> GetZaoshengData(double freq)
+        public async Task<string[]> GetZaoshengData()
         {
-            double benZhen = freq - 175 * 1e6;
-            await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
-            await SendCommandAsync($":SENS:FREQ:CENT {freq}");
+            await SendCommandAsync(":INIT:CONT OFF");
+            await SendCommandAsync(":INIT:REST");
+            string opc = await QueryAsync("*OPC?");
 
-            const int maxTries = 20; // 最多读取次数，防止死循环
+            const int maxTry = 50; // 最多尝试次数
             string[] finalValues = null;
 
-            for (int attempt = 1; attempt <= maxTries; attempt++)
+            for (int n = 1; n <= maxTry; n++)
             {
-                await SendCommandAsync("INIT:IMM");
-                await Task.Delay(500); // 可根据仪表响应速度调整
-                string data = await QueryAsync("TRAC? TRACE1, NOISe");
-                await SendCommandAsync("*OPC");
+                string data = await QueryAsync(":FETCH:CORR:NFIG? DB");
 
                 if (string.IsNullOrWhiteSpace(data))
+                    continue;
+
+                string[] parts = data.Split(',');
+                if (parts.Length == 0)
+                    continue;
+
+                if (finalValues == null)
+                    finalValues = new string[parts.Length];
+
+                for (int i = 0; i < parts.Length; i++)
                 {
-                    //LogToConsole($"第 {attempt} 次读取噪声数据为空，跳过...");
+                    string raw = parts[i]?.Trim() ?? "";
+
+                    // ------- 判定是否有效 -------
+                    bool ok = double.TryParse(raw, out double v) &&
+                              !double.IsNaN(v) &&
+                              v != 0 &&
+                              Math.Abs(v - 9.9099995E+37) > 1e30 &&
+                              Math.Abs(v + 9.91E+37) > 1e30;
+
+                    if (ok)
+                        finalValues[i] = v.ToString();
+                }
+
+                // ------- 检查是否全部有效 -------
+                bool allValid = finalValues.All(s =>
+                    double.TryParse(s, out double v) &&
+                    !double.IsNaN(v) &&
+                    v > 0 && v < 10 &&
+                    Math.Abs(v - 9.9099995E+37) > 1e30 &&
+                    Math.Abs(v + 9.91E+37) > 1e30)
+                    ;
+
+                if (allValid)
+                    return finalValues;
+
+                await Task.Delay(5000);
+            }
+
+            return finalValues;
+        }
+
+        /// <summary>
+        /// 在指定射频频点测量噪声系数（单点，非扫频）。
+        /// 将频谱仪起止频率设为同一频点后触发测量，返回该点校正噪声系数（dB）。
+        /// </summary>
+        public async Task<string> GetZaoshengSinglePointAsync(double freqHz)
+        {
+            double benZhen = freqHz - 175 * 1e6;
+            await SendCommandAsync($":SENS:CONF:MODE:SYST:LO:FREQ {benZhen}");
+            await SendCommandAsync($":SENS:FREQ:STAR {freqHz}");
+            await SendCommandAsync($":SENS:FREQ:STOP {freqHz}");
+            await SendCommandAsync($":SENS:FREQ:CENT {freqHz}");
+            await SendCommandAsync(":SENS:SWE:POIN 1");
+
+            await SendCommandAsync(":INIT:CONT OFF");
+            await SendCommandAsync(":INIT:REST");
+            await QueryAsync("*OPC?");
+
+            const int maxTry = 20;
+            for (int n = 1; n <= maxTry; n++)
+            {
+                string raw = await QueryAsync(":FETCH:CORR:NFIG? DB");
+                if (string.IsNullOrWhiteSpace(raw))
+                {
+                    await Task.Delay(500);
                     continue;
                 }
 
-                string[] parts = data.Split(',');
-                double[] current = parts.Select(p =>
+                string[] parts = raw.Split(',');
+                foreach (string part in parts)
                 {
-                    if (double.TryParse(p, out double val))
-                    {
-                        if (Math.Abs(val - 9.9099995E+37) < 1e30)
-                            return double.NaN;
-                        else
-                            return val;
-                    }
-                    else return double.NaN;
-                }).ToArray();
-
-                // 第一次初始化 finalValues
-                if (finalValues == null)
-                    finalValues = current.Select(v => double.IsNaN(v) ? "NaN" : v.ToString()).ToArray();
-
-                // 逐点更新
-                for (int i = 0; i < current.Length; i++)
-                {
-                    if (double.TryParse(finalValues[i], out double existVal) && !double.IsNaN(existVal) && existVal > 0)
-                        continue; // 已有有效值，不更新
-
-                    if (!double.IsNaN(current[i]) && current[i] > 0)
-                        finalValues[i] = current[i].ToString(); // 更新为有效值
+                    string trimmed = part?.Trim() ?? "";
+                    bool ok = double.TryParse(trimmed, out double v) &&
+                              !double.IsNaN(v) &&
+                              v != 0 &&
+                              Math.Abs(v - 9.9099995E+37) > 1e30 &&
+                              Math.Abs(v + 9.91E+37) > 1e30;
+                    if (ok)
+                        return v.ToString("F2");
                 }
 
-                // 检查是否所有点都有效
-                bool allValid = finalValues.All(s =>
-                {
-                    return double.TryParse(s, out double v) && !double.IsNaN(v) && v > 0;
-                });
-
-                //LogToConsole($"第 {attempt} 次采集完成，有效点 {finalValues.Count(s => double.TryParse(s, out double v) && !double.IsNaN(v))}/{finalValues.Length}");
-
-                if (allValid)
-                {
-                    //LogToConsole($"✅ 已采集到完整有效噪声数据（共 {finalValues.Length} 点）");
-                    return finalValues;
-                }
+                await Task.Delay(1000);
             }
 
-            //LogToConsole("⚠️ 达到最大尝试次数，仍有无效点，返回部分数据。");
-            return finalValues;
+            return double.NaN.ToString();
         }
+
         /// <summary>
         /// 获取噪声曲线中指定索引位置的有效值
         /// </summary>
@@ -506,6 +582,10 @@ namespace DbfTest.FUNCTION
         {
             await SendCommandAsync("INIT:CONT ON");
         }
+        public async Task SetPower(double power,int portNum)
+        {
+            await SendCommandAsync($"SOUR:POW{portNum} {power}");
+        }
         public async Task SetNormalize()
         {
             // 触发单次测量
@@ -524,7 +604,7 @@ namespace DbfTest.FUNCTION
         {
             // 触发单次测量
             await ScanOnce0();
-            await Task.Delay(1000);
+            await QueryOperationCompleteAsync();
             // 选中 Trace 3 再 normalize
             await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_1'");
             await SendCommandAsync(":CALC1:MATH:FUNC NORM");
@@ -567,23 +647,25 @@ namespace DbfTest.FUNCTION
             string[] parts = data?.Split(',');
             return parts;
         }
-        // 获取 S11 驻波比（VSWR）
-        public async Task<string[]> GetInputVSWRStringAsync()
+        // 获取 S11 驻波比（VSWR，扫描点数为 1，返回单值）
+        public async Task<string> GetInputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'TRC3'");
-            await SendCommandAsync("CALC:FORM SWR");
-            string data = await QueryAsync("CALC:DATA? FDATA");
-            string[] parts = data?.Split(',');
-            return parts;
+            await SendCommandAsync("CALC2:PAR:SEL 'CH2_S11_2'");
+            await SendCommandAsync("CALC2:FORM SWR");
+            string data = await QueryAsync("CALC2:DATA? FDATA");
+            if (string.IsNullOrWhiteSpace(data))
+                return "";
+            return data.Split(',')[0].Trim();
         }
-        // 获取 S22 驻波比（VSWR）
-        public async Task<string[]> GetOutputVSWRStringAsync()
+        // 获取 S22 驻波比（VSWR，扫描点数为 1，返回单值）
+        public async Task<string> GetOutputVSWRStringAsync()
         {
-            await SendCommandAsync("CALC:PAR:SEL 'TRC4'");
-            await SendCommandAsync("CALC:FORM SWR");
-            string data = await QueryAsync("CALC:DATA? FDATA");
-            string[] parts = data?.Split(',');
-            return parts;
+            await SendCommandAsync("CALC2:PAR:SEL 'CH2_S11_3'");
+            await SendCommandAsync("CALC2:FORM SWR");
+            string data = await QueryAsync("CALC2:DATA? FDATA");
+            if (string.IsNullOrWhiteSpace(data))
+                return "";
+            return data.Split(',')[0].Trim();
         }
         // 获取初始相位
         public async Task<string[]> GetInitialPhaseStringAsync()
@@ -597,11 +679,74 @@ namespace DbfTest.FUNCTION
         public async Task<string[]> GetPhase_Send()
         {
             await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_1'");
+            await TriggerVnaSingleSweepAndWaitAsync();
             //await SendCommandAsync(":CALC1:FORM PHAS");
             await SendCommandAsync(":CALC1:FORM UPH");
             string data = await QueryAsync(":CALC1:DATA? FDATA");
             string[] parts = data?.Split(',');
             return parts;
+        }
+        /// <summary>
+        /// 触发单次扫描并等待完成。调用前须已通过 SetVNACenterFreqForSweepAsync 进入 HOLD。
+        /// </summary>
+        private async Task TriggerVnaSingleSweepAndWaitAsync(int timeoutMs = 10000)
+        {
+            if (!await TriggerSingleSweepAfterHoldAsync(timeoutMs))
+                throw new TimeoutException("等待矢网扫描完成超时。");
+        }
+        /// <summary>
+        /// HOLD 设频后的单次扫描：SINGle → *OPC? → 等待完成。
+        /// 不再 ABOR/强制等待“扫描中”，避免首次 OPER:DEV? 在模式切换未完成时长时间阻塞。
+        /// </summary>
+        public async Task<bool> TriggerSingleSweepAfterHoldAsync(int timeoutMs = 10000)
+        {
+            if (!await SendCommandAsync(":SENSe:SWEep:MODE SINGle"))
+                return false;
+
+            await QueryAsync("*OPC?");
+
+            return await WaitForSweepCompleteAsync(timeoutMs);
+        }
+        private async Task<bool> WaitForSweepCompleteAsync(int timeoutMs)
+        {
+            const int pollMs = 10;
+            int maxWaitCount = Math.Max(1, timeoutMs / pollMs);
+
+            for (int waitCount = 0; waitCount < maxWaitCount; waitCount++)
+            {
+                if (IsScanComplete(await QueryOperationStateAsync()))
+                    return true;
+                await Task.Delay(pollMs);
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// 查询操作状态（对应Python的operation_state_query）
+        /// </summary>
+        /// <returns>状态值，16表示扫描完成</returns>
+        public async Task<string> QueryOperationStateAsync()
+        {
+            return await QueryAsync(":STAT:OPER:DEV?");
+        }
+
+        /// <summary>
+        /// 判断 :STAT:OPER:DEV? 返回值是否表示扫描已完成（bit4=16）。
+        /// </summary>
+        public static bool IsScanComplete(string operDevResponse)
+        {
+            if (string.IsNullOrWhiteSpace(operDevResponse))
+                return false;
+
+            string s = operDevResponse.Trim();
+            if (s == "+16" || s == "16")
+                return true;
+
+            if (int.TryParse(s, System.Globalization.NumberStyles.Integer,
+                    System.Globalization.CultureInfo.InvariantCulture, out int val))
+                return (val & 16) != 0;
+
+            return false;
         }
         public async Task<string[]> GetInitialPhaseStringAsync_New()
         {

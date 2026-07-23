@@ -31,9 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeviceAddressNew_Form));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.xinhaoBenzhen_textBox = new System.Windows.Forms.TextBox();
-            this.xinhao2Name_textBox = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.chargeName_textBox = new System.Windows.Forms.TextBox();
             this.shiwangName_textBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,9 +40,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.charge_textBox = new System.Windows.Forms.TextBox();
             this.shiwang_textBox = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.gonglvName_textBox = new System.Windows.Forms.TextBox();
-            this.gonglv_textBox = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.xinhaoName_textBox = new System.Windows.Forms.TextBox();
             this.xinhao_textBox = new System.Windows.Forms.TextBox();
@@ -62,6 +56,12 @@
             this.fpga_mac_textBox = new System.Windows.Forms.TextBox();
             this.fpga_ip_textBox = new System.Windows.Forms.TextBox();
             this.pinpu_textBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.gonglvName_textBox = new System.Windows.Forms.TextBox();
+            this.charge2Name_textBox = new System.Windows.Forms.TextBox();
+            this.gonglv_textBox = new System.Windows.Forms.TextBox();
+            this.charge2_textBox = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -106,9 +106,6 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 21.92056F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.82926F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.25019F));
-            this.tableLayoutPanel1.Controls.Add(this.xinhaoBenzhen_textBox, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.xinhao2Name_textBox, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label14, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.chargeName_textBox, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.shiwangName_textBox, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
@@ -118,9 +115,6 @@
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.charge_textBox, 2, 2);
             this.tableLayoutPanel1.Controls.Add(this.shiwang_textBox, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.gonglvName_textBox, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.gonglv_textBox, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label12, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.xinhaoName_textBox, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.xinhao_textBox, 2, 4);
@@ -137,6 +131,12 @@
             this.tableLayoutPanel1.Controls.Add(this.fpga_mac_textBox, 2, 8);
             this.tableLayoutPanel1.Controls.Add(this.fpga_ip_textBox, 2, 7);
             this.tableLayoutPanel1.Controls.Add(this.pinpu_textBox, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label11, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label14, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.gonglvName_textBox, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.charge2Name_textBox, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.gonglv_textBox, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.charge2_textBox, 2, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -155,35 +155,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(929, 522);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // xinhaoBenzhen_textBox
-            // 
-            this.xinhaoBenzhen_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xinhaoBenzhen_textBox.Location = new System.Drawing.Point(501, 223);
-            this.xinhaoBenzhen_textBox.Name = "xinhaoBenzhen_textBox";
-            this.xinhaoBenzhen_textBox.Size = new System.Drawing.Size(425, 26);
-            this.xinhaoBenzhen_textBox.TabIndex = 35;
-            // 
-            // xinhao2Name_textBox
-            // 
-            this.xinhao2Name_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xinhao2Name_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.xinhao2Name_textBox.Location = new System.Drawing.Point(206, 223);
-            this.xinhao2Name_textBox.Name = "xinhao2Name_textBox";
-            this.xinhao2Name_textBox.ReadOnly = true;
-            this.xinhao2Name_textBox.Size = new System.Drawing.Size(289, 26);
-            this.xinhao2Name_textBox.TabIndex = 34;
-            // 
-            // label14
-            // 
-            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label14.Location = new System.Drawing.Point(35, 220);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(132, 44);
-            this.label14.TabIndex = 33;
-            this.label14.Text = "信号发生器(本振)";
             // 
             // chargeName_textBox
             // 
@@ -280,36 +251,6 @@
             this.shiwang_textBox.Name = "shiwang_textBox";
             this.shiwang_textBox.Size = new System.Drawing.Size(425, 26);
             this.shiwang_textBox.TabIndex = 17;
-            // 
-            // label11
-            // 
-            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label11.Location = new System.Drawing.Point(72, 132);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(58, 44);
-            this.label11.TabIndex = 24;
-            this.label11.Text = "功率计";
-            // 
-            // gonglvName_textBox
-            // 
-            this.gonglvName_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gonglvName_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gonglvName_textBox.Location = new System.Drawing.Point(206, 135);
-            this.gonglvName_textBox.Name = "gonglvName_textBox";
-            this.gonglvName_textBox.ReadOnly = true;
-            this.gonglvName_textBox.Size = new System.Drawing.Size(289, 26);
-            this.gonglvName_textBox.TabIndex = 26;
-            // 
-            // gonglv_textBox
-            // 
-            this.gonglv_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gonglv_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gonglv_textBox.Location = new System.Drawing.Point(501, 135);
-            this.gonglv_textBox.Name = "gonglv_textBox";
-            this.gonglv_textBox.Size = new System.Drawing.Size(425, 26);
-            this.gonglv_textBox.TabIndex = 25;
             // 
             // label12
             // 
@@ -465,6 +406,68 @@
             this.pinpu_textBox.Size = new System.Drawing.Size(425, 26);
             this.pinpu_textBox.TabIndex = 32;
             // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.Location = new System.Drawing.Point(72, 220);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(58, 44);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "功率计";
+            // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label14.Location = new System.Drawing.Point(76, 132);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(51, 44);
+            this.label14.TabIndex = 33;
+            this.label14.Text = "电源2";
+            // 
+            // gonglvName_textBox
+            // 
+            this.gonglvName_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gonglvName_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.gonglvName_textBox.Location = new System.Drawing.Point(206, 223);
+            this.gonglvName_textBox.Name = "gonglvName_textBox";
+            this.gonglvName_textBox.ReadOnly = true;
+            this.gonglvName_textBox.Size = new System.Drawing.Size(289, 26);
+            this.gonglvName_textBox.TabIndex = 26;
+            // 
+            // charge2Name_textBox
+            // 
+            this.charge2Name_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charge2Name_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.charge2Name_textBox.Location = new System.Drawing.Point(206, 135);
+            this.charge2Name_textBox.Name = "charge2Name_textBox";
+            this.charge2Name_textBox.ReadOnly = true;
+            this.charge2Name_textBox.Size = new System.Drawing.Size(289, 26);
+            this.charge2Name_textBox.TabIndex = 34;
+            this.charge2Name_textBox.Visible = false;
+            // 
+            // gonglv_textBox
+            // 
+            this.gonglv_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gonglv_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.gonglv_textBox.Location = new System.Drawing.Point(501, 223);
+            this.gonglv_textBox.Name = "gonglv_textBox";
+            this.gonglv_textBox.Size = new System.Drawing.Size(425, 26);
+            this.gonglv_textBox.TabIndex = 25;
+            // 
+            // charge2_textBox
+            // 
+            this.charge2_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.charge2_textBox.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.charge2_textBox.Location = new System.Drawing.Point(501, 135);
+            this.charge2_textBox.Name = "charge2_textBox";
+            this.charge2_textBox.Size = new System.Drawing.Size(425, 26);
+            this.charge2_textBox.TabIndex = 35;
+            this.charge2_textBox.Visible = false;
+            // 
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.White;
@@ -610,8 +613,8 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.TextBox xinhaoBenzhen_textBox;
-        private System.Windows.Forms.TextBox xinhao2Name_textBox;
+        private System.Windows.Forms.TextBox charge2_textBox;
+        private System.Windows.Forms.TextBox charge2Name_textBox;
         private System.Windows.Forms.Label label14;
     }
 }
