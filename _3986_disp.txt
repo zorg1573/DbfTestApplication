@@ -1,0 +1,1939 @@
+
+===== PAGE 56 =====
+3 程控命令
+3.3 仪器命令
+47
+ON|1：文字批注显示开
+返回值：
+0：文字批注显示关
+1：文字批注显示开
+举例：
+:DISP:ANN OFF
+:DISP:ANN?
+复位状态：文字批注显示开
+按键路径：前面板【格式】—>[批注]
+[ 组合显示]
+:DISPlay:TRACe:COMBined
+功能描述：在图形显示模式下，设置/查询组合图形显示状态。
+设置格式：:DISPlay:TRACe:COMBined OFF|ON|0|1
+查询格式：:DISPlay:TRACe:COMBined?
+参数说明：OFF|0：组合显示关
+ON|1：组合显示开
+返回值：
+0：组合显示关
+1：组合显示开
+举例：
+:DISP:TRAC:COMB OFF
+:DISP:TRAC:COMB?
+复位状态：组合显示关
+按键路径：前面板【格式】—>[组合显示]
+说明：
+当开启组合图形显示，上下图中分别显示的两条迹线会组合到一个图中显示。关
+闭组合显示后返回到双图显示格式。
+[ 表格参数显示开关]
+:DISPlay:TABLe:RESUlt:NFIGure|GAIN|YFACtor|PHOT|PCOLd|TEFFective
+功能描述：设置/查询表格显示格式时，各参数的显示开关状态。
+设置格式：:DISPlay:TABLe:RESUlt:NFIGure|GAIN|YFACtor|PHOT|PCOLd|TEFFective
+OFF|ON|0|1
+查询格式：:DISPlay:TABLe:RESUlt:NFIGure|GAIN|YFACtor|PHOT|PCOLd|TEFFective?
+参数说明：选择显示参数：
+NFIGure：选择显示参数为噪声系数
+GAIN：选择显示参数为增益
+YFACtor：选择显示参数为Y因子
+TEFFective：选择显示参数为等效噪声温度
+PHOT：选择显示参数为热功率
+PCOLd：选择显示参数为冷功率
+OFF|0：组合显示关
+ON|1：组合显示开
+返回值：
+0：表格参数显示关
+1：表格参数显示开
+举例：
+:DISP:TABL:RESU:TEFF ON
+
+===== PAGE 58 =====
+3 程控命令
+3.3 仪器命令
+49
+UPPer：放大上半窗口显示
+LOWer：放大下半窗口显示
+返回值：
+OFF|UPP|LOW
+举例：
+:DISP:ZOOM:WIND OFF
+:DISP:ZOOM:WIND?
+复位状态：不放大。
+按键路径：前面板【窗口缩放】
+说明：
+窗口是相应的双图显示时的上下图框。
+3.3.3.2
+参数
+参数对应前面板的【参数】键，该键指定激活显示的测量结果参数，包括噪声系数、增
+益、Y因子、等效温度、热功率、冷功率，适用于所有显示格式。
+[ 指定图形区域轨迹的测量参数类型]
+:DISPlay:DATA:TRACe1|2
+功能描述：设置/查询指定轨迹线的参数类型。
+设置格式：:DISPlay:DATA:TRACe1|2 <result>
+查询格式：:DISPlay:DATA:TRACe1|2?
+参数说明：
+<result>
+NFIGure：噪声系数
+GAIN：增益
+YFACtor：Y因子
+TEFFective：等效噪声温度
+PHOT：热功率
+PCOLd：冷功率
+返回值：
+NFIG|GAIN|YFAC|TEFF|PHOT|PCOL
+举例：
+:DISP:DATA:TRAC2 YFAC
+:DISP:DATA:TRAC2?
+复位状态：迹线1：本机噪声系数
+迹线2：增益
+按键路径：前面板【参数】—>[参数-轨迹1]/[参数-轨迹2]
+说明：
+迹线1：指在图形显示模式时的上半区域内的迹线，列表显示模式中的中间列以
+及测试仪模式显示时的中间数值。
+迹线2：是图形显示模式时的下半区域内的迹线，列表显示模式中的右边列以及
+测试仪模式显示时的右边数值。
+迹线1 和迹线2 不能被设置为同一个参数进行显示。
+[ 当前激活图形区域轨迹的测量参数类型]
+:DISPlay:RESult:TYPE
+功能描述：设置/查询当前激活窗口的显示参数类型。
+
+===== PAGE 59 =====
+3 程控命令
+3.3 仪器命令
+50
+设置格式：:DISPlay:RESult:TYPE <type>
+查询格式：:DISPlay:RESult:TYPE?
+参数说明：
+<type>
+NFIGure：噪声系数
+GAIN：增益
+YFACtor：Y因子
+TEFFective：等效噪声温度
+PHOT：热功率
+PCOLd：冷功率
+返回值：
+NFIG|GAIN|YFAC|TEFF|PHOT|PCOL
+举例：
+:DISP:RES:TYPE NFIGure
+:DISP:RES:TYPE?
+复位状态：迹线1：本机噪声系数
+迹线2：增益
+按键路径：前面板【参数】—>[参数-轨迹1]/[参数-轨迹2]
+说明：
+迹线1 和迹线2 不能被设置为同一个参数进行显示。
+[ 修正结果显示]
+:DISPlay:DATA:CORRections
+功能描述：设置/查询修正显示开关。
+设置格式：:DISPlay:DATA:CORRections OFF|ON|0|1
+查询格式：:DISPlay:DATA:CORRection?
+参数说明：OFF|0：修正显示状态关
+ON|1：修正显示状态开
+返回值：
+0|1
+举例：
+:DISP:DATA:CORR OFF
+:DISP:DATA:CORR?
+复位状态：关
+按键路径：前面板【修正】—>[噪声系数修正]
+3.3.3.3
+标尺
+标尺对应前面板的【标尺】键，为测量结果显示指定坐标上下限、刻度/格、单位和自
+动标尺设置。
+[ 自动标尺]
+:DISPlay:TRACe:Y[:SCALe]:AUTO
+功能描述：设置/查询自动标尺开关状态。
+设置格式：:DISPlay:TRACe:Y[:SCALe]:AUTO OFF|ON|0|1
+查询格式：:DISPlay:TRACe:Y[:SCALe]:AUTO?
+参数说明：OFF|0：自动标尺状态关
+
+===== PAGE 64 =====
+3 程控命令
+3.3 仪器命令
+55
+按键路径：前面板【修正】—>[RF校准最大衰减值]
+[ 微波最小衰减量]
+:INPut:ATTenuation:MWAVe:MINimum
+功能描述：设置/查询校准执行时的微波最小衰减量。
+设置格式：:INPut:ATTenuation:MWAVe:MINimum <integer>
+查询格式：:INPut:ATTenuation:MWAVe:MINimum?
+参数说明：
+<integer>
+范围：0 10 dB，5dB为步进
+返回值：
+校准执行时的微波最小衰减量
+举例：
+:INP:ATT:MWAV:MIN 5dB
+:INP:ATT:MWAV:MIN?
+复位状态：0dB
+按键路径：前面板【修正】—>[uW校准最小衰减量]
+[ 微波最大衰减量]
+:INPut:ATTenuation:MWAVe:MAXimum
+功能描述：设置/查询校准执行时的微波最大衰减量。
+设置格式：:INPut:ATTenuation:MWAVe:MAXimum <integer>
+查询格式：:INPut:ATTenuation:MWAVe:MAXimum?
+参数说明：
+<integer>
+范围：10 15 dB，5dB为步进
+返回值：
+校准执行时的微波最大衰减量
+举例：
+:INP:ATT:MWAV:MAX 15dB
+:INP:ATT:MWAV:MAX?
+复位状态：10dB
+按键路径：前面板【修正】—>[uW校准最大衰减量]
+3.3.5 MEASure 子系统
+频率扫描和频率固定模式下，测量结果的获取。
+3.3.5.1
+频率扫描模式下，测量结果
+[ 噪声系数测量- 已修正]
+:FETCh:CORRected:NFIGure?
+功能描述：查询扫描频率范围内的已校准的噪声系数值。
+查询格式：:FETCh:CORRected:NFIGure? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+噪声系数值
+
+===== PAGE 65 =====
+3 程控命令
+3.3 仪器命令
+56
+举例：
+:FETC:CORR:NFIG? DB
+:FETCh:CORRected:NFIGure:DATA?
+功能描述：查询扫描范围内的已校准的频率值和噪声系数值。返回值为频率、噪声系数数据
+对格式，数据对个数等于扫描点数。
+查询格式：:FETCh:CORRected:NFIGure:DATA? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+频率、噪声系数值数据对，格式<freq>,<value>{,<freq>,<value>}，单位缺省
+为Hz和dB。
+返回值频率值在噪声系数值之前，中间用逗号间隔。如果使用可选单位参数，噪
+声系数值则以所选单位表示返回；如果可选单位参数省略，噪声系数值则以缺
+省单位dB返回。
+举例：
+:FETC:CORR:NFIG:DATA? DB
+[ 增益测量- 已修正]
+:FETCh:CORRected:GAIN?
+功能描述：查询扫描频率范围内的已校准的增益值。
+查询格式：:FETCh:CORRected:GAIN? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，则缺省单位为dB。
+返回值：
+增益值
+举例：
+:FETC:CORR:GAIN? DB
+:FETCh:CORRected:GAIN:DATA?
+功能描述：查询扫描范围内的已校准的频率值和增益值。返回值为频率、增益数据对格式，
+数据对个数等于扫描点数。
+查询格式：:FETCh:CORRected:GAIN:DATA? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，则缺省单位为dB。
+返回值：
+频率、增益数据对，格式<freq>,<value>{,<freq>,<value>}，单位缺省为Hz和
+dB。
+返回频率值在增益值之前，中间用逗号间隔。如果使用可选单位参数，增益值则
+以所选单位表示返回；如果可选单位参数省略，增益值则以缺省单位dB返回。
+举例：
+:FETC:CORR:GAIN:DATA? DB
+[ Y 因子测量– 已修正]
+:FETCh:CORRected:YFACtor?
+功能描述：查询扫描频率范围内的已校准的Y因子。
+
+===== PAGE 66 =====
+3 程控命令
+3.3 仪器命令
+57
+查询格式：:FETCh:CORRected:YFACtor? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+Y因子
+举例：
+:FETC:CORR:YFAC? DB
+[ 冷功率测量- 已修正]
+:FETCh:CORRected:PCOLd?
+功能描述：查询扫描频率范围内的已校准的冷功率值。
+查询格式：:FETCh:CORRected:PCOLd? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+冷功率值
+举例：
+:FETC:CORR:PCOL? DB
+[ 热功率测量- 已修正]
+:FETCh:CORRected:PHOT?
+功能描述：查询扫描频率范围内的已校准的热功率值。
+查询格式：:FETCh:CORRected:PHOT? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+热功率值
+举例：
+:FETC:CORR:PHOT? DB
+[ 等效噪声温度测量- 已修正]
+:FETCh:CORRected:TEFFective?
+功能描述：查询扫描频率范围内的已校准的等效噪声温度。
+查询格式：:FETCh:CORRected:TEFFective? K|CEL|FAR
+参数说明：单位是K|CEL|FAR，或者K、C、F。
+如果没有指定单位，就用系统缺省的单位K。
+返回值：
+等效噪声温度
+举例：
+:FETC:CORR:TEFF? K
+[ 噪声系数测量- 未修正]
+:FETCh:UNCorrected:NFIGure?
+功能描述：查询扫描频率范围内的未校准的噪声系数值。
+查询格式：:FETCh:UNCorrected:NFIGure? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+噪声系数值
+
+===== PAGE 67 =====
+3 程控命令
+3.3 仪器命令
+58
+举例：
+:FETC:UNC:NFIG? DB
+:FETCh:UNCorrected:NFIGure:DATA?
+功能描述：查询扫描范围内的未校准的频率值和噪声系数值。返回值为频率、噪声系数数据
+对格式，数据对个数等于扫描点数。
+查询格式：:FETCh:UNCorrected:NFIGure:DATA? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+频率、噪声系数值数据对，格式<freq>,<value>{,<freq>,<value>}，单位缺省
+为Hz和dB。
+返回值频率值在噪声系数值之前，中间用逗号间隔。如果使用可选单位参数，噪
+声系数值则以所选单位表示返回；如果可选单位参数省略，噪声系数值则以缺
+省单位dB返回。
+举例：
+:FETC:UNC:NFIG:DATA? DB
+[ 增益测量- 未修正]
+:FETCh:UNCorrected:GAIN?
+功能描述：查询扫描频率范围内的未校准的增益值。
+查询格式：:FETCh:UNCorrected:GAIN? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+增益值
+举例：
+:FETC:UNC:GAIN? DB
+:FETCh:UNCorrected:GAIN:DATA?
+功能描述：查询扫描范围内的未校准的频率值和增益值。返回值为频率、增益数据对格式，
+数据对个数等于扫描点数。
+查询格式：:FETCh:UNCorrected:GAIN:DATA? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+频率、增益值数据对，格式<freq>,<value>{,<freq>,<value>}，单位缺省为Hz
+和dB。
+返回值频率值在增益值之前，中间用逗号间隔。如果使用可选单位参数，增益值
+则以所选单位表示返回；如果可选单位参数省略，增益值则以缺省单位dB返回。
+举例：
+:FETC:UNC:GAIN:DATA? DB
+[ Y 因子测量- 未修正]
+:FETCh:UNCorrected:YFACtor?
+功能描述：查询扫描频率范围内的未校准的Y因子。
+查询格式：:FETCh:UNCorrected:YFACtor? DB|LINear
+
+===== PAGE 68 =====
+3 程控命令
+3.3 仪器命令
+59
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+Y因子
+举例：
+:FETC:UNC:YFAC? DB
+[ 冷功率测量- 未修正]
+:FETCh:UNCorrected:PCOLd?
+功能描述：查询扫描频率范围内的未校准的冷功率值。
+查询格式：:FETCh:UNCorrected:PCOLd? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+冷功率值
+举例：
+:FETC:UNC:PCOL? DB
+说明：
+噪声系数分析仪能够进行噪声源关断时的冷功率测量，该功率和仪器端口
+的功率相关。
+[ 热功率测量- 未修正]
+:FETCh:UNCorrected:PHOT?
+功能描述：查询扫描频率范围内的未校准的热功率值。
+查询格式：:FETCh:UNCorrected:PHOT? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+热功率值
+举例：
+:FETC:UNC:PHOT? DB
+说明：
+噪声系数分析仪能够进行噪声源开启时的热功率测量，该功率和仪器端口
+的功率相关。
+[ 等效噪声温度测量- 未修正]
+:FETCh:UNCorrected:TEFFective?
+功能描述：查询扫描频率范围内的未校准的等效噪声温度。
+查询格式：:FETCh:UNCorrected:TEFFective? K|CEL|FAR
+参数说明：单位是K|CEL|FAR，或者K、C、F。
+如果没有指定单位，就用系统缺省的单位K。
+返回值：
+等效噪声温度
+举例：
+:FETC:UNC:TEFF? CEL
+3.3.5.2
+频率固定模式下，测量结果
+[ 噪声系数测量– 已修正]
+:FETCh:SCALar:CORRected:NFIGure?
+功能描述：查询固定频率点的已校准的噪声系数值。
+
+===== PAGE 69 =====
+3 程控命令
+3.3 仪器命令
+60
+查询格式：:FETCh:SCALar:CORRected:NFIGure? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+噪声系数值
+举例：
+:FETC:SCAL:CORR:NFIG? DB
+[ 增益测量– 已修正]
+:FETCh:SCALar:CORRected:GAIN?
+功能描述：查询固定频率点的已校准的增益值。
+查询格式：:FETCh:SCALar:CORRected:GAIN? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+增益值
+举例：
+:FETC:SCAL:CORR:GAIN? DB
+[ Y 因子测量– 已修正]
+:FETCh:SCALar:CORRected:YFACtor?
+功能描述：查询固定频率点的已校准的Y因子。
+查询格式：:FETCh:SCALar:CORRected:YFACtor? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+Y因子
+举例：
+:FETC:SCAL:CORR:YFAC? DB
+[ 冷功率测量– 已修正]
+:FETCh:SCALar:CORRected:PCOLd?
+功能描述：查询固定频率点的已校准的冷功率值。
+查询格式：:FETCh:SCALar:CORRected:PCOLd? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+冷功率值
+举例：
+:FETC:SCAL:CORR:PCOL? DB
+[ 热功率测量– 已修正]
+:FETCh:SCALar:CORRected:PHOT?
+功能描述：查询固定频率点的已校准的热功率值。
+查询格式：:FETCh:SCALar:CORRected:PHOT? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+热功率值
+举例：
+:FETC:SCAL:CORR:PHOT? DB
+
+===== PAGE 70 =====
+3 程控命令
+3.3 仪器命令
+61
+说明：
+噪声系数分析仪能够进行噪声源开启时的热功率测量，该功率和仪器端口的功
+率相关。
+[ 等效噪声温度测量– 已修正]
+:FETCh:SCALar:CORRected:TEFFective?
+功能描述：查询描频率范围内的已校准的等效噪声温度。
+查询格式：:FETCh:SCALar:CORRected:TEFFective? K|CEL|FAR
+参数说明：单位是K|CEL|FAR，或者K、C、F。
+如果没有指定单位，就用系统缺省的单位K。
+返回值：
+等效噪声温度
+举例：
+:FETC:SCAL:CORR:TEFF? K
+[ 噪声系数测量- 未修正]
+:FETCh:SCALar:UNCorrected:NFIGure?
+功能描述：查询固定频率点的未校准的噪声系数值。
+查询格式：:FETCh:SCALar:UNCorrected:NFIGure? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+噪声系数值
+举例：
+:FETC:SCAL:UNC:NFIG? DB
+[ 增益测量– 未修正]
+:FETCh:SCALar:UNCorrected:GAIN?
+功能描述：查询固定频率点的未校准的增益值。
+查询格式：:FETCh:SCALar:UNCorrected:GAIN? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+增益值
+举例：
+:FETC:SCAL:UNC:GAIN? DB
+[ Y 因子测量- 未修正]
+:FETCh:SCALar:UNCorrected:YFACtor?
+功能描述：查询固定频率点的未校准的Y因子。
+查询格式：:FETCh:SCALar:UNCorrected:YFACtor? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+Y因子
+举例：
+:FETC:SCAL:UNC:YFAC? DB
+
+===== PAGE 71 =====
+3 程控命令
+3.3 仪器命令
+62
+[ 冷功率测量- 未修正]
+:FETCh:SCALar:UNCorrected:PCOLd?
+功能描述：查询固定频率点的未校准的冷功率值。
+查询格式：:FETCh:SCALar:UNCorrected:PCOLd? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+冷功率值
+举例：
+:FETC:SCAL:UNC:PCOL? DB
+说明：
+噪声系数分析仪能够进行噪声源关断时的冷功率测量，该功率和仪器端口
+的功率相关。
+[ 热功率测量- 未修正]
+:FETCh:SCALar:UNCorrected:PHOT?
+功能描述：查询固定频率点的未校准的热功率值。
+查询格式：:FETCh:SCALar:UNCorrected:PHOT? DB|LINear
+参数说明：单位是DB或LINear。
+如果没有指定单位，就用系统缺省的单位dB。
+返回值：
+热功率值
+举例：
+:FETC:SCAL:UNC:PHOT? DB
+说明：
+噪声系数分析仪能够进行噪声源开启时的热功率测量，该功率和仪器端口
+的功率相关。
+[ 等效噪声温度测量- 未修正]
+:FETCh:SCALar:UNCorrected:TEFFective?
+功能描述：查询固定频率点的未校准的等效噪声温度。
+查询格式：:FETCh:SCALar:UNCorrected:TEFFective? K|CEL|FAR
+参数说明：单位是K|CEL|FAR，或者K、C、F。
+如果没有指定单位，就用系统缺省的单位K。
+返回值：
+等效噪声温度
+举例：
+:FETC:SCAL:UNC:TEFF? K
+3.3.6 MMEMory 子系统
+文件的保存与调用。
+3.3.6.1 文件调用
+此部分命令对应与前面板的【文件】键，执行文件的调用功能，噪声系数分析仪中文件
+类型包括测量超噪比、校准超噪比、仪器状态、频率列表、DUT 前/后的损耗补偿、限制线
+等。
+
+===== PAGE 82 =====
+3 程控命令
+3.3 仪器命令
+73
+[ 带宽模式]
+:SENSe:BANDwidth:AUTO
+功能描述：设置/查询带宽的手动、自动模式。
+设置格式：:SENSe: BANDwidth:AUTO ON|OFF|0|1
+查询格式：:SENSe: BANDwidth:AUTO?
+参数说明：ON|1：自动模式
+OFF|0：手动模式
+举例：
+:SENSe:BAND:AUTO ON
+:SENSe:BAND:AUTO?
+复位状态：1
+按键路径：前面板【带宽】
+3.3.8.4 超噪比
+超噪比对应前面板的【超噪比】键，用来进行超噪比设置和超噪比数据编辑。包括设置
+ENR 模式、编辑超噪比表、指定一个冷温度、指定一个固定冷温度、选择一个固定频率超
+噪比值和SNS 设置等。
+[ ENR 模式]
+:SENSe:CORRection:ENR:MODE
+功能描述：设置/查询ENR模式。
+设置格式：:SENSe:CORRection:ENR:MODE TABLe|SPOT
+查询格式：:SENSe:CORRection:ENR:MODE?
+参数说明：TABLe
+表格
+SPOT
+固定
+举例：
+:SENS:CORR:ENR:MODE TABL
+:SENS:CORR:ENR:MODE?
+复位状态：表格
+按键路径：前面板【超噪比】—>[ENR模式]
+[ 共用表]
+:SENSe:CORRection:ENR:COMMon:STATe
+功能描述：设置/查询共用表状态。
+设置格式：:SENSe:CORRection:ENR:COMMon:STATe OFF|ON|0|1
+查询格式：:SENSe:CORRection:ENR:COMMon:STATe?
+参数说明：ON|1:状态使能时，测量ENR表被用于测量和校准。
+OFF|0:状态禁止时，校准使用它自己的ENR表。
+举例：
+:SENS:CORR:ENR:COMM:STAT OFF
+:SENS:CORR:ENR:COMM:STAT?
+复位状态：公用表开
+按键路径：前面板【超噪比】—>[共用表]
+
+===== PAGE 83 =====
+3 程控命令
+3.3 仪器命令
+74
+[ 自动加载ENR ]
+:SENSe:CORRection:ENR:AUTO[:STATe]
+功能描述：设置/查询自动加载ENR表状态。
+设置格式：:SENSe:CORRection:ENR:AUTO[:STATe] OFF|ON|0|1
+查询格式：:SENSe:CORRection:ENR:AUTO[:STATe]?
+参数说明：ON|1:状态使能时，并满足以下条件之一时，测量ENR表和相关数据从SNS噪声
+源中自动装载：
+当SNS第一次被连接；
+上电后，SNS被检测到；
+当命令设置状态为ON时SNS已连接。
+OFF|0:状态关闭。
+举例：
+:SENS:CORR:ENR:AUTO:STAT OFF
+:SENS:CORR:ENR:AUTO:STAT?
+复位状态：共用表开
+按键路径：前面板【超噪比】—>[SNS设置]—>[自动加载ENR]
+[ 校准ENR 表]
+:SENSe:CORRection:ENR:CALibration:TABLe:DATA
+功能描述：设置/查询当前校准ENR表中数据。
+设置格式：:SENSe:CORRection:ENR:CALibration:TABLe:DATA
+<freq>,<value>{,<freq>,<value>}
+查询格式：:SENSe:CORRection:ENR:CALibration:TABLe:DATA?
+返回值：
+<freq>,<value>{,<freq>,<value>} 单位缺省为Hz和dB
+参数说明：
+<freq>
+频率，可输入的频率单位为Hz、KHz、MHz、GHz，缺省为Hz
+<value>
+ENR值，单位dB
+范围：1 601个数据组
+举例：
+:SENS:CORR:ENR:CAL:TABL:DATA 1G,15.43,2G,15.2
+:SENS:CORR:ENR:CAL:TABL:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[校准ENR表]—>[编辑]
+[ 校准ENR 表个数]
+:SENSe:CORRection:ENR:CALibration:TABLe:COUNt?
+功能描述：查询当前校准ENR表中ENR值的个数。
+查询格式：:SENSe:CORRection:ENR:CALibration:TABLe:COUNt?
+返回值：
+整数
+参数说明：范围：0 601
+举例：
+:SENS:CORR:ENR:CAL:TABL:COUN?
+
+===== PAGE 84 =====
+3 程控命令
+3.3 仪器命令
+75
+[ 校准ENR 表型号]
+:SENSe:CORRection:ENR:CALibration:TABLe:ID:DATA
+功能描述：设置/查询当前校准ENR表中噪声源型号。
+设置格式：:SENSe:CORRection:ENR:CALibration:TABLe:ID:DATA <ID>
+查询格式：:SENSe:CORRection:ENR:CALibration:TABLe:ID:DATA?
+返回值：
+噪声源型号。
+参数说明：
+<ID>
+最长30个字符（例如：346C）
+举例：
+:SENS:CORR:ENR:CAL:TABL:ID:DATA 346C
+:SENS:CORR:ENR:CAL:TABL:ID:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[校准ENR表]—>[噪声源型号]
+[ 校准ENR 表序号]
+:SENSe:CORRection:ENR:CALibration:TABLe:SERial:DATA
+功能描述：设置/查询当前校准ENR表中噪声源序号。
+设置格式：:SENSe:CORRection:ENR:CALibration:TABLe:SERial:DATA <serial number>
+查询格式：:SENSe:CORRection:ENR:CALibration:TABLe:SERial:DATA?
+返回值：
+噪声源序列号。
+参数说明：
+<serial number>
+最长30个字符（例如：2018001）
+举例：
+:SENS:CORR:ENR:CAL:TABL:ID:DATA 2018001
+:SENS:CORR:ENR:CAL:TABL:ID:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[校准ENR表]—>[噪声源序号]
+[ 从智能噪声源中装载校准ENR 表]
+:SENSe:CORRection:ENR:CALibration:TABLe:SNS
+功能描述：设置从连接的SNS智能噪声源中装载ENR数据到仪器的校准ENR表。
+设置格式：:SENSe:CORRection:ENR:CALibration:TABLe:SNS
+参数说明：ENR数据装载时，正在进行的任何测量都会复位。
+当没有SNS智能噪声源连接时，此命令将给出一个设置冲突。
+举例：
+:SENS:CORR:ENR:CAL:TABL:SNS
+[ 测量ENR 表]
+:SENSe:CORRection:ENR[:MEASurement]:TABLe:DATA
+功能描述：设置/查询当前测量ENR表中数据。
+设置格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:DATA
+<freq>,<value>{,<freq>,<value>}
+查询格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:DATA?
+返回值：
+<freq>,<value>{,<freq>,<value>} 单位缺省为Hz和dB
+参数说明：
+<freq>
+频率，可输入的频率单位为Hz、KHz、MHz、GHz，缺省为Hz
+
+===== PAGE 85 =====
+3 程控命令
+3.3 仪器命令
+76
+<value>
+ENR值，单位dB
+范围：1 601个数据组
+举例：
+:SENS:CORR:ENR:MEAS:TABL:DATA 1G,15.31,2G,15.5
+:SENS:CORR:ENR:MEAS:TABL:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[测量ENR表]—>[编辑]
+[ 测量ENR 表个数]
+:SENSe:CORRection:ENR[:MEASurement]:TABLe:COUNt?
+功能描述：查询当前校准ENR表中ENR值的个数。
+查询格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:COUNt?
+返回值：
+整数
+参数说明：范围：0 601
+举例：
+:SENS:CORR:ENR:MEAS:TABL:COUN?
+[ 测量ENR 表型号]
+:SENSe:CORRection:ENR[:MEASurement]:TABLe:ID:DATA
+功能描述：设置/查询当前测量ENR表中噪声源型号。
+设置格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:ID:DATA <ID>
+查询格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:ID:DATA?
+返回值：
+噪声源型号。
+参数说明：
+<ID>
+最长30个字符（例如：346C）
+举例：
+:SENS:CORR:ENR:MEAS:TABL:ID:DATA 346C
+:SENS:CORR:ENR:MEAS:TABL:ID:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[测量ENR表]—>[噪声源型号]
+[ 测量ENR 表序号]
+:SENSe:CORRection:ENR[:MEASurement]:TABLe:SERial:DATA
+功能描述：设置/查询当前测量ENR表中噪声源序号。
+设置格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:SERial:DATA <serial
+number>
+查询格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:SERial:DATA?
+返回值：
+噪声源序列号。
+参数说明：
+<serial number>
+最长30个字符（例如：2018001）
+举例：
+:SENS:CORR:ENR:MEAS:TABL:SER:DATA 2018001
+:SENS:CORR:ENR:MEAS:TABL:SER:DATA?
+按键路径：前面板【超噪比】—>[共用表|关]—>[测量ENR表]—>[噪声源序号]
+
+===== PAGE 86 =====
+3 程控命令
+3.3 仪器命令
+77
+[ 从SNS 噪声源中装载测量ENR 表]
+:SENSe:CORRection:ENR[:MEASurement]:TABLe:SNS
+功能描述：从连接的智能噪声源中装载ENR数据到仪器的测量ENR表。
+设置格式：:SENSe:CORRection:ENR[:MEASurement]:TABLe:SNS
+举例：
+:SENS:CORR:ENR:MEAS:TABL:SNS
+说明：
+ENR数据装载时，正在进行的任何测量都会复位。
+当没有SNS智能噪声源连接时，此命令将给出一个设置冲突。
+[ ENR 固定值]
+:SENSe:CORRection:ENR:SPOT
+功能描述：固定ENR使能时，设置/查询固定ENR的值。
+设置格式：:SENSe:CORRection:ENR:SPOT <value>
+查询格式：:SENSe:CORRection:ENR:SPOT?
+返回值：
+固定ENR值。
+参数说明：
+<value>
+ENR值键入能够以dB、Kelvin（K）、摄氏度（CEL）和华氏温度（FAR）为单
+位，缺省单位为dB。
+范围：-7 50 dB；
+不能输入低于290K的ENR值。
+举例：
+:SENS:CORR:ENR:SPOT 15.2dB
+:SENS:CORR:ENR:SPOT?
+复位状态：15.2dB
+按键路径：前面板【超噪比】—>[ENR模式固定]—>[固定值]
+[ 固定ENR 模式]
+:SENSe:CORRection:SPOT:MODE
+功能描述：设置/查询固定ENR的类型，选择测量中使用的哪种参数。
+设置格式：:SENSe:CORRection:SPOT:MODE ENR|THOT
+查询格式：:SENSe:CORRection:SPOT:MODE?
+返回值：
+ENR|THOT。
+参数说明：ENR值键入能够以Kelvin（K）、摄氏度（CEL）、华氏温度（FAR）为单位，
+缺省单位为dB。
+ENR：选择此项时，可通过命令SENSe:CORRection:ENR:SPOT<value>来输入；
+THOT：选择此项时，可通过命令SENSe:CORRection:ENR:THOT<value>来输
+入。
+举例：
+:SENS:CORR:SPOT:MODE ENR
+:SENS:CORR:SPOT:MODE?
+复位状态：ENR
+按键路径：前面板【超噪比】—>[ENR模式固定]—>[固定值]—>[固定值类型ENR|热温度]
+
+===== PAGE 87 =====
+3 程控命令
+3.3 仪器命令
+78
+[ ENR 热温度值]
+:SENSe:CORRection:ENR:THOT
+功能描述：当固定ENR使能时，设置/查询固定热温度的值。
+设置格式：:SENSe:CORRection:ENR:THOT <value>
+查询格式：:SENSe:CORRection:ENR:THOT?
+返回值：
+固定热温度
+参数说明：ENR值键入能够以Kelvin（K）、摄氏度（CEL）、华氏温度（FAR）为单位，
+缺省单位为K。
+举例：
+:SENS:CORR:ENR:THOT 16dB
+:SENS:CORR:ENR:THOT?
+复位状态：9892.80K（等效于固定ENR值15.2dB）
+按键路径：前面板【超噪比】—>[ENR模式固定]—>[固定值]—>[固定值类型热温度]—>[固
+定热温度]
+[ SNS 冷温度]
+:SENSe:CORRection:TCOLd:SNS[:STATe]
+功能描述：设置/查询从SNS加载用户冷温度。
+设置格式：:SENSe:CORRection:TCOLd:SNS[:STATe] OFF|ON|0|1
+查询格式：:SENSe:CORRection:TCOLd:SNS[:STATe]?
+返回值：
+0 ：状态关
+1 ：状态开
+参数说明：
+ON|1：
+状态开时，仪器定期的从所连接的SNS 智能噪声源中获得冷温度；
+OFF|0：状态关时，使用用户设定值或缺省值。
+举例：
+:SENS:CORR:TCOL:SNS:STAT OFF
+:SENS:CORR:TCOL:SNS:STAT?
+复位状态：ON|1
+按键路径：前面板【超噪比】—>[冷温度]—>[SNS热温度]
+说明：
+当没有智能噪声源连接时，此命令被禁止。这种情况下对此命令的任何设置都将
+返回冲突指示。
+[ 从SNS 加载用户冷温度]
+:SENSe:CORRection:TCOLd:USER:SET
+功能描述：从连接的智能噪声源读取并使用用户冷温度值。
+设置格式：:SENSe:CORRection:TCOLd:USER:SET
+举例：
+:SENS:CORR:TCOL:USER:SET
+按键路径：前面板【超噪比】—>[冷温度]—>[从SNS加载用户冷温度]
+说明：
+当没有智能噪声源连接时，此命令被禁止。这种情况下对此命令的任何设置都将
+返回冲突指示。
+
+===== PAGE 88 =====
+3 程控命令
+3.3 仪器命令
+79
+[ 用户冷温度控制]
+:SENSe:CORRection:TCOLd:USER[:STATe]
+功能描述：设置/查询用户冷温度状态。
+设置格式：:SENSe:CORRection:TCOLd:USER[:STATe] OFF|ON|0|1
+查询格式：:SENSe:CORRection:TCOLd:SNS[:STATe]?
+举例：
+:SENS:CORR:TCOL:USER:STAT OFF
+:SENS:CORR:TCOL:USER:STAT?
+按键路径：前面板【超噪比】—>[冷温度]—>[*缺省]
+复位状态：关
+说明：
+设置和查询用户冷温度是打开还是关闭状态。禁止时，使用缺省的296.5K。
+当从SNS中读温度值时，优先使用用户冷温度。
+[ 用户冷温度]
+:SENSe:CORRection:TCOLd:USER:VALue
+功能描述：设置/查询用户冷温度值。
+设置格式：:SENSe:CORRection:TCOLd:USER:VALue <temperature>
+查询格式：:SENSe:CORRection:TCOLd:USER:VALue?
+参数说明：单位为Kelvin（K）、摄氏度（CEL）、华氏温度（FAR）。当用户冷温度开关
+使能时应用此值；当从智能噪声源读取时，不使用此值。查询返回的单位缺省K。
+范围:0 29650000.00 K
+举例：
+:SENS:CORR:TCOL:USER:VAL 290K
+:SENS:CORR:TCOL:USER:VAL?
+按键路径：前面板【超噪比】—>[冷温度]—>[用户冷温度]
+复位状态：296.5K
+3.3.8.5 损耗补偿
+损耗补偿对应前面板的【损耗补偿】键，用来设置测量中被测件前、被测件后的相关损
+耗补偿参数，可以指定一个适用于所有频率的单一固定损耗值，或设置适用于整个频率范围
+的频率/损耗对应的损耗补偿表格。命令包括：损耗补偿开关、类型、固定损耗补偿值、损
+耗补偿表、温度补偿值等。
+[ DUT 前损耗补偿控制]
+:SENSe:CORRection:LOSS:BEFore[:STATe]
+功能描述：设置/查询DUT前的损耗补偿状态。
+设置格式：:SENSe:CORRection:LOSS:BEFore[:STATe] OFF|ON|0|1
+查询格式：:SENSe:CORRection:LOSS:BEFore[:STATe]?
+参数说明：ON|1：损耗补偿开
+OFF|0：损耗补偿关
+举例：
+:SENS:CORR:LOSS:BEF:STAT OFF
+:SENS:CORR:LOSS:BEF:STAT?
+按键路径：前面板【损耗补偿】—>[DUT前]
+
+===== PAGE 89 =====
+3 程控命令
+3.3 仪器命令
+80
+复位状态：关
+[ DUT 前损耗补偿模式]
+:SENSe:CORRection:LOSS:BEFore:MODE
+功能描述：设置/查询DUT前的损耗补偿模式。
+设置格式：:SENSe:CORRection:LOSS:BEFore:MODE OFF|FIXed|TABLe
+查询格式：:SENSe:CORRection:LOSS:BEFore:MODE?
+参数说明：OFF：DUT前的损耗补偿关闭；
+FIXed：DUT前的损耗补偿值使用固定值；
+TABLe：DUT前的损耗补偿值使用损耗补偿表中数据。
+举例：
+:SENS:CORR:LOSS:BEF:MODE FIX
+:SENS:CORR:LOSS:BEF:MODE?
+按键路径：前面板【损耗补偿】—>[DUT前]
+复位状态：关
+[ DUT 前损耗补偿固定值]
+:SENSe:CORRection:LOSS:BEFore:VALue
+功能描述：设置/查询DUT前的损耗补偿的固定值。
+设置格式：:SENSe:CORRection:LOSS:BEFore:VALue <value>
+查询格式：:SENSe:CORRection:LOSS:BEFore:VALue?
+参数说明：范围：-100 100 dB
+举例：
+:SENS:CORR:LOSS:BEF:VAL 5dB
+:SENS:CORR:LOSS:BEF:VAL?
+按键路径：前面板【损耗补偿】—>[DUT前]—>[固定]—>[固定值（DUT前）]
+复位状态：0dB
+[ DUT 前损耗补偿表数据]
+:SENSe:CORRection:LOSS:BEFore:TABLe:DATA
+功能描述：设置/查询DUT前损耗补偿表中输入频率-损耗数据组对。
+设置格式：:SENSe:CORRection:LOSS:BEFore:TABLe:DATA
+<freq>,<value>{,<freq>,<value>}
+查询格式：:SENSe:CORRection:LOSS:BEFore:TABLe:DATA?
+参数说明：最大可输入601 组数据。
+<freq>
+频率，可输入的单位为Hz、KHz、MHz、GHz，查询命令返回单位缺省为Hz
+范围：0 100 GHz
+<value>
+损耗值，可输入的损耗值单位为dB。
+范围：-100 100 dB
+举例：
+:SENS:CORR:LOSS:BEF:TABL:DATA 4.5G,5,6G,4
+:SENS:CORR:LOSS:BEF:TABL:DATA?
+按键路径：前面板【损耗补偿】—>[DUT前]—>[表格]—>[损耗补偿表]—>[DUT前表格]
+复位状态：单位为Hz和dB
+
+===== PAGE 90 =====
+3 程控命令
+3.3 仪器命令
+81
+[ DUT 前损耗补偿表输入个数]
+:SENSe:CORRection:LOSS:BEFore:TABLe:COUNt?
+功能描述：返回DUT前损耗补偿的输入个数。
+查询格式：:SENSe:CORRection:LOSS:BEFore:TABLe:COUNt?
+参数说明：范围：0 601内的任一整数
+举例：
+:SENS:CORR:LOSS:BEF:TABL:COUN?
+[ DUT 前损耗补偿温度]
+:SENSe:CORRection:TEMPerature:BEFore
+功能描述：设置/查询DUT前损耗补偿的温度。
+设置格式：:SENSe:CORRection:TEMPerature:BEFore <temperature>
+查询格式：:SENSe:CORRection:TEMPerature:BEFore?
+参数说明：单位为Kelvin（K）、摄氏度（CEL）、华氏温度（FAR）或者K、C、F。查询
+返回的单位缺省为K。
+范围：0 29650000.00 K
+举例：
+:SENS:CORR:TEMP:BEF 1000K
+:SENS:CORR:TEMP:BEF?
+按键路径：前面板【损耗补偿】—>[温度(DUT前)]
+复位状态：290.0K
+[ DUT 后损耗补偿控制]
+:SENSe:CORRection:LOSS:AFTer[:STATe]
+功能描述：设置/查询DUT后的损耗补偿状态。
+设置格式：:SENSe:CORRection:LOSS:AFTer[:STATe] OFF|ON|0|1
+查询格式：:SENSe:CORRection:LOSS:AFTer[:STATe]?
+参数说明：ON|1：损耗补偿开
+OFF|0：损耗补偿关
+举例：
+:SENS:CORR:LOSS:AFT:STAT OFF
+:SENS:CORR:LOSS:AFT:STAT?
+按键路径：前面板【损耗补偿】—>[DUT后]
+复位状态：关
+[ DUT 后损耗补偿模式]
+:SENSe:CORRection:LOSS:AFTer:MODE
+功能描述：设置/查询DUT后的损耗补偿模式。
+设置格式：:SENSe:CORRection:LOSS:AFTer:MODE OFF|FIXed|TABLe
+查询格式：:SENSe:CORRection:LOSS:AFTer:MODE?
+参数说明：OFF：DUT后的损耗补偿关闭；
+FIXed：DUT后的损耗补偿值使用固定值；
+TABLe：DUT后的损耗补偿值使用损耗补偿表中数据。
+举例：
+:SENS:CORR:LOSS:AFT:MODE FIXed
+
+===== PAGE 91 =====
+3 程控命令
+3.3 仪器命令
+82
+:SENS:CORR:LOSS:AFT:MODE?
+按键路径：前面板【损耗补偿】—>[DUT后]
+复位状态：关
+[ DUT 后损耗补偿固定值]
+:SENSe:CORRection:LOSS:AFTer:VALue
+功能描述：设置/查询DUT后的损耗补偿的固定值。
+设置格式：:SENSe:CORRection:LOSS:AFTer:VALue <value>
+查询格式：:SENSe:CORRection:LOSS:AFTer:VALue?
+参数说明：范围：-100 100 dB
+举例：
+:SENS:CORR:LOSS:AFT:VAL 5dB
+:SENS:CORR:LOSS:AFT:VAL?
+按键路径：前面板【损耗补偿】—>[DUT后]—>[固定]—>[固定值（DUT后）]
+复位状态：0dB
+[ DUT 后损耗补偿表数据]
+:SENSe:CORRection:LOSS:AFTer:TABLe:DATA
+功能描述：设置/查询DUT后损耗补偿表中输入频率-损耗数据组对。
+设置格式：:SENSe:CORRection:LOSS:AFTer:TABLe:DATA
+<freq>,<value>{,<freq>,<value>}
+查询格式：:SENSe:CORRection:LOSS:AFTer:TABLe:DATA?
+参数说明：最大可输入601组数据。
+<freq>
+频率，可输入的单位为Hz、KHz、MHz、GHz，查询命令返回单位缺省为Hz
+范围：0 100 GHz
+<value>
+损耗值，可输入的损耗值单位为dB。
+范围：-100 100 dB
+举例：
+:SENS:CORR:LOSS:AFT:TABL:DATA 4.5GHz,5,6GHz,4
+:SENS:CORR:LOSS:AFT:TABL:DATA?
+按键路径：前面板【损耗补偿】—>[DUT后]—>[表格]—>[损耗补偿表]—>[DUT后表格]
+复位状态：单位为Hz和dB
+[ DUT 后损耗补偿表输入个数]
+:SENSe:CORRection:LOSS:AFTer:TABLe:COUNt?
+功能描述：返回DUT后损耗补偿的输入个数。
+查询格式：:SENSe:CORRection:LOSS:AFTer:TABLe:COUNt?
+返回值：
+范围：0 601 内的任一整数
+举例：
+:SENS:CORR:LOSS:AFT:TABL:COUN?
+[ DUT 后损耗补偿温度]
+:SENSe:CORRection:TEMPerature:AFTer
+功能描述：设置/查询DUT后损耗补偿的温度。
+
+===== PAGE 92 =====
+3 程控命令
+3.3 仪器命令
+83
+设置格式：:SENSe:CORRection:TEMPerature:AFTer <temperature>
+查询格式：:SENSe:CORRection:TEMPerature:AFTer?
+参数说明：单位为Kelvin（K）、摄氏度（CEL）、华氏温度（FAR）或者K、C、F。查询
+返回的单位缺省为K。
+范围：0 29650000.00 K
+举例：
+:SENS:CORR:TEMP:AFT 1000K
+:SENS:CORR:TEMP:AFT?
+按键路径：前面板【损耗补偿】—>[温度(DUT后)]
+复位状态：290.0K
+3.3.8.6
+DUT 设置
+DUT 设置对应前面板的【模式设置】[DUT 设置]键，用于选择被测装置类型以及相应
+类型下的测量设置等，包括DUT 类型、LO 类型固定或可变、系统下变频器控制开关、固定IF
+频率、固定LO 频率、LO 频偏设置、频率模式及输入频率属性等。
+[ 选择DUT 类型]
+:SENSe:CONFigure:MODE:DUT
+功能描述：设置/查询被测件类型。
+设置格式：:SENSe:CONFigure:MODE:DUT AMPLifier|DOWNconv|UPConv
+查询格式：:SENSe:CONFigure:MODE:DUT?
+参数说明：AMPLifier：测量的DUT为放大器类型；
+DOWNconv：测量的DUT为下变频器件；
+UPConv：测量的DUT为上变频器件。
+举例：
+:SENS:CONF:MODE:DUT AMPL
+:SENS:CONF:MODE:DUT?
+按键路径：前面板【模式设置】—>[DUT设置]—>[DUT]
+复位状态：放大器
+[ DUT LO 类型]
+:SENSe:CONFigure:MODE:DUT:LOSCillator
+功能描述：设置/查询被测件为变频器件测量时LO的状态：LO固定或者LO可变。
+设置格式：:SENSe:CONFigure:MODE:DUT:LOSCillator FIXed|VARiable
+查询格式：:SENSe:CONFigure:MODE:DUT:LOSCillator?
+参数说明：FIXed：LO频率保持一固定常数；
+VARiable：LO频率可变。
+举例：
+:SENS:CONF:MODE:DUT:LOSC FIXed
+:SENS:CONF:MODE:DUT:LOSC?
+复位状态：固定
+按键路径：前面板【模式设置】—>[DUT设置]—>[LO模式]
+说明：
+注意，LO固定意味着IF频率是可变的，LO可变表示IF频率固定。
+此命令仅在测量上、下变频器件或者系统下变频时使用。
+
+===== PAGE 107 =====
+3 程控命令
+3.3 仪器命令
+98
+按键路径：无
+3.3.11 TRACe 子系统
+此部分命令执行轨迹线的相关操作。相当于菜单中的部分[频标]操作。
+[ 未修正轨迹幅度查询]
+:TRACe[:DATA]:UNCorrected:AMPLitude[:VALue]?
+功能描述：查询指定的未修正迹线在指定频率点上的幅度值。
+查询格式：:TRACe[:DATA]:UNCorrected:AMPLitude[:VALue]? <trace>,<freq>[,<units>]
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<freq>
+频率
+<units>
+频率单位
+返回值：
+如果使用可选单位参数，幅度值则以所选单位表示返回；
+如果可选单位参数省略，幅度值则以指定迹线的缺省单位返回。
+举例：
+:TRAC:UNC:AMPL:VAL? NFIG,5GHz
+[ 未修正轨迹最大值查询]
+:TRACe[:DATA]:UNCorrected:AMPLitude:MAXimum?
+功能描述：查询指定未修正轨迹的最大幅度值以及相应的频率。
+查询格式：:TRACe[:DATA]:UNCorrected:AMPLitude:MAXimum? <trace>[,<units>]
+返回值：
+返回值幅度在频率值之前，中间用逗号间隔。如果使用可选单位参数，幅度值则
+以所选单位表示返回；如果可选单位参数省略，幅度值则以指定迹线的缺省单位
+返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位
+
+===== PAGE 108 =====
+3 程控命令
+3.3 仪器命令
+99
+举例：
+:TRAC:UNC:AMPL:MAX? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[最大值]
+[ 未修正轨迹最小值查询]
+:TRACe[:DATA]:UNCorrected:AMPLitude:MINimum?
+功能描述：查询指定未修正轨迹的最小幅度值以及相应的频率。
+查询格式：:TRACe[:DATA]:UNCorrected:AMPLitude:MINimum? <trace>[,<units>]
+返回值：
+返回最小值在频率值之前，中间用逗号间隔。如果使用可选单位参数，最小值则
+以所选单位表示返回；如果可选单位参数省略，最小值则以指定迹线的缺省单位
+返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位
+举例：
+:TRAC:UNC:AMPL:MIN? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[最小值]
+[ 未修正轨迹峰峰值查询]
+:TRACe[:DATA]:UNCorrected:PTPeak?
+功能描述：查询指定未修正轨迹中最大幅度值与最小幅度值的差值，以及这两个点之间的频
+率差。
+查询格式：:TRACe[:DATA]:UNCorrected:PTPeak? <trace>[,<units>]
+返回值：
+返回峰峰值在频率值之前，中间用逗号间隔。如果使用可选单位参数，峰峰值则
+以所选单位表示返回；如果可选单位参数省略，峰峰值则以指定迹线的缺省单位
+返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位，缺省为Hz
+举例：
+:TRAC:UNC:PTP? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[峰峰值]
+
+===== PAGE 109 =====
+3 程控命令
+3.3 仪器命令
+100
+[ 未修正轨迹差值查询]
+:TRACe[:DATA]:UNCorrected:DELTa?
+功能描述：查询指定未修正轨迹中频率1和频率2的幅度差值。
+查询格式：:TRACe[:DATA]:UNCorrected:DELTa? <trace>,<freq1>,<freq2>[,<units>]
+返回值：
+如果使用可选单位参数，幅度差值则以所选单位表示返回；如果可选单位参数
+省略，幅度差值则以指定迹线的缺省单位返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<freq1>
+频率1
+<freq1>
+频率2
+<units>
+频率单位，缺省为Hz
+举例：
+:TRAC:UNC:DELT? NFIG,5GHz,6GHz
+[ 修正轨迹幅度查询]
+:TRACe[:DATA]:CORRected:AMPLitude[:VALue]?
+功能描述：查询指定的已修正迹线在指定频率点上的幅度值。
+查询格式：:TRACe[:DATA]:CORRected:AMPLitude[:VALue]? <trace>,<freq>[,<units>]
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<freq>
+频率
+<units>
+频率单位
+返回值：
+如果使用可选单位参数，幅度值则以所选单位表示返回；
+如果可选单位参数省略，幅度值则以指定迹线的缺省单位返回。
+举例：
+:TRAC:CORR:AMPL:VAL? NFIG,5GHz
+[ 修正轨迹最大值查询]
+:TRACe[:DATA]:CORRected:AMPLitude:MAXimum?
+功能描述：查询指定已修正轨迹的最大幅度值以及相应的频率。
+查询格式：:TRACe[:DATA]:CORRected:AMPLitude:MAXimum? <trace>[,<units>]
+
+===== PAGE 110 =====
+3 程控命令
+3.3 仪器命令
+101
+返回值：
+返回值幅度在频率值之前，中间用逗号间隔。如果使用可选单位参数，幅度值则
+以所选单位表示返回；如果可选单位参数省略，幅度值则以指定迹线的缺省单位
+返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位
+举例：
+:TRAC:CORR:AMPL:MAX? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[最大值]
+[ 修正轨迹最小值查询]
+:TRACe[:DATA]:CORRected:AMPLitude:MINimum?
+功能描述：查询指定已修正轨迹的最小幅度值以及相应的频率。
+查询格式：:TRACe[:DATA]:CORRected:AMPLitude:MINimum? <trace>[,<units>]
+返回值：
+返回最小值在频率值之前，中间用逗号间隔。如果使用可选单位参数，最小值则
+以所选单位表示返回；如果可选单位参数省略，最小值则以指定迹线的缺省单位
+返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位
+举例：
+:TRAC:CORR:AMPL:MIN? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[最小值]
+[ 修正轨迹峰峰值查询]
+:TRACe[:DATA]:CORRected:PTPeak?
+功能描述：查询指定已修正轨迹中最大幅度值与最小幅度值的差值，以及这两个点之间的频
+率差。
+查询格式：:TRACe[:DATA]:CORRected:PTPeak? <trace>[,<units>]
+返回值：
+返回峰峰值在频率值之前，中间用逗号间隔。如果使用可选单位参数，峰峰值则
+以所选单位表示返回；如果可选单位参数省略，峰峰值则以指定迹线的缺省单位
+返回。
+
+===== PAGE 111 =====
+3 程控命令
+3.3 仪器命令
+102
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<units>
+频率单位，缺省为Hz
+举例：
+:TRAC:CORR:PTP? NFIG
+按键路径：前面板【频标】—>[搜索类型]—>[峰峰值]
+[ 修正轨迹差值查询]
+:TRACe[:DATA]:CORRected:DELTa?
+功能描述：查询指定已修正轨迹中频率1和频率2的幅度差值。
+查询格式：:TRACe[:DATA]:CORRected:DELTa? <trace>,<freq1>,<freq2>[,<units>]
+返回值：
+如果使用可选单位参数，幅度差值则以所选单位表示返回；如果可选单位参数
+省略，幅度差值则以指定迹线的缺省单位返回。
+参数说明：
+<trace>
+参数<trace>可以是以下之一：
+NFIGure：噪声系数迹线，单位为dB或线性LINear，缺省为dB；
+YFACtor：Y因子迹线，单位为dB或线性LINear，缺省为dB；
+PHOT：热功率迹线，单位为dB或线性LINear，缺省为dB；
+PCOLd：冷功率迹线，单位为dB或线性LINear，缺省为dB；
+TEFFective：等效噪声温度迹线，单位为Kelvin（K）、摄氏度（CEL）、华氏
+温度（FAR），缺省为K。
+<freq1>
+频率1
+<freq1>
+频率2
+<units>
+频率单位，缺省为Hz
+举例：
+:TRAC:CORR:DELT? NFIG,5GHz,6GHz
+3.3.12 TRIGger 子系统
+[ 扫描模式]
+:INITiate:CONTinuous
+功能描述：设置/查询连续扫描开关状态。
+设置格式：:INITiate:CONTinuous OFF|ON|0|1
+查询格式：:INITiate:CONTinuous?
+参数说明：OFF|0：连续扫描关，此时仪器保持等待状态直到接收到设置连续On命令后才开
+始扫描，完成单次扫描后自动返回空闲等待状态。
+ON|1：连续扫描开，此时一次扫描完毕后另外一次测量马上开始。
+
+===== PAGE 119 =====
+4 编程示例
+4.1 基本操作示例
+110
+4.1.7 查询轨迹数据
+/*************************************************************************
+下面的示例说明了如何查询已修正的测量轨迹数据。
+*************************************************************************/
+void QueryData ()
+{
+ViStatus status;
+ViUInt32 retCnt = 0;
+int points = 0;
+char
+buff[256] ;
+// #define VI_READ_DATABUFLEN 1000000
+char rd_Buf_Data[VI_READ_DATABUFLEN];
+char rd_Buf[VI_READ_BUFLEN];
+// #define VI_READ_BUFLEN
+30
+//设置测量频率：扫描4~10GHz，21个点
+sprintf(buff,":SENS:FREQ:MODE SWE\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+sprintf(buff,":SENS:FREQ:START 4GHz\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+sprintf(buff,":SENS:FREQ:STOP 10GHz\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+sprintf(buff,":SENS:SWE:POIN 21\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+//设置轨迹1=噪声系数，轨迹2=增益
+sprintf(buff,":DISP:DATA:TRAC1 NFIG\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+sprintf(buff,":DISP:DATA:TRAC2 GAIN\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+//获取扫描点数
+sprintf(buff,":SENS:SWE:POIN?\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+status = viRead(vi3986, (ViBuf) rd_Buf, VI_READ_BUFLEN, &retCnt);
+points = atoi(rd_Buf);
+//扫描单次
+sprintf(buff,":INIT:CONT OFF\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+
+===== PAGE 120 =====
+4 编程示例
+4.1 基本操作示例
+111
+//重扫
+sprintf(buff,":INIT:REST\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+//获取测量数据
+sprintf(buff,":FETC:CORR:NFIG? DB\n");
+status = viWrite(vi3986, (ViBuf) buff, strlen(buff), &retCnt);
+//发送查询数据命令，此处数据格式为已修正的噪声系数值，中间以逗号间隔
+status = viRead(vi3986, (ViBuf) rd_Buf_Data, VI_READ_DATABUFLEN,
+&retCnt);
+}
+4.1.8 命令同步
+/*************************************************************************
+下面以扫描过程为例说明了命令同步的方法。
+*************************************************************************/
+void SweepSync()
+{
+ViStatus status;
+long retCnt;
+ViEventType etype;
+ViEvent eevent;
+int stat;
+char OpcOk[2];
+/*********************************************************************/
+/* 命令INITiate[:IMMediate]启动单次扫描（连续扫描关闭时INIT:CONT OFF）*/
+/* 单次扫描结束时，才能执行命令缓冲区中的下一条命令
+*/
+/*********************************************************************/
+status = viWrite(vi3986, (ViBuf)":INIT:CONT OFF", 14, (ViPUInt32) &retCnt);
+//等待扫描结束的方法1：使用*WAI
+status = viWrite(vi3986, (ViBuf)":INIT", 18, (ViPUInt32)&retCnt);
+status = viWrite(vi3986, (ViBuf)"*WAI", 18, (ViPUInt32)&retCnt);
+//等待扫描结束的方法2：使用*OPC？
+status = viWrite(vi3986, (ViBuf) ":INIT", 20, (ViPUInt32)&retCnt);
+status = viWrite(vi3986, (ViBuf) "*OPC?", 18, (ViPUInt32)&retCnt);
+status = viRead(vi3986, (ViBuf)OpcOk, 2, (ViPUInt32)&retCnt); //等待*OPC返
+回“1”
+
+===== PAGE 135 =====
+附录
+附录A SCPI 命令速查表
+126
+37
+:DISPlay:DATA:CORRections
+设置/查询修正状态开关
+38
+:DISPlay:DATA:TRACe1|2
+设置/查询当前迹线类型
+39
+:DISPlay:DATA:UNITs
+设置/查询参数显示单位
+40
+:DISPlay:FORMat
+设置/查询测量显示格式
+41
+:DISPlay:GRATicule
+设置/查询坐标方格显示开关
+42
+:DISPlay:PRESet
+复位
+43
+:DISPlay:RESult:TYPE
+设置/查询当前轨迹测量参数
+类型
+44
+:DISPlay:TABLe:RESUlt:NFIGure|GAIN|YFACtor|PH
+OT|PCOLd|TEFFective
+设置/查询表格显示格式时，各
+参数的显示开关状态
+45
+:DISPlay:TRACe:COMBined
+设置/查询图形组合显示开关
+46
+:DISPlay:TRACe:WINDow
+设置/查询当前活动图形区
+47
+:DISPlay:TRACe:Y[:SCALe]:AUTO
+设置/查询自动标尺开关
+48
+:DISPlay:TRACe:Y[:SCALe]:LOWer
+设置/查询轨迹下限值
+49
+:DISPlay:TRACe:Y[:SCALe]:PDIVision
+设置/查询轨迹每格刻度值
+50
+:DISPlay:TRACe:Y[:SCALe]:RLEVel:VALue
+设置/查询某参数参考线的值
+51
+:DISPlay:TRACe:Y[:SCALe]:UPPer
+设置/查询轨迹上限值
+52
+:DISPlay:WINDow:LANGuage
+设置/查询仪器显示语言类型
+53
+:DISPlay:ZOOM:WINDow
+设置/查询上、下图形窗口的缩
+放显示
+54
+:FETCh:CORRected:GAIN?
+查询扫频状态已修正的增益
+55
+:FETCh:CORRected:NFIGure?
+查询扫频状态已修正的噪声
+系数
+56
+:FETCh:CORRected:PCOLd?
+查询扫频状态已修正的冷功
+率
+57
+:FETCh:CORRected:PHOT?
+查询扫频状态已修正的热功
+率
+58
+:FETCh:CORRected:TEFFective?
+查询扫频状态已修正的等效
+温度
+59
+:FETCh:CORRected:YFACtor?
+查询扫频状态已修正的Y 因子
+60
+:FETCh:SCALar:CORRected:GAIN?
+查询点频状态已修正的增益
+61
+:FETCh:SCALar:CORRected:NFIGure?
+查询点频状态已修正的噪声
+系数
+62
+:FETCh:SCALar:CORRected:PCOLd?
+查询点频状态已修正的冷功
+率
+63
+:FETCh:SCALar:CORRected:PHOT?
+查询点频状态已修正的热功
+率
+64
+:FETCh:SCALar:CORRected:TEFFective?
+查询点频状态已修正的等效
+温度
+65
+:FETCh:SCALar:CORRected:YFACtor?
+查询点频状态已修正的Y 因子
+
+===== PAGE 136 =====
+附录
+附录A SCPI 命令速查表
+127
+66
+:FETCh:SCALar:UNCorrected:GAIN?
+查询点频状态未修正的增益
+67
+:FETCh:SCALar:UNCorrected:NFIGure?
+查询点频状态未修正的噪声
+系数
+68
+:FETCh:SCALar:UNCorrected:PCOLd?
+查询点频状态未修正的冷功
+率
+69
+:FETCh:SCALar:UNCorrected:PHOT?
+查询点频状态未修正的热功
+率
+70
+:FETCh:SCALar:UNCorrected:TEFFective?
+查询点频状态未修正的等效
+温度
+71
+、:FETCh:SCALar:UNCorrected:YFACtor?
+查询点频状态未修正的Y 因子
+72
+:FETCh:UNCorrected:GAIN?
+查询扫频状态未修正的增益
+73
+:FETCh:UNCorrected:NFIGure?
+查询扫频状态未修正的噪声
+系数
+74
+:FETCh:UNCorrected:PCOLd?
+查询扫频状态未修正的冷功
+率
+75
+:FETCh:UNCorrected:PHOT?
+查询扫频状态未修正的热功
+率
+76
+:FETCh:UNCorrected:TEFFective?
+查询扫频状态未修正的等效
+温度
+77
+:FETCh:UNCorrected:YFACtor?
+查询扫频状态未修正的Y 因子
+78
+:INITiate:CONTinuous
+设置/查询连续扫描开关
+79
+:INITiate:RESTart
+重扫
+80
+:INITiate[:IMMediate]
+重扫（兼容N8975A）
+81
+:INPut:ATTenuation[:RF]:MAXimum
+设置/查询校准射频最大衰减
+量值
+82
+:INPut:ATTenuation[:RF]:MINimum
+设置/查询校准射频最小衰减
+量值
+83
+:INPut:ATTenuation:MWAVe:MAXimum
+设置/查询校准微波最大衰减
+量值
+84
+:INPut:ATTenuation:MWAVe:MINimum
+设置/查询校准微波最小衰减
+量值
+85
+:MMEMory:LOAD:ENR
+从文件加载测量或校准超噪
+表
+86
+:MMEMory:LOAD:FREQuency
+从指定文件加载频率列表
+87
+:MMEMory:LOAD:LIMit
+从指定文件加载限制线
+88
+:MMEMory:LOAD:LOSS
+从指定文件加载所选损耗补
+偿表
+89
+:MMEMory:LOAD:STATe
+从文件加载仪器状态
+90
+:MMEMory:STORe:ENR
+保存测量/校准超噪表到指定
+文件
+
+===== PAGE 138 =====
+附录
+附录A SCPI 命令速查表
+129
+116
+:SENSe:CONFigure:MODE:SYSTem:IF:FREQuency
+设置/查询系统下变频模式固
+定中频频率
+117
+:SENSe:CONFigure:MODE:SYSTem:LOSCillator
+设置/查询系统下变频LO 模
+式
+118
+:SENSe:CONFigure:MODE:SYSTem:LOSCillator:FR
+EQuency
+设置/查询系统下变频模式固
+定本振频率
+119
+:SENSe:CONFigure:MODE:SYSTem:LOSCillator:OF
+FSet
+设置/查询系统下变频模式边
+带类型
+120
+:SENSe:CONFigure:MODE:UPConv:FREQuency:C
+ONText
+设置/查询上变频器的测量频
+率输入类型
+121
+:SENSe:CONFigure:MODE:UPConv:IF:FREQuency
+设置/查询上变频模式固定中
+频频率
+122
+:SENSe:CONFigure:MODE:UPConv:LOSCillator:FR
+EQuency
+设置/查询上变频模式固定本
+振频率
+123
+:SENSe:CONFigure:MODE:UPConv:LOSCillator:OF
+FSet
+设置/查询上变频模式边带类
+型
+124
+:SENSe:CORRection:ENR:AUTO[:STATe]
+设置/查询自动加载ENR 表开
+关状态
+125
+:SENSe:CORRection:ENR:CALibration:TABLe:COU
+Nt?
+查询校准ENR 表的输入个数
+126
+:SENSe:CORRection:ENR:CALibration:TABLe:DAT
+A
+设置/查询校准ENR 表数据
+127
+:SENSe:CORRection:ENR:CALibration:TABLe:ID:D
+ATA
+设置/查询校准ENR 表ID
+128
+:SENSe:CORRection:ENR:CALibration:TABLe:SERi
+al:DATA
+设置/查询校准ENR 表串号
+129
+:SENSe:CORRection:ENR:CALibration:TABLe:SNS
+从智能噪声源加载校准ENR
+表
+130
+:SENSe:CORRection:ENR:COMMon:STATe
+设置/查询ENR 共用表开关
+131
+:SENSe:CORRection:ENR:MEASurement:TABLe:C
+OUNt?
+查询测量ENR 表的输入个数
+132
+:SENSe:CORRection:ENR:MEASurement:TABLe:D
+ATA
+设置/查询测量ENR 表数据
+133
+:SENSe:CORRection:ENR:MEASurement:TABLe:ID
+:DATA
+设置/查询测量ENR 表ID
+134
+:SENSe:CORRection:ENR:MEASurement:TABLe:SE
+Rial:DATA
+设置/查询测量ENR 表串号
+135
+:SENSe:CORRection:ENR:MEASurement:TABLe:S
+NS
+从智能噪声源加载测量ENR
+表
+136
+:SENSe:CORRection:ENR:MODE
+设置/查询超噪比模式
+137
+:SENSe:CORRection:ENR:SPOT
+设置/查询固定ENR 值
+
+===== PAGE 139 =====
+附录
+附录A SCPI 命令速查表
+130
+138
+:SENSe:CORRection:ENR:THOT
+设置/查询ENR 固定热温度值
+139
+:SENSe:CORRection:LOSS:AFTer:MODE
+设置/查询DUT 后损耗补偿值
+类型
+140
+:SENSe:CORRection:LOSS:AFTer:TABLe:COUNt?
+查询DUT 后损耗补偿表输入
+个数
+141
+:SENSe:CORRection:LOSS:AFTer:TABLe:DATA
+设置/查询DUT 后损耗补偿表
+数据
+142
+:SENSe:CORRection:LOSS:AFTer:VALue
+设置/查询DUT 后固定损耗补
+偿值
+143
+:SENSe:CORRection:LOSS:AFTer[:STATe]
+设置/查询DUT 后损耗补偿状
+态开关
+144
+:SENSe:CORRection:LOSS:BEFore:MODE
+设置/查询DUT 前损耗补偿值
+类型
+145
+:SENSe:CORRection:LOSS:BEFore:TABLe:COUNt?
+查询DUT 前损耗补偿表个数
+146
+:SENSe:CORRection:LOSS:BEFore:TABLe:DATA
+设置/查询DUT 前损耗补偿表
+数据
+147
+:SENSe:CORRection:LOSS:BEFore:VALue
+设置/查询DUT 前固定损耗补
+偿值
+148
+:SENSe:CORRection:LOSS:BEFore[:STATe]
+设置/查询DUT 前损耗补偿状
+态开关
+149
+:SENSe:CORRection:SPOT:MODE
+设置/查询固定ENR 类型
+150
+:SENSe:CORRection:TCOLd:SNS[:STATe]
+设置/查询自动从智能噪声源
+读取冷温度的状态开关
+151
+:SENSe:CORRection:TCOLd:USER:SET
+从智能噪声源设置用户冷温
+度
+152
+:SENSe:CORRection:TCOLd:USER[:STATe]
+设置/查询用户冷温度开关状
+态
+153
+:SENSe:CORRection:TCOLd:USER:VALue
+设置/查询用户冷温度值
+154
+:SENSe:CORRection:TEMPerature:AFTer
+设置/查询DUT 后损耗补偿温
+度值
+155
+:SENSe:CORRection:TEMPerature:BEFore
+设置/查询DUT 前损耗补偿温
+度值
+156
+:SENSe:FREQuency:CENTer
+设置/查询中心频率
+157
+:SENSe:FREQuency:SWEep:LIST
+查询频率模式为扫描时的扫
+描频率值
+158
+:SENSe:FREQuency:FIXed
+设置/查询固定频率
+159
+:SENSe:FREQuency:LIST:COUNt?
+查询频率列表频率个数
+160
+:SENSe:FREQuency:LIST:DATA
+设置/查询频率列表
+161
+:SENSe:FREQuency:MODE
+设置/查询频率模式
+162
+:SENSe:FREQuency:SPAN
+设置/查询扫描带宽
+
+===== PAGE 140 =====
+附录
+附录A SCPI 命令速查表
+131
+163
+:SENSe:FREQuency:SPAN:FULL
+设置全扫宽
+164
+:SENSe:FREQuency:STARt
+设置/查询起始频率
+165
+:SENSe:FREQuency:STOP
+设置/查询终止频率
+166
+:SENSe:MANual:IF:FIXed
+设置/查询手动测量固定IF 衰
+减量
+167
+:SENSe:MANual:IF:MODE
+设置/查询手动测量IF 衰减模
+式
+168
+:SENSe:MANual:MWAVe:FIXed
+设置/查询手动测量固定微波
+衰减量
+169
+:SENSe:MANual:MWAVe:MODE
+设置/查询手动测量微波衰减
+模式
+170
+:SENSe:MANual:NOISe[:STATe]
+设置/查询手动测量噪声源开
+关状态
+171
+:SENSe:MANual:RF:FIXed
+设置/查询手动测量固定射频
+衰减量
+172
+:SENSe:MANual:RF:MODE
+设置/查询手动测量射频衰减
+模式
+173
+:SENSe:RENew:SWEep
+重新扫描
+174
+:SENSe:SOURce:NOISe:STYLe
+设置/查询噪声源的类型
+175
+:SENSe:SWEep:POINts
+设置/查询扫描点数，整数
+176
+:SENSe:SYSTem:COMMunicate:GPIB:EXTLoscillat
+or:ADDRess
+设置/查询仪器外部本振GPIB
+地址
+177
+[:SENSe]:SYSTem:COMMunicate:GPIB:ADDRess
+设置/查询仪器GPIB 地址
+178
+:SYSTem:COMMunicate:LAN:IP:ADDRess
+设置/查询仪器IP 地址
+179
+:SYSTem:COMMunicate:LAN:SOCKet:CONTrol
+设置/查询仪器网络端口号
+180
+:SYSTem:PRESet
+复位
+181
+:TRACe[:DATA]:CORRected:AMPLitude:MAXimum
+?
+查询指定已修正轨迹的最大
+幅度值以及相应的频率（相当
+于Marker Minimum）
+182
+:TRACe[:DATA]:CORRected:AMPLitude:MINimum?
+查询指定已修正轨迹的最小
+幅度值以及相应的频率（相当
+于Marker Maxmum）
+183
+:TRACe[:DATA]:CORRected:AMPLitude[:VALue]?
+查询指定已修正轨迹在指定
+频率点的幅度值
+184
+:TRACe[:DATA]:CORRected:DELTa?
+查询指定已修正轨迹中频率1
+和频率2 的幅度差值
+185
+:TRACe[:DATA]:CORRected:PTPeak?
+查询指定已修正轨迹中最大
+幅度值与最小幅度值的差值，
+以及产生差值的频率差（相当
+于Marker PTPeak）
+
+===== PAGE 141 =====
+附录
+附录A SCPI 命令速查表
+132
+186
+:TRACe[:DATA]:UNCorrected:AMPLitude:MAXimu
+m?
+查询指定未修正轨迹的最大
+幅度值以及相应的频率（相当
+于Marker Minimum）
+187
+:TRACe[:DATA]:UNCorrected:AMPLitude:MINimu
+m?
+查询指定未修正轨迹的最小
+幅度值以及相应的频率（相当
+于Marker Maxmum）
+188
+:TRACe[:DATA]:UNCorrected:AMPLitude[:VALue]
+?
+查询指定未修正轨迹在指定
+频率点的幅度值
+189
+:TRACe[:DATA]:UNCorrected:DELTa?
+查询指定未修正轨迹中频率1
+和频率2 的幅度差值
+190
+:TRACe[:DATA]:UNCorrected:PTPeak?
+查询指定未修正轨迹中最大
+幅度值与最小幅度值的差值，
+以及产生差值的频率差（相当
+于Marker PTPeak）

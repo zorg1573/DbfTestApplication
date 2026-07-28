@@ -62,6 +62,7 @@
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.button10 = new System.Windows.Forms.Button();
@@ -71,10 +72,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button11 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.textBox_benzhen_power = new System.Windows.Forms.TextBox();
@@ -177,7 +182,8 @@
             this.toolStripButton2,
             this.toolStripButton3,
             this.toolStripButton4,
-            this.toolStripButton5});
+            this.toolStripButton5,
+            this.toolStripButton6});
             this.toolStrip1.Location = new System.Drawing.Point(23, 75);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1275, 25);
@@ -404,6 +410,7 @@
             this.toolStripButton3.Name = "toolStripButton3";
             this.toolStripButton3.Size = new System.Drawing.Size(84, 22);
             this.toolStripButton3.Text = "测试频谱调用";
+            this.toolStripButton3.Visible = false;
             this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripButton4
@@ -414,6 +421,7 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(84, 22);
             this.toolStripButton4.Text = "测试矢网调用";
+            this.toolStripButton4.Visible = false;
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // toolStripButton5
@@ -424,7 +432,19 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(107, 22);
             this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.Visible = false;
             this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            // 
+            // toolStripButton6
+            // 
+            this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
+            this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Name = "toolStripButton6";
+            this.toolStripButton6.Size = new System.Drawing.Size(84, 22);
+            this.toolStripButton6.Text = "重算衰减精度";
+            this.toolStripButton6.Visible = false;
+            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -465,6 +485,8 @@
             this.tableLayoutPanel2.Controls.Add(this.button1, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.button7, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.button6, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.button2, 0, 6);
+            this.tableLayoutPanel2.Controls.Add(this.button3, 0, 7);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 5);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
@@ -583,6 +605,19 @@
             this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.White;
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(4, 136);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(111, 37);
+            this.button1.TabIndex = 87;
+            this.button1.Text = "驻波";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // button7
             // 
             this.button7.BackColor = System.Drawing.Color.White;
@@ -596,19 +631,6 @@
             this.button7.Text = "噪声采集";
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.White;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(4, 136);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(111, 37);
-            this.button1.TabIndex = 87;
-            this.button1.Text = "驻波";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button6
             // 
@@ -624,8 +646,32 @@
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(4, 268);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(111, 37);
+            this.button2.TabIndex = 88;
+            this.button2.Text = "平坦度";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Visible = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(4, 312);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(111, 37);
+            this.button3.TabIndex = 89;
+            this.button3.Text = "-1dB带宽";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button14);
+            this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.button13);
             this.panel1.Controls.Add(this.label11);
             this.panel1.Controls.Add(this.textBox_benzhen_power);
@@ -661,17 +707,38 @@
             this.panel1.Size = new System.Drawing.Size(1139, 110);
             this.panel1.TabIndex = 1;
             // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(926, 79);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(173, 36);
+            this.button14.TabIndex = 124;
+            this.button14.Text = "射频和本振频率减100MHz";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(926, 43);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(173, 36);
+            this.button4.TabIndex = 123;
+            this.button4.Text = "射频和本振频率加100MHz";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click_1);
+            // 
             // button13
             // 
             this.button13.BackColor = System.Drawing.Color.White;
             this.button13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button13.Location = new System.Drawing.Point(901, 9);
+            this.button13.Location = new System.Drawing.Point(926, 6);
             this.button13.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(120, 36);
             this.button13.TabIndex = 122;
             this.button13.Text = "更新记录表";
             this.button13.UseVisualStyleBackColor = false;
+            this.button13.Visible = false;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // label11
@@ -735,9 +802,9 @@
             this.rf_checkBox.Location = new System.Drawing.Point(815, 8);
             this.rf_checkBox.Margin = new System.Windows.Forms.Padding(10, 15, 3, 3);
             this.rf_checkBox.Name = "rf_checkBox";
-            this.rf_checkBox.Size = new System.Drawing.Size(48, 25);
+            this.rf_checkBox.Size = new System.Drawing.Size(93, 25);
             this.rf_checkBox.TabIndex = 114;
-            this.rf_checkBox.Text = "RF";
+            this.rf_checkBox.Text = "射频输出";
             this.rf_checkBox.UseVisualStyleBackColor = true;
             this.rf_checkBox.CheckedChanged += new System.EventHandler(this.rf_checkBox_CheckedChanged);
             // 
@@ -748,9 +815,9 @@
             this.mod_checkBox.Location = new System.Drawing.Point(815, 36);
             this.mod_checkBox.Margin = new System.Windows.Forms.Padding(10, 15, 3, 3);
             this.mod_checkBox.Name = "mod_checkBox";
-            this.mod_checkBox.Size = new System.Drawing.Size(70, 25);
+            this.mod_checkBox.Size = new System.Drawing.Size(93, 25);
             this.mod_checkBox.TabIndex = 115;
-            this.mod_checkBox.Text = "MOD";
+            this.mod_checkBox.Text = "本振输出";
             this.mod_checkBox.UseVisualStyleBackColor = true;
             this.mod_checkBox.CheckedChanged += new System.EventHandler(this.mod_checkBox_CheckedChanged);
             // 
@@ -1114,5 +1181,10 @@
         private System.Windows.Forms.Button button13;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ToolStripButton toolStripButton6;
     }
 }
