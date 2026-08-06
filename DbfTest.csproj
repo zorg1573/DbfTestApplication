@@ -246,6 +246,12 @@
     <Compile Include="PAGE\PinpuControl_Form.Designer.cs">
       <DependentUpon>PinpuControl_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="PAGE\VNASetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PAGE\VNASetting.Designer.cs">
+      <DependentUpon>VNASetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="PAGE\WaitForm\JieshoujingduWait_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,6 +275,9 @@
     </Compile>
     <Compile Include="PAGE\WaitForm\RecieveTestWait_Form.Designer.cs">
       <DependentUpon>RecieveTestWait_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PAGE\ReceiveTestSelect_Form.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PAGE\SqlSet_Form.cs">
       <SubType>Form</SubType>
@@ -372,6 +381,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\PinpuControl_Form.resx">
       <DependentUpon>PinpuControl_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PAGE\VNASetting.resx">
+      <DependentUpon>VNASetting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PAGE\WaitForm\JieshoujingduWait_Form.resx">
       <DependentUpon>JieshoujingduWait_Form.cs</DependentUpon>

@@ -595,9 +595,9 @@ namespace DbfTest.FUNCTION
         }
         public async Task<string[]> GetGain_Send()
         {
-            await SendCommandAsync(":CALC4:PAR:SEL 'TRC8'");
-            await SendCommandAsync(":CALC4:FORM MLOG");
-            string data = await QueryAsync(":CALC4:DATA? FDATA");
+            await SendCommandAsync(":CALC1:PAR:SEL 'CH1_S11_2'");
+            await SendCommandAsync(":CALC1:FORM MLOG");
+            string data = await QueryAsync(":CALC1:DATA? FDATA");
             string[] parts = data?.Split(',');
             return parts;
         }

@@ -63,21 +63,58 @@
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.button10 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button11 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label20 = new System.Windows.Forms.Label();
+            this.textBox172 = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBox171 = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBox170 = new System.Windows.Forms.TextBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.textBox169 = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.textBox168 = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.textBox167 = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox166 = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.textBox165 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox164 = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.textBox163 = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBox162 = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBox161 = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.textBox160 = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.textBox159 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.textBox158 = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.textBox157 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.p1bc_textBox = new System.Windows.Forms.TextBox();
             this.button14 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
@@ -183,7 +220,8 @@
             this.toolStripButton3,
             this.toolStripButton4,
             this.toolStripButton5,
-            this.toolStripButton6});
+            this.toolStripButton6,
+            this.toolStripButton7});
             this.toolStrip1.Location = new System.Drawing.Point(23, 75);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1275, 25);
@@ -230,6 +268,7 @@
             this.参数设置ToolStripMenuItem.Name = "参数设置ToolStripMenuItem";
             this.参数设置ToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.参数设置ToolStripMenuItem.Text = "参数设置";
+            this.参数设置ToolStripMenuItem.Visible = false;
             this.参数设置ToolStripMenuItem.Click += new System.EventHandler(this.参数设置ToolStripMenuItem_Click);
             // 
             // 接收加电ToolStripMenuItem
@@ -262,6 +301,7 @@
             this.矢网设置ToolStripMenuItem.Name = "矢网设置ToolStripMenuItem";
             this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.矢网设置ToolStripMenuItem.Text = "矢网设置";
+            this.矢网设置ToolStripMenuItem.Visible = false;
             // 
             // 调用矢网信号源文件ToolStripMenuItem
             // 
@@ -292,6 +332,7 @@
             this.频谱分析仪设置ToolStripMenuItem.Name = "频谱分析仪设置ToolStripMenuItem";
             this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.频谱分析仪设置ToolStripMenuItem.Text = "频谱分析仪设置";
+            this.频谱分析仪设置ToolStripMenuItem.Visible = false;
             // 
             // 参数设置ToolStripMenuItem1
             // 
@@ -314,6 +355,7 @@
             this.功率计设置ToolStripMenuItem.Name = "功率计设置ToolStripMenuItem";
             this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.功率计设置ToolStripMenuItem.Text = "功率计设置";
+            this.功率计设置ToolStripMenuItem.Visible = false;
             // 
             // 调用功率计状态文件ToolStripMenuItem
             // 
@@ -327,6 +369,7 @@
             this.信号发生器设置ToolStripMenuItem.Name = "信号发生器设置ToolStripMenuItem";
             this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.信号发生器设置ToolStripMenuItem.Text = "信号发生器设置";
+            this.信号发生器设置ToolStripMenuItem.Visible = false;
             // 
             // toolStripDropDownButton2
             // 
@@ -442,9 +485,19 @@
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(84, 22);
-            this.toolStripButton6.Text = "重算衰减精度";
+            this.toolStripButton6.Text = "重算寄生调幅";
             this.toolStripButton6.Visible = false;
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
+            // 
+            // toolStripButton7
+            // 
+            this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
+            this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton7.Name = "toolStripButton7";
+            this.toolStripButton7.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButton7.Text = "矢网调试";
+            this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -460,8 +513,8 @@
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.59398F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70.07519F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30.22556F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.44361F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -476,17 +529,18 @@
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.button10, 0, 12);
-            this.tableLayoutPanel2.Controls.Add(this.button9, 0, 11);
-            this.tableLayoutPanel2.Controls.Add(this.button8, 0, 10);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 9);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.button11, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.button3, 0, 7);
             this.tableLayoutPanel2.Controls.Add(this.button5, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.button1, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.button7, 0, 5);
             this.tableLayoutPanel2.Controls.Add(this.button6, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.button2, 0, 6);
-            this.tableLayoutPanel2.Controls.Add(this.button3, 0, 7);
+            this.tableLayoutPanel2.Controls.Add(this.button7, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 8);
+            this.tableLayoutPanel2.Controls.Add(this.button8, 0, 9);
+            this.tableLayoutPanel2.Controls.Add(this.button9, 0, 10);
+            this.tableLayoutPanel2.Controls.Add(this.button15, 0, 11);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(5, 5);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
@@ -524,46 +578,6 @@
             this.button10.UseVisualStyleBackColor = false;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
-            // button9
-            // 
-            this.button9.BackColor = System.Drawing.Color.White;
-            this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.Location = new System.Drawing.Point(4, 491);
-            this.button9.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(111, 34);
-            this.button9.TabIndex = 85;
-            this.button9.Text = "发射移相";
-            this.button9.UseVisualStyleBackColor = false;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // button8
-            // 
-            this.button8.BackColor = System.Drawing.Color.White;
-            this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.Location = new System.Drawing.Point(4, 447);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(111, 34);
-            this.button8.TabIndex = 84;
-            this.button8.Text = "发射功率";
-            this.button8.UseVisualStyleBackColor = false;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 397);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 43);
-            this.label2.TabIndex = 83;
-            this.label2.Text = "发射测试";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -587,9 +601,23 @@
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(111, 34);
             this.button11.TabIndex = 75;
-            this.button11.Text = "接收测试";
+            this.button11.Text = "接收多指标测试";
             this.button11.UseVisualStyleBackColor = false;
             this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Location = new System.Drawing.Point(4, 312);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(111, 37);
+            this.button3.TabIndex = 89;
+            this.button3.Text = "-1dB带宽";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Visible = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // button5
             // 
@@ -618,20 +646,6 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.White;
-            this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.Location = new System.Drawing.Point(4, 227);
-            this.button7.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(111, 34);
-            this.button7.TabIndex = 82;
-            this.button7.Text = "噪声采集";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.White;
@@ -648,28 +662,121 @@
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.White;
+            this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(4, 268);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(111, 37);
             this.button2.TabIndex = 88;
             this.button2.Text = "平坦度";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Visible = false;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
-            // button3
+            // button7
             // 
-            this.button3.Location = new System.Drawing.Point(4, 312);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(111, 37);
-            this.button3.TabIndex = 89;
-            this.button3.Text = "-1dB带宽";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            this.button7.BackColor = System.Drawing.Color.White;
+            this.button7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button7.Location = new System.Drawing.Point(4, 227);
+            this.button7.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(111, 34);
+            this.button7.TabIndex = 82;
+            this.button7.Text = "噪声采集";
+            this.button7.UseVisualStyleBackColor = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(5, 353);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(101, 30);
+            this.label2.TabIndex = 83;
+            this.label2.Text = "发射测试";
+            // 
+            // button8
+            // 
+            this.button8.BackColor = System.Drawing.Color.White;
+            this.button8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button8.Location = new System.Drawing.Point(4, 403);
+            this.button8.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(111, 34);
+            this.button8.TabIndex = 84;
+            this.button8.Text = "发射功率";
+            this.button8.UseVisualStyleBackColor = false;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button9
+            // 
+            this.button9.BackColor = System.Drawing.Color.White;
+            this.button9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button9.Location = new System.Drawing.Point(4, 447);
+            this.button9.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(111, 34);
+            this.button9.TabIndex = 85;
+            this.button9.Text = "发射移相";
+            this.button9.UseVisualStyleBackColor = false;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button15
+            // 
+            this.button15.BackColor = System.Drawing.Color.White;
+            this.button15.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button15.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button15.Location = new System.Drawing.Point(4, 488);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(111, 37);
+            this.button15.TabIndex = 90;
+            this.button15.Text = "发射初相";
+            this.button15.UseVisualStyleBackColor = false;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label20);
+            this.panel1.Controls.Add(this.textBox172);
+            this.panel1.Controls.Add(this.label23);
+            this.panel1.Controls.Add(this.textBox171);
+            this.panel1.Controls.Add(this.label24);
+            this.panel1.Controls.Add(this.textBox170);
+            this.panel1.Controls.Add(this.label25);
+            this.panel1.Controls.Add(this.textBox169);
+            this.panel1.Controls.Add(this.label26);
+            this.panel1.Controls.Add(this.textBox168);
+            this.panel1.Controls.Add(this.label27);
+            this.panel1.Controls.Add(this.textBox167);
+            this.panel1.Controls.Add(this.label28);
+            this.panel1.Controls.Add(this.textBox166);
+            this.panel1.Controls.Add(this.label29);
+            this.panel1.Controls.Add(this.textBox165);
+            this.panel1.Controls.Add(this.label21);
+            this.panel1.Controls.Add(this.textBox164);
+            this.panel1.Controls.Add(this.label22);
+            this.panel1.Controls.Add(this.textBox163);
+            this.panel1.Controls.Add(this.label17);
+            this.panel1.Controls.Add(this.textBox162);
+            this.panel1.Controls.Add(this.label18);
+            this.panel1.Controls.Add(this.textBox161);
+            this.panel1.Controls.Add(this.label19);
+            this.panel1.Controls.Add(this.textBox160);
+            this.panel1.Controls.Add(this.label16);
+            this.panel1.Controls.Add(this.textBox159);
+            this.panel1.Controls.Add(this.label15);
+            this.panel1.Controls.Add(this.textBox158);
+            this.panel1.Controls.Add(this.label14);
+            this.panel1.Controls.Add(this.label13);
+            this.panel1.Controls.Add(this.textBox157);
+            this.panel1.Controls.Add(this.label12);
+            this.panel1.Controls.Add(this.p1bc_textBox);
             this.panel1.Controls.Add(this.button14);
             this.panel1.Controls.Add(this.button4);
             this.panel1.Controls.Add(this.button13);
@@ -704,12 +811,345 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(132, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1139, 110);
+            this.panel1.Size = new System.Drawing.Size(1139, 194);
             this.panel1.TabIndex = 1;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label20.Location = new System.Drawing.Point(957, 153);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(57, 21);
+            this.label20.TabIndex = 159;
+            this.label20.Text = "17.2：";
+            // 
+            // textBox172
+            // 
+            this.textBox172.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox172.Location = new System.Drawing.Point(1020, 153);
+            this.textBox172.Name = "textBox172";
+            this.textBox172.Size = new System.Drawing.Size(48, 29);
+            this.textBox172.TabIndex = 158;
+            this.textBox172.Text = "1.96";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label23.Location = new System.Drawing.Point(838, 153);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(57, 21);
+            this.label23.TabIndex = 157;
+            this.label23.Text = "17.1：";
+            // 
+            // textBox171
+            // 
+            this.textBox171.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox171.Location = new System.Drawing.Point(901, 153);
+            this.textBox171.Name = "textBox171";
+            this.textBox171.Size = new System.Drawing.Size(48, 29);
+            this.textBox171.TabIndex = 156;
+            this.textBox171.Text = "1.93";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label24.Location = new System.Drawing.Point(721, 153);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(57, 21);
+            this.label24.TabIndex = 155;
+            this.label24.Text = "17.0：";
+            // 
+            // textBox170
+            // 
+            this.textBox170.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox170.Location = new System.Drawing.Point(784, 153);
+            this.textBox170.Name = "textBox170";
+            this.textBox170.Size = new System.Drawing.Size(48, 29);
+            this.textBox170.TabIndex = 154;
+            this.textBox170.Text = "1.86";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label25.Location = new System.Drawing.Point(604, 153);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(57, 21);
+            this.label25.TabIndex = 153;
+            this.label25.Text = "16.9：";
+            // 
+            // textBox169
+            // 
+            this.textBox169.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox169.Location = new System.Drawing.Point(667, 153);
+            this.textBox169.Name = "textBox169";
+            this.textBox169.Size = new System.Drawing.Size(48, 29);
+            this.textBox169.TabIndex = 152;
+            this.textBox169.Text = "1.85";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label26.Location = new System.Drawing.Point(485, 153);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(57, 21);
+            this.label26.TabIndex = 151;
+            this.label26.Text = "16.8：";
+            // 
+            // textBox168
+            // 
+            this.textBox168.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox168.Location = new System.Drawing.Point(548, 153);
+            this.textBox168.Name = "textBox168";
+            this.textBox168.Size = new System.Drawing.Size(48, 29);
+            this.textBox168.TabIndex = 150;
+            this.textBox168.Text = "1.87";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label27.Location = new System.Drawing.Point(368, 153);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(57, 21);
+            this.label27.TabIndex = 149;
+            this.label27.Text = "16.7：";
+            // 
+            // textBox167
+            // 
+            this.textBox167.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox167.Location = new System.Drawing.Point(431, 153);
+            this.textBox167.Name = "textBox167";
+            this.textBox167.Size = new System.Drawing.Size(48, 29);
+            this.textBox167.TabIndex = 148;
+            this.textBox167.Text = "1.77";
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label28.Location = new System.Drawing.Point(251, 153);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(57, 21);
+            this.label28.TabIndex = 147;
+            this.label28.Text = "16.6：";
+            // 
+            // textBox166
+            // 
+            this.textBox166.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox166.Location = new System.Drawing.Point(314, 153);
+            this.textBox166.Name = "textBox166";
+            this.textBox166.Size = new System.Drawing.Size(48, 29);
+            this.textBox166.TabIndex = 146;
+            this.textBox166.Text = "1.85";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label29.Location = new System.Drawing.Point(132, 153);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(57, 21);
+            this.label29.TabIndex = 145;
+            this.label29.Text = "16.5：";
+            // 
+            // textBox165
+            // 
+            this.textBox165.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox165.Location = new System.Drawing.Point(195, 153);
+            this.textBox165.Name = "textBox165";
+            this.textBox165.Size = new System.Drawing.Size(48, 29);
+            this.textBox165.TabIndex = 144;
+            this.textBox165.Text = "1.74";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label21.Location = new System.Drawing.Point(957, 118);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(57, 21);
+            this.label21.TabIndex = 143;
+            this.label21.Text = "16.4：";
+            // 
+            // textBox164
+            // 
+            this.textBox164.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox164.Location = new System.Drawing.Point(1020, 118);
+            this.textBox164.Name = "textBox164";
+            this.textBox164.Size = new System.Drawing.Size(48, 29);
+            this.textBox164.TabIndex = 142;
+            this.textBox164.Text = "1.76";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label22.Location = new System.Drawing.Point(838, 118);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(57, 21);
+            this.label22.TabIndex = 141;
+            this.label22.Text = "16.3：";
+            // 
+            // textBox163
+            // 
+            this.textBox163.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox163.Location = new System.Drawing.Point(901, 118);
+            this.textBox163.Name = "textBox163";
+            this.textBox163.Size = new System.Drawing.Size(48, 29);
+            this.textBox163.TabIndex = 140;
+            this.textBox163.Text = "1.64";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label17.Location = new System.Drawing.Point(721, 118);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(57, 21);
+            this.label17.TabIndex = 139;
+            this.label17.Text = "16.2：";
+            // 
+            // textBox162
+            // 
+            this.textBox162.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox162.Location = new System.Drawing.Point(784, 118);
+            this.textBox162.Name = "textBox162";
+            this.textBox162.Size = new System.Drawing.Size(48, 29);
+            this.textBox162.TabIndex = 138;
+            this.textBox162.Text = "1.74";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label18.Location = new System.Drawing.Point(604, 118);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(57, 21);
+            this.label18.TabIndex = 137;
+            this.label18.Text = "16.1：";
+            // 
+            // textBox161
+            // 
+            this.textBox161.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox161.Location = new System.Drawing.Point(667, 118);
+            this.textBox161.Name = "textBox161";
+            this.textBox161.Size = new System.Drawing.Size(48, 29);
+            this.textBox161.TabIndex = 136;
+            this.textBox161.Text = "1.62";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label19.Location = new System.Drawing.Point(485, 118);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(57, 21);
+            this.label19.TabIndex = 135;
+            this.label19.Text = "16.0：";
+            // 
+            // textBox160
+            // 
+            this.textBox160.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox160.Location = new System.Drawing.Point(548, 118);
+            this.textBox160.Name = "textBox160";
+            this.textBox160.Size = new System.Drawing.Size(48, 29);
+            this.textBox160.TabIndex = 134;
+            this.textBox160.Text = "1.57";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label16.Location = new System.Drawing.Point(368, 118);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(57, 21);
+            this.label16.TabIndex = 133;
+            this.label16.Text = "15.9：";
+            // 
+            // textBox159
+            // 
+            this.textBox159.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox159.Location = new System.Drawing.Point(431, 118);
+            this.textBox159.Name = "textBox159";
+            this.textBox159.Size = new System.Drawing.Size(48, 29);
+            this.textBox159.TabIndex = 132;
+            this.textBox159.Text = "1.56";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label15.Location = new System.Drawing.Point(251, 118);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(57, 21);
+            this.label15.TabIndex = 131;
+            this.label15.Text = "15.8：";
+            // 
+            // textBox158
+            // 
+            this.textBox158.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox158.Location = new System.Drawing.Point(314, 118);
+            this.textBox158.Name = "textBox158";
+            this.textBox158.Size = new System.Drawing.Size(48, 29);
+            this.textBox158.TabIndex = 130;
+            this.textBox158.Text = "1.55";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label14.Location = new System.Drawing.Point(132, 118);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(57, 21);
+            this.label14.TabIndex = 129;
+            this.label14.Text = "15.7：";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label13.Location = new System.Drawing.Point(19, 118);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(122, 21);
+            this.label13.TabIndex = 127;
+            this.label13.Text = "发射功率补偿：";
+            // 
+            // textBox157
+            // 
+            this.textBox157.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox157.Location = new System.Drawing.Point(195, 118);
+            this.textBox157.Name = "textBox157";
+            this.textBox157.Size = new System.Drawing.Size(48, 29);
+            this.textBox157.TabIndex = 128;
+            this.textBox157.Text = "1.47";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label12.Location = new System.Drawing.Point(25, 78);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(84, 21);
+            this.label12.TabIndex = 125;
+            this.label12.Text = "P-1补偿：";
+            // 
+            // p1bc_textBox
+            // 
+            this.p1bc_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.p1bc_textBox.Location = new System.Drawing.Point(115, 79);
+            this.p1bc_textBox.Name = "p1bc_textBox";
+            this.p1bc_textBox.Size = new System.Drawing.Size(88, 29);
+            this.p1bc_textBox.TabIndex = 126;
+            this.p1bc_textBox.Text = "2.5";
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(926, 79);
+            this.button14.Location = new System.Drawing.Point(914, 60);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(173, 36);
             this.button14.TabIndex = 124;
@@ -719,7 +1159,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(926, 43);
+            this.button4.Location = new System.Drawing.Point(914, 11);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(173, 36);
             this.button4.TabIndex = 123;
@@ -731,7 +1171,7 @@
             // 
             this.button13.BackColor = System.Drawing.Color.White;
             this.button13.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button13.Location = new System.Drawing.Point(926, 6);
+            this.button13.Location = new System.Drawing.Point(1092, 9);
             this.button13.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button13.Name = "button13";
             this.button13.Size = new System.Drawing.Size(120, 36);
@@ -964,7 +1404,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(281, 79);
+            this.label4.Location = new System.Drawing.Point(467, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(74, 21);
             this.label4.TabIndex = 101;
@@ -974,7 +1414,7 @@
             // operator_textBox
             // 
             this.operator_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.operator_textBox.Location = new System.Drawing.Point(361, 82);
+            this.operator_textBox.Location = new System.Drawing.Point(547, 76);
             this.operator_textBox.Name = "operator_textBox";
             this.operator_textBox.Size = new System.Drawing.Size(74, 29);
             this.operator_textBox.TabIndex = 102;
@@ -1021,7 +1461,7 @@
             // 
             this.button12.BackColor = System.Drawing.Color.White;
             this.button12.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button12.Location = new System.Drawing.Point(7, 71);
+            this.button12.Location = new System.Drawing.Point(441, 71);
             this.button12.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(120, 36);
@@ -1034,7 +1474,7 @@
             // 
             this.chasun_checkBox.AutoSize = true;
             this.chasun_checkBox.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.chasun_checkBox.Location = new System.Drawing.Point(133, 82);
+            this.chasun_checkBox.Location = new System.Drawing.Point(567, 82);
             this.chasun_checkBox.Margin = new System.Windows.Forms.Padding(3, 15, 3, 3);
             this.chasun_checkBox.Name = "chasun_checkBox";
             this.chasun_checkBox.Size = new System.Drawing.Size(123, 21);
@@ -1046,7 +1486,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(132, 121);
+            this.splitContainer1.Location = new System.Drawing.Point(132, 205);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -1054,8 +1494,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.console_textBox);
             this.tableLayoutPanel1.SetRowSpan(this.splitContainer1, 2);
-            this.splitContainer1.Size = new System.Drawing.Size(1139, 541);
-            this.splitContainer1.SplitterDistance = 466;
+            this.splitContainer1.Size = new System.Drawing.Size(1139, 457);
+            this.splitContainer1.SplitterDistance = 393;
             this.splitContainer1.TabIndex = 2;
             // 
             // console_textBox
@@ -1065,7 +1505,7 @@
             this.console_textBox.Multiline = true;
             this.console_textBox.Name = "console_textBox";
             this.console_textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.console_textBox.Size = new System.Drawing.Size(1139, 71);
+            this.console_textBox.Size = new System.Drawing.Size(1139, 60);
             this.console_textBox.TabIndex = 0;
             // 
             // Main_Form
@@ -1186,5 +1626,42 @@
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ToolStripButton toolStripButton6;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox p1bc_textBox;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox textBox172;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox textBox171;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBox170;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.TextBox textBox169;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox textBox168;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox textBox167;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox textBox166;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox textBox165;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBox164;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox textBox163;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox textBox162;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBox161;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox160;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox textBox159;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox textBox158;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox textBox157;
+        private System.Windows.Forms.Button button15;
+        private System.Windows.Forms.ToolStripButton toolStripButton7;
     }
 }
