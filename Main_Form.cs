@@ -569,7 +569,7 @@ namespace DbfTest
             LogToConsole("开始发射初相测试...");
             WritePersonToAllSheets();
             await ChargeSendPowerON(); // 发射加电
-
+            await Task.Delay(1000);
             int chNum = 0;
 
             if (ch1_checkBox.Checked) chNum = 1;
