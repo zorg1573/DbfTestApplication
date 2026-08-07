@@ -1520,7 +1520,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_Form";
             this.Padding = new System.Windows.Forms.Padding(23, 75, 23, 25);
-            this.Text = "KuDBF40W测试";
+            this.Text = "KuDBF20W测试";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

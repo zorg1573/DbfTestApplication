@@ -59,16 +59,8 @@
             this.ch6_yixiang_textBox = new System.Windows.Forms.TextBox();
             this.ch7_yixiang_textBox = new System.Windows.Forms.TextBox();
             this.ch8_yixiang_textBox = new System.Windows.Forms.TextBox();
-            this.ch8_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch7_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch6_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch5_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch4_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch3_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.ch2_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.ch1_shuaijian_textBox = new System.Windows.Forms.TextBox();
-            this.comboBox_mode = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.mgc_comboBox = new System.Windows.Forms.ComboBox();
             this.panel3.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -124,7 +116,7 @@
             // 
             this.send_button.BackColor = System.Drawing.Color.White;
             this.send_button.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.send_button.Location = new System.Drawing.Point(108, 543);
+            this.send_button.Location = new System.Drawing.Point(110, 496);
             this.send_button.Name = "send_button";
             this.send_button.Size = new System.Drawing.Size(87, 39);
             this.send_button.TabIndex = 23;
@@ -136,7 +128,7 @@
             // 
             this.cancel_button.BackColor = System.Drawing.Color.White;
             this.cancel_button.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cancel_button.Location = new System.Drawing.Point(266, 543);
+            this.cancel_button.Location = new System.Drawing.Point(268, 496);
             this.cancel_button.Name = "cancel_button";
             this.cancel_button.Size = new System.Drawing.Size(87, 39);
             this.cancel_button.TabIndex = 24;
@@ -208,7 +200,7 @@
             this.flowLayoutPanel1.Controls.Add(this.pictureBox2);
             this.flowLayoutPanel1.Controls.Add(this.pictureBox3);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(315, 4);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(313, 4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(128, 32);
             this.flowLayoutPanel1.TabIndex = 28;
@@ -312,21 +304,21 @@
             // shuaijian_textBox
             // 
             this.shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.shuaijian_textBox.Location = new System.Drawing.Point(149, 492);
+            this.shuaijian_textBox.Location = new System.Drawing.Point(307, 132);
             this.shuaijian_textBox.Name = "shuaijian_textBox";
             this.shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
             this.shuaijian_textBox.TabIndex = 12;
-            this.shuaijian_textBox.Text = "0000000000";
+            this.shuaijian_textBox.Text = "111111";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(69, 495);
+            this.label5.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(307, 114);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(74, 21);
+            this.label5.Size = new System.Drawing.Size(32, 17);
             this.label5.TabIndex = 13;
-            this.label5.Text = "中频衰减";
+            this.label5.Text = "衰减";
             // 
             // ch2_yixiang_textBox
             // 
@@ -391,115 +383,35 @@
             this.ch8_yixiang_textBox.TabIndex = 39;
             this.ch8_yixiang_textBox.Text = "000000";
             // 
-            // ch8_shuaijian_textBox
+            // label6
             // 
-            this.ch8_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch8_shuaijian_textBox.Location = new System.Drawing.Point(292, 447);
-            this.ch8_shuaijian_textBox.Name = "ch8_shuaijian_textBox";
-            this.ch8_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch8_shuaijian_textBox.TabIndex = 48;
-            this.ch8_shuaijian_textBox.Text = "000000";
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.Location = new System.Drawing.Point(307, 164);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(33, 17);
+            this.label6.TabIndex = 41;
+            this.label6.Text = "mgc";
             // 
-            // ch7_shuaijian_textBox
+            // mgc_comboBox
             // 
-            this.ch7_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch7_shuaijian_textBox.Location = new System.Drawing.Point(292, 402);
-            this.ch7_shuaijian_textBox.Name = "ch7_shuaijian_textBox";
-            this.ch7_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch7_shuaijian_textBox.TabIndex = 47;
-            this.ch7_shuaijian_textBox.Text = "000000";
-            // 
-            // ch6_shuaijian_textBox
-            // 
-            this.ch6_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch6_shuaijian_textBox.Location = new System.Drawing.Point(292, 358);
-            this.ch6_shuaijian_textBox.Name = "ch6_shuaijian_textBox";
-            this.ch6_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch6_shuaijian_textBox.TabIndex = 46;
-            this.ch6_shuaijian_textBox.Text = "000000";
-            // 
-            // ch5_shuaijian_textBox
-            // 
-            this.ch5_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch5_shuaijian_textBox.Location = new System.Drawing.Point(292, 312);
-            this.ch5_shuaijian_textBox.Name = "ch5_shuaijian_textBox";
-            this.ch5_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch5_shuaijian_textBox.TabIndex = 45;
-            this.ch5_shuaijian_textBox.Text = "000000";
-            // 
-            // ch4_shuaijian_textBox
-            // 
-            this.ch4_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch4_shuaijian_textBox.Location = new System.Drawing.Point(292, 267);
-            this.ch4_shuaijian_textBox.Name = "ch4_shuaijian_textBox";
-            this.ch4_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch4_shuaijian_textBox.TabIndex = 44;
-            this.ch4_shuaijian_textBox.Text = "000000";
-            // 
-            // ch3_shuaijian_textBox
-            // 
-            this.ch3_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch3_shuaijian_textBox.Location = new System.Drawing.Point(292, 222);
-            this.ch3_shuaijian_textBox.Name = "ch3_shuaijian_textBox";
-            this.ch3_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch3_shuaijian_textBox.TabIndex = 43;
-            this.ch3_shuaijian_textBox.Text = "000000";
-            // 
-            // ch2_shuaijian_textBox
-            // 
-            this.ch2_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch2_shuaijian_textBox.Location = new System.Drawing.Point(292, 178);
-            this.ch2_shuaijian_textBox.Name = "ch2_shuaijian_textBox";
-            this.ch2_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch2_shuaijian_textBox.TabIndex = 42;
-            this.ch2_shuaijian_textBox.Text = "000000";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(292, 114);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 17);
-            this.label2.TabIndex = 41;
-            this.label2.Text = "衰减";
-            // 
-            // ch1_shuaijian_textBox
-            // 
-            this.ch1_shuaijian_textBox.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.ch1_shuaijian_textBox.Location = new System.Drawing.Point(292, 132);
-            this.ch1_shuaijian_textBox.Name = "ch1_shuaijian_textBox";
-            this.ch1_shuaijian_textBox.Size = new System.Drawing.Size(100, 29);
-            this.ch1_shuaijian_textBox.TabIndex = 40;
-            this.ch1_shuaijian_textBox.Text = "000000";
-            // 
-            // comboBox_mode
-            // 
-            this.comboBox_mode.FormattingEnabled = true;
-            this.comboBox_mode.Items.AddRange(new object[] {
-            "正常处理",
-            "只改中频"});
-            this.comboBox_mode.Location = new System.Drawing.Point(292, 495);
-            this.comboBox_mode.Name = "comboBox_mode";
-            this.comboBox_mode.Size = new System.Drawing.Size(100, 20);
-            this.comboBox_mode.TabIndex = 49;
+            this.mgc_comboBox.FormattingEnabled = true;
+            this.mgc_comboBox.Items.AddRange(new object[] {
+            "0",
+            "1"});
+            this.mgc_comboBox.Location = new System.Drawing.Point(307, 187);
+            this.mgc_comboBox.Name = "mgc_comboBox";
+            this.mgc_comboBox.Size = new System.Drawing.Size(100, 20);
+            this.mgc_comboBox.TabIndex = 42;
             // 
             // ManualSend_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 605);
+            this.ClientSize = new System.Drawing.Size(441, 552);
             this.ControlBox = false;
-            this.Controls.Add(this.comboBox_mode);
-            this.Controls.Add(this.ch8_shuaijian_textBox);
-            this.Controls.Add(this.ch7_shuaijian_textBox);
-            this.Controls.Add(this.ch6_shuaijian_textBox);
-            this.Controls.Add(this.ch5_shuaijian_textBox);
-            this.Controls.Add(this.ch4_shuaijian_textBox);
-            this.Controls.Add(this.ch3_shuaijian_textBox);
-            this.Controls.Add(this.ch2_shuaijian_textBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.ch1_shuaijian_textBox);
+            this.Controls.Add(this.mgc_comboBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.ch8_yixiang_textBox);
             this.Controls.Add(this.checkBox_ch8);
             this.Controls.Add(this.ch7_yixiang_textBox);
@@ -567,15 +479,7 @@
         private System.Windows.Forms.TextBox ch6_yixiang_textBox;
         private System.Windows.Forms.TextBox ch7_yixiang_textBox;
         private System.Windows.Forms.TextBox ch8_yixiang_textBox;
-        private System.Windows.Forms.TextBox ch8_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch7_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch6_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch5_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch4_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch3_shuaijian_textBox;
-        private System.Windows.Forms.TextBox ch2_shuaijian_textBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox ch1_shuaijian_textBox;
-        private System.Windows.Forms.ComboBox comboBox_mode;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox mgc_comboBox;
     }
 }

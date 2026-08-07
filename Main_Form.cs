@@ -1129,128 +1129,6 @@ namespace DbfTest
         /// <param name="e"></param>
         private async void button7_Click(object sender, EventArgs e)
         {
-            /*try
-            {
-                if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
-                {
-                    MessageBox.Show("请选择一个通道", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                string ch = "";
-                string testType = testType_comboBox.Text;
-                string componentName = componentName_textBox.Text;
-
-                //进度条
-                int num = 0;
-                SafeSetProgressBarMaximum(_pointCount, 0);
-
-                if (ch1_checkBox.Checked)
-                {
-                    ch = $"通道1-{testType}";
-                }
-                if (ch2_checkBox.Checked)
-                {
-                    ch = $"通道2-{testType}";
-                }
-                if (ch3_checkBox.Checked)
-                {
-                    ch = $"通道3-{testType}";
-                }
-                if (ch4_checkBox.Checked)
-                {
-                    ch = $"通道4-{testType}";
-                }
-                if (ch5_checkBox.Checked)
-                {
-                    ch = $"通道1-{testType}";
-                }
-                if (ch6_checkBox.Checked)
-                {
-                    ch = $"通道2-{testType}";
-                }
-                if (ch7_checkBox.Checked)
-                {
-                    ch = $"通道3-{testType}";
-                }
-                if (ch8_checkBox.Checked)
-                {
-                    ch = $"通道4-{testType}";
-                }
-                double xinhaoyuanPower = -56;
-                if (textBox_rf_power.Text == "" || textBox_rf_power.Text == null)
-                {
-                    MessageBox.Show("请输入信号源功率");
-                    return;
-                }
-                else
-                {
-                    xinhaoyuanPower = double.Parse(textBox_rf_power.Text);
-                }
-
-                await ChargeRecievePowerON(); // 接收加电
-                await Task.Delay(500);     // 延时保证设备稳定
-                await RecieveTestUDP();       // FPGA发包
-                await Task.Delay(500);     // 延时保证设备稳定
-
-                ScpiDevice pinpuDevice = new ScpiDevice();
-                ScpiDevice xinhaoBenzhenDevice = new ScpiDevice();
-                ScpiDevice xinhaoDevice = new ScpiDevice();
-
-                bool connected = await pinpuDevice.ConnectAsync(_pinpuAddress);
-                bool connected2 = await xinhaoBenzhenDevice.ConnectAsync(_xinhaoAddress);
-                bool connected3 = await xinhaoDevice.ConnectAsync(_vnaAddress);
-                if (!connected || !connected2 || !connected3)
-                {
-                    LogToConsole("连接失败");
-                    return;
-                }
-                string[] freqArray = new string[_pointCount];
-                string[] data = new string[_pointCount];
-                double step = 0;
-                step = (_stopFreq - _startFreq) / (_pointCount - 1);
-
-                await xinhaoDevice.LoadStateFile("40.csa");
-                await xinhaoDevice.SetPower(xinhaoyuanPower, _vnaRfPortNum);
-                await xinhaoDevice.EnableOutput();
-                await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
-                await xinhaoBenzhenDevice.EnableRfOutput();
-
-                await pinpuDevice.SendCommandAsync(":INST:SEL NFIGURE");
-                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/kudbfzs.sta'");
-
-                for (int i = 0; i < _pointCount; i++)
-                {
-                    double freqHz = _startFreq + step * i;
-                    double freqGHz = Math.Round(freqHz / 1e9, 3);
-                    freqArray[i] = freqGHz.ToString("F6"); // 保留6位小数（GHz）
-
-                    await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
-                    await Task.Delay(200);
-                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
-                    await Task.Delay(200);
-                    // 频谱仪也只测当前频点，不再读取整段扫频曲线
-                    data = await pinpuDevice.GetZaoshengSinglePointAsync();
-                    LogToConsole($"噪声系数 {freqGHz:F3} GHz = {data[i]} dB");
-
-                    num++;
-                    SafeIncrementProgressBar();
-                    label6.Text = ((double)num / _pointCount * 100).ToString("f2") + "%";
-                    label6.Refresh();
-                }
-                WriteZaoshengToMatchingFrequencyRows(freqArray, data, "测试结果");
-                LogToConsole("噪声采集");
-
-                await xinhaoBenzhenDevice.DisableRfOutput();
-                pinpuDevice.Disconnect();
-                xinhaoBenzhenDevice.Disconnect();
-                await CloseCharge();
-                await CloseFPGA();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"噪声采集失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                operateLog_DAL.InsertOperateLog_DT("噪声采集失败", ex.ToString(), operator_textBox.Text);
-            }*/
             try
             {
                 if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
@@ -1302,13 +1180,27 @@ namespace DbfTest
                 await ChargeRecievePowerON(); // 接收加电
                 await Task.Delay(500);     // 延时保证设备稳定
                                            //await RecieveTestUDP();       // FPGA发包
-                bool[] rxEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                string zhongpinShuaijian = "0000010100";
+                string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                string model = "10";
+                string model_stc = model + "01011" + "0";
+                string buling = new string('0', 59);
                 modelValue = StringToByteArray("01 03 02 00");
-                bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                bool[] txDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, txDisable);
+                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
                 SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500);     // 延时保证设备稳定
@@ -1667,15 +1559,29 @@ namespace DbfTest
                 else
                 {
                     string numToString = ToSixBitBinaryString2(idx);
-                    string[] numToString2 = Enumerable.Repeat(numToString, 8).ToArray();
+
                     LogToConsole("idx:" + idx + ",bitString:" + numToString);
-                    bool[] rxEnable = GetChannelCheckedStates();
-                    string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                    string zhongpinShuaijian = "0000000000";
+                    string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model = "10";
+                    string model_stc = model + numToString + "0";
+                    string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
-                    bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                    bool[] txDisable = { true, true, true, true, true, true, true, true };
-                    var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, numToString2, rxEnable, txDisable);
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
                     SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 }
@@ -2144,14 +2050,8 @@ namespace DbfTest
                     label6.Refresh();
                 }
 
-                bool[] rxEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                modelValue = StringToByteArray("01 03 02 00");
-                bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                bool[] txDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits("0000000000", zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, txDisable);
+                await RecieveTestUDP();
 
-                SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
                 await Task.Delay(500); // 让设备处理
 
                 for (int i = 0; i < _pointCount; i++)
@@ -2503,6 +2403,23 @@ namespace DbfTest
 
         public string ToSixBitBinaryString2(int number)
         {
+            /*            if (number < 0 || number > 63)
+                            throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
+
+                        // 1️⃣ 转6位二进制
+                        string binary = Convert.ToString(number, 2).PadLeft(6, '0');
+
+                        // 2️⃣ 反转
+                        char[] reversed = binary.ToCharArray();
+                        Array.Reverse(reversed);
+
+            *//*            // 3️⃣ 取反（0->1, 1->0）
+                        for (int i = 0; i < reversed.Length; i++)
+                        {
+                            reversed[i] = reversed[i] == '0' ? '1' : '0';
+                        }*//*
+
+                        return new string(reversed);*/
             if (number < 0 || number > 63)
                 throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
 
@@ -2513,11 +2430,11 @@ namespace DbfTest
             char[] reversed = binary.ToCharArray();
             Array.Reverse(reversed);
 
-/*            // 3️⃣ 取反（0->1, 1->0）
+            // 3️⃣ 取反（0->1, 1->0）
             for (int i = 0; i < reversed.Length; i++)
             {
                 reversed[i] = reversed[i] == '0' ? '1' : '0';
-            }*/
+            }
 
             return new string(reversed);
         }
@@ -4699,39 +4616,32 @@ namespace DbfTest
             return normalized.PadRight(IfAttenuationBitCount, '0');
         }
 
-        byte[] GenerateCodeValueFromBits(string ifAttenuationBits, string[] txPhaseBits, string[] rxPhaseBits, string[] txAttenuationBits, string[] rxAttenuationBits, bool[] rxEnable, bool[] txEnable)
+        byte[] GenerateCodeValueFromBits(string[] bitStrings)
         {
-            ValidateChannelArrays(txPhaseBits, rxPhaseBits, txAttenuationBits, rxAttenuationBits, rxEnable, txEnable);
+            /*            if (bitStrings.Length != 10)
+                            throw new ArgumentException("应包含10个通道的比特串");*/
 
-            List<int> controlBits = new List<int>(ControlBitCount);
-            // 28字节控制码顺序: 表头[5:0] + ATT[9:0] + 26×8
-            AppendBitString(controlBits, ToWireBitOrder(DefaultTableHeaderBits), TableHeaderBitCount, "表头");
-            AppendBitString(controlBits, PadIfAttenuationBits(ifAttenuationBits), IfAttenuationBitCount, "ATT[9:0]");
+            int[] expectedLengths = { 56, 28, 28, 28, 28, 28, 28, 28, 9, 59 };
+            string allBits = "";
 
-            for (int i = 0; i < ChannelCount; i++)
+            for (int i = 0; i < 10; i++)
             {
-                AppendEnableBit(controlBits, rxEnable[i]);
-                AppendBitString(controlBits, txPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射移相");
-                AppendBitString(controlBits, rxPhaseBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收移相");
-                AppendBitString(controlBits, txAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 发射衰减");
-                AppendBitString(controlBits, rxAttenuationBits[i], ChannelFieldBitCount, $"通道 {i + 1} 接收衰减");
-                AppendEnableBit(controlBits, txEnable[i]);
+                string bits = bitStrings[i].Replace(" ", "");
+                if (bits.Length != expectedLengths[i])
+                    throw new ArgumentException($"通道 {i + 1} 应为 {expectedLengths[i]} 位，但提供了 {bits.Length} 位");
+
+                allBits += bits;
             }
 
-            if (controlBits.Count != ControlBitCount)
-                throw new ArgumentException($"控制字应为{ControlBitCount}位（{ControlCodeByteLength}字节），但现在是 {controlBits.Count} 位");
+            if (allBits.Length != 320)
+                throw new ArgumentException($"总位数应为320，但现在是 {allBits.Length}");
 
-            byte[] codeBytes = new byte[CodeValueLength];
-            for (int i = 0; i < controlBits.Count; i++)
+            // 输出 15 字节（120 位）
+            byte[] codeBytes = new byte[40];
+            for (int i = 0; i < 40; i++)
             {
-                if (controlBits[i] != 1)
-                    continue;
-
-                int byteIndex = ControlCodeStartIndex + i / 8;
-                if (byteIndex >= CodeValueLength)
-                    throw new ArgumentException($"控制字超出 codeValue 范围：需要字节索引 {byteIndex}，但 codeValue 长度为 {CodeValueLength}。");
-
-                codeBytes[byteIndex] |= (byte)(1 << (i % 8));
+                string byteStr = allBits.Substring(i * 8, 8);
+                codeBytes[i] = Convert.ToByte(byteStr, 2);
             }
 
             return codeBytes;
@@ -4790,139 +4700,315 @@ namespace DbfTest
 
         private async Task RecieveTestUDP()
         {
-            // 与 ManualSend_Form 一致：在 UI 线程组包/发包，避免 Task.Run 跨线程读 CheckBox
-            try
+            await Task.Run(() =>
             {
-                bool[] rxEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                modelValue = StringToByteArray("01 03 02 00");
-                bool[] txDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits("0000000000", zeroBits, zeroBits, zeroBits, zeroBits, rxEnable, txDisable);
+                try
+                {
+                    string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model = "10";
+                    string model_stc = model + "111111" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 02 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    string chSum = "";
+                    if (ch1_checkBox.Checked)
+                    {
+                        chSum += "通道1 ";
+                    }
+                    if (ch2_checkBox.Checked)
+                    {
+                        chSum += " 通道2 ";
+                    }
+                    if (ch3_checkBox.Checked)
+                    {
+                        chSum += " 通道3 ";
+                    }
+                    if (ch4_checkBox.Checked)
+                    {
+                        chSum += " 通道4 ";
+                    }
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
+                    }
 
-                LogToConsole("FPGA发包:" + BuildSelectedChannelSummary());
-                SendCustomPacket(this.headValue, modelValue, emptyValue, codeValue);
+                    LogToConsole("FPGA发包:" + chSum);
 
-                operateLog_DAL.InsertOperateLog_DT("接收测试", $"{rxEnable[0]},{rxEnable[1]},{rxEnable[2]},{rxEnable[3]}", operator_textBox.Text);
-            }
-            catch (Exception ex)
-            {
-                LogToConsole("接收测试失败: " + ex);
-                operateLog_DAL.InsertOperateLog_DT("接收测试失败", ex.ToString(), operator_textBox.Text);
-            }
-            await Task.CompletedTask;
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+
+                    operateLog_DAL.InsertOperateLog_DT("接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}", operator_textBox.Text);
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole("接收测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("接收测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
         }
         private async Task RecieveTestUDPFullAtt()
         {
-            try
+            await Task.Run(() =>
             {
-                bool[] rxEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                string[] oneBits = Enumerable.Repeat("111111", 8).ToArray();
-                modelValue = StringToByteArray("01 03 02 00");
-                bool[] txDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits("0000000000", zeroBits, zeroBits, zeroBits, oneBits, rxEnable, txDisable);
+                try
+                {
+                    string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model = "10";
+                    string model_stc = model + "000000" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 02 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    string chSum = "";
+                    if (ch1_checkBox.Checked)
+                    {
+                        chSum += "通道1 ";
+                    }
+                    if (ch2_checkBox.Checked)
+                    {
+                        chSum += " 通道2 ";
+                    }
+                    if (ch3_checkBox.Checked)
+                    {
+                        chSum += " 通道3 ";
+                    }
+                    if (ch4_checkBox.Checked)
+                    {
+                        chSum += " 通道4 ";
+                    }
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
+                    }
 
-                LogToConsole("FPGA发包:" + BuildSelectedChannelSummary());
-                SendCustomPacket(this.headValue, modelValue, emptyValue, codeValue);
+                    LogToConsole("FPGA发包:" + chSum);
 
-                operateLog_DAL.InsertOperateLog_DT("接收测试", $"{rxEnable[0]},{rxEnable[1]},{rxEnable[2]},{rxEnable[3]}", operator_textBox.Text);
-            }
-            catch (Exception ex)
-            {
-                LogToConsole("接收测试失败: " + ex);
-                operateLog_DAL.InsertOperateLog_DT("接收测试失败", ex.ToString(), operator_textBox.Text);
-            }
-            await Task.CompletedTask;
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+
+                    operateLog_DAL.InsertOperateLog_DT("接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}", operator_textBox.Text);
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole("接收测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("接收测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
         }
         private async Task SendTestUDP()
         {
-            try
+            await Task.Run(() =>
             {
-                if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
+                try
                 {
-                    MessageBox.Show("请至少选择一个通道进行发射测试", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                    string ch1send = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2send = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3send = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4send = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5send = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6send = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7send = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8send = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch1send;
+                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch2send;
+                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch3send;
+                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch4send;
+                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch5send;
+                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch6send;
+                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch7send;
+                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch8send;
+                    string model = "00";
+                    string model_stc = model + "111111" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 01 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    string chSum = "";
+                    if (ch1_checkBox.Checked)
+                    {
+                        chSum += "通道1 ";
+                    }
+                    if (ch2_checkBox.Checked)
+                    {
+                        chSum += " 通道2 ";
+                    }
+                    if (ch3_checkBox.Checked)
+                    {
+                        chSum += " 通道3 ";
+                    }
+                    if (ch4_checkBox.Checked)
+                    {
+                        chSum += " 通道4 ";
+                    }
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
+                    }
+                    if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
+                    {
+                        MessageBox.Show("请至少选择一个通道进行发射测试", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    LogToConsole("FPGA发包:" + chSum);
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+
+                    operateLog_DAL.InsertOperateLog_DT("发射测试", $"{ch1send},{ch2send},{ch3send},{ch4send}", operator_textBox.Text);
+
                 }
-
-                bool[] txEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                modelValue = StringToByteArray("01 03 01 00");
-                bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits("0000000000", zeroBits, zeroBits, zeroBits, zeroBits, rxDisable, txEnable);
-
-                LogToConsole("FPGA发包:" + BuildSelectedChannelSummary());
-                SendCustomPacket(this.headValue, modelValue, emptyValue, codeValue);
-
-                operateLog_DAL.InsertOperateLog_DT("发射测试", $"{txEnable[0]},{txEnable[1]},{txEnable[2]},{txEnable[3]},{txEnable[4]},{txEnable[5]},{txEnable[6]},{txEnable[7]}", operator_textBox.Text);
-            }
-            catch (Exception ex)
-            {
-                LogToConsole("发射测试失败: " + ex);
-                operateLog_DAL.InsertOperateLog_DT("发射测试失败", ex.ToString(), operator_textBox.Text);
-            }
-            await Task.CompletedTask;
+                catch (Exception ex)
+                {
+                    LogToConsole("发射测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("发射测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
         }
         private async Task SendTestUDP(int num, string yixiangOrshuaijian)
         {
-            try
+            await Task.Run(() =>
             {
-                int selectedCount = 0;
-                if (ch1_checkBox.Checked) selectedCount++;
-                if (ch2_checkBox.Checked) selectedCount++;
-                if (ch3_checkBox.Checked) selectedCount++;
-                if (ch4_checkBox.Checked) selectedCount++;
-                if (ch5_checkBox.Checked) selectedCount++;
-                if (ch6_checkBox.Checked) selectedCount++;
-                if (ch7_checkBox.Checked) selectedCount++;
-                if (ch8_checkBox.Checked) selectedCount++;
-
-                if (selectedCount != 1)
+                try
                 {
-                    MessageBox.Show("请只选择一个接收通道！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    // 获取勾选的通道数量
+                    int selectedCount = 0;
+                    if (ch1_checkBox.Checked) selectedCount++;
+                    if (ch2_checkBox.Checked) selectedCount++;
+                    if (ch3_checkBox.Checked) selectedCount++;
+                    if (ch4_checkBox.Checked) selectedCount++;
+                    if (ch5_checkBox.Checked) selectedCount++;
+                    if (ch6_checkBox.Checked) selectedCount++;
+                    if (ch7_checkBox.Checked) selectedCount++;
+                    if (ch8_checkBox.Checked) selectedCount++;
+
+                    // 判断是否仅选择一个
+                    if (selectedCount != 1)
+                    {
+                        MessageBox.Show("请只选择一个接收通道！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return; // 终止方法
+                    }
+                    string numToString = ToSixBitBinaryString(num);
+                    // 分别设置通道值
+                    string ch1send = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2send = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3send = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4send = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5send = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6send = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7send = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8send = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + numToString + "000000" + ch1send;
+                    string ch2 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch2send;
+                    string ch3 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch3send;
+                    string ch4 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch4send;
+                    string ch5 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch5send;
+                    string ch6 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch6send;
+                    string ch7 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch7send;
+                    string ch8 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch8send;
+                    string model = "00";
+                    string model_stc = model + "111111" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 01 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+                    LogToConsole(numToString);
                 }
-                string numToString = ToSixBitBinaryString2(num);
-                bool[] txEnable = GetChannelCheckedStates();
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                string[] txPhaseBits = yixiangOrshuaijian == "移相"
-                    ? Enumerable.Repeat(numToString, 8).ToArray()
-                    : zeroBits;
-                string[] txAttenuationBits = yixiangOrshuaijian == "移相"
-                    ? zeroBits
-                    : Enumerable.Repeat(numToString, 8).ToArray();
-                modelValue = StringToByteArray("01 03 01 00");
-                bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                var codeValue = GenerateCodeValueFromBits("0000000000", txPhaseBits, zeroBits, txAttenuationBits, zeroBits, rxDisable, txEnable);
-                SendCustomPacket(this.headValue, modelValue, emptyValue, codeValue);
-                LogToConsole(numToString);
-            }
-            catch (Exception ex)
-            {
-                LogToConsole("发射测试失败: " + ex);
-                operateLog_DAL.InsertOperateLog_DT("发射测试失败", ex.ToString(), operator_textBox.Text);
-            }
-            await Task.CompletedTask;
+                catch (Exception ex)
+                {
+                    LogToConsole("发射测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("发射测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
         }
         private async Task CloseFPGA()
         {
-            try
+            await Task.Run(() =>
             {
-                LogToConsole("切换至负载态");
-                string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
-                bool[] rxDisable = { true, true, true, true, true, true, true, true };
-                bool[] txDisable = { true, true, true, true, true, true, true, true };
-                string zhongpinShuaijian = "0000000000";
-                modelValue = StringToByteArray("01 03 03 00");
-                var codeValue = GenerateCodeValueFromBits(zhongpinShuaijian, zeroBits, zeroBits, zeroBits, zeroBits, rxDisable, txDisable);
+                try
+                {
+                    LogToConsole("切换至负载态");
+                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model_stc = "01" + "000000" + "0";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 03 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
 
-                SendCustomPacket(this.headValue, modelValue, emptyValue, codeValue);
-            }
-            catch (Exception ex)
-            {
-                LogToConsole("切换至负载态失败: " + ex);
-                operateLog_DAL.InsertOperateLog_DT("切换至负载态失败", ex.ToString(), operator_textBox.Text);
-            }
-            await Task.CompletedTask;
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole("切换至负载态失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("切换至负载态失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
         }
 
         private string BuildSelectedChannelSummary()
