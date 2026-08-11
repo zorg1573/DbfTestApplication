@@ -1,5 +1,4 @@
-﻿using Excel;
-using Ivi.Visa;
+﻿using Ivi.Visa;
 using Keysight.KtNA;
 using System;
 using System.Collections.Generic;

@@ -70,7 +70,7 @@ namespace DbfTest
         {
             testType_comboBox.SelectedIndex = 0;
             operator_textBox.Text = "操作员";
-            componentName_textBox.Text = "DBF";
+            componentName_textBox.Text = "KUDBF20W";
             jsbc_textBox.Text = "60";
             GetAddress();
             GetDeviceFilesJson();
@@ -2478,8 +2478,8 @@ namespace DbfTest
                                 return;
                             }
 
-                            Excel.Workbook workbook = (Excel.Workbook)document;
-                            Excel.Application excelApp = workbook.Application;
+                            dynamic workbook = document;
+                            dynamic excelApp = workbook.Application;
 
                             if (excelApp == null || excelApp.ActiveWindow == null)
                             {
@@ -2488,7 +2488,7 @@ namespace DbfTest
                             }
 
                             // 强制激活第一个工作表
-                            Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[1];
+                            dynamic sheet = workbook.Worksheets[1];
                             sheet.Activate();
 
                             // 稍微等待后再次尝试设置缩放（第一次可能失败）
@@ -2496,7 +2496,7 @@ namespace DbfTest
                             {
                                 try
                                 {
-                                    Excel.Window window = excelApp.ActiveWindow;
+                                    dynamic window = excelApp.ActiveWindow;
 
                                     if (window != null)
                                     {
@@ -2511,7 +2511,7 @@ namespace DbfTest
                             }, TaskScheduler.FromCurrentSynchronizationContext());
 
                             // 可选：清除数据
-                            /*                            foreach (Excel.Worksheet ws in workbook.Worksheets)
+                            /*                            foreach (dynamic ws in workbook.Worksheets)
                                                         {
                                                             ClearExcelContentBelowRow(ws, 8);
                                                         }*/
@@ -2877,12 +2877,12 @@ namespace DbfTest
                 // 去除每个字符串的空格
                 string[] cleanedData = data.Select(s => s.Replace("\n", "")).ToArray();
 
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                Excel.Workbook workbook = excelApp.ActiveWorkbook;
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
 
                 // 根据名称获取指定的工作表
-                Excel.Worksheet worksheet = null;
-                foreach (Excel.Worksheet sheet in workbook.Sheets)
+                dynamic worksheet = null;
+                foreach (dynamic sheet in workbook.Sheets)
                 {
                     if (sheet.Name == sheetName)
                     {
@@ -2920,12 +2920,12 @@ namespace DbfTest
                 // 去除换行符
                 string[] cleanedData = data.Select(s => s.Replace("\n", "")).ToArray();
 
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                Excel.Workbook workbook = excelApp.ActiveWorkbook;
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
 
                 // 根据名称获取指定的工作表
-                Excel.Worksheet worksheet = null;
-                foreach (Excel.Worksheet sheet in workbook.Sheets)
+                dynamic worksheet = null;
+                foreach (dynamic sheet in workbook.Sheets)
                 {
                     if (sheet.Name == sheetName)
                     {
@@ -2949,9 +2949,9 @@ namespace DbfTest
                     int row = 8 + i;
 
                     // 从目标列取值
-                    var targetCell = worksheet.Cells[row, targetColumnIndex];
+                    dynamic targetCell = worksheet.Cells[row, targetColumnIndex];
                     double targetVal = 0;
-                    if (targetCell != null)
+                    if (targetCell != null && targetCell.Value != null)
                     {
                         targetVal = double.Parse(targetCell.Value.ToString());
                     }
@@ -2978,17 +2978,17 @@ namespace DbfTest
                 MessageBox.Show("写入 Excel 失败：" + ex.Message);
             }
         }
-        private void ClearExcelColumnBelowRow(Excel.Worksheet worksheet, int columnIndex, int startRow)
+        private void ClearExcelColumnBelowRow(dynamic worksheet, int columnIndex, int startRow)
         {
             try
             {
-                // 找到当前列中最后有数据的行号
-                int lastRow = worksheet.Cells[worksheet.Rows.Count, columnIndex].End(Excel.XlDirection.xlUp).Row;
+                // 找到当前列中最后有数据的行号（xlUp = -4162）
+                int lastRow = worksheet.Cells[worksheet.Rows.Count, columnIndex].End(-4162).Row;
 
                 // 如果最后行在第 startRow 行或之后，清除从 startRow 到最后行之间的单元格
                 if (lastRow >= startRow)
                 {
-                    Excel.Range clearRange = worksheet.Range[worksheet.Cells[startRow, columnIndex], worksheet.Cells[lastRow, columnIndex]];
+                    dynamic clearRange = worksheet.Range[worksheet.Cells[startRow, columnIndex], worksheet.Cells[lastRow, columnIndex]];
                     clearRange.ClearContents();
                 }
             }
@@ -3001,9 +3001,9 @@ namespace DbfTest
         {
             try
             {
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                var workbook = excelApp.ActiveWorkbook;
-                Excel.Worksheet worksheet = workbook.Sheets[sheetName];
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
+                dynamic worksheet = workbook.Sheets[sheetName];
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
@@ -3053,12 +3053,19 @@ namespace DbfTest
                 string[] cleanedData = data.Select(s => s.Trim().Replace("\n", "").Replace("\r", "")).ToArray();
 
                 // 获取当前 Excel 实例
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                Excel.Workbook workbook = excelApp.ActiveWorkbook;
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
 
                 // 查找指定工作表
-                Excel.Worksheet worksheet = workbook.Sheets.Cast<Excel.Worksheet>()
-                    .FirstOrDefault(s => s.Name == sheetName);
+                dynamic worksheet = null;
+                foreach (dynamic sheet in workbook.Sheets)
+                {
+                    if (sheet.Name == sheetName)
+                    {
+                        worksheet = sheet;
+                        break;
+                    }
+                }
 
                 if (worksheet == null)
                 {
@@ -3076,7 +3083,7 @@ namespace DbfTest
                         if (columnIndex > 2)
                         {
                             // 读取基态列（第2列）的单元格值
-                            object baseObj = (worksheet.Cells[row, 2] as Excel.Range).Value;
+                            object baseObj = worksheet.Cells[row, 2].Value;
                             double baseValue = 0.0;
 
                             if (baseObj != null && double.TryParse(baseObj.ToString(), out double parsedBase))
@@ -3112,9 +3119,9 @@ namespace DbfTest
         {
             try
             {
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                var workbook = excelApp.ActiveWorkbook;
-                Excel.Worksheet worksheet = workbook.Sheets[sheetName];
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
+                dynamic worksheet = workbook.Sheets[sheetName];
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
@@ -3160,13 +3167,13 @@ namespace DbfTest
             try
             {
                 // 获取当前运行的 Excel 实例
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                var workbook = excelApp.ActiveWorkbook;
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
 
                 string personText = operator_textBox.Text.Trim();
 
                 // 遍历所有工作表
-                foreach (Excel.Worksheet sheet in workbook.Sheets)
+                foreach (dynamic sheet in workbook.Sheets)
                 {
                     sheet.Cells[1, 2] = personText; // B1 单元格
                 }
@@ -3184,9 +3191,9 @@ namespace DbfTest
             {
                 // 去除每个字符串的空格
                 string[] cleanedData = data.Select(s => s.Replace("\n", "")).ToArray();
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                var workbook = excelApp.ActiveWorkbook;
-                Excel.Worksheet worksheet = workbook.Sheets[sheetName];
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
+                dynamic worksheet = workbook.Sheets[sheetName];
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
@@ -3227,9 +3234,9 @@ namespace DbfTest
         public void SubtractStandardAndWriteResult(string sheetName)
         {
             /*            LogToConsole("开始写入数据差值");
-                        var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                        var workbook = excelApp.ActiveWorkbook;
-                        Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
+                        dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                        dynamic workbook = excelApp.ActiveWorkbook;
+                        dynamic phaseSheet = workbook.Sheets[sheetName];
 
                         int startCol = 2;  // 从第2列开始
                         int endCol = 65;
@@ -3257,9 +3264,9 @@ namespace DbfTest
                         LogToConsole("数据差值写入完成");*/
             LogToConsole("开始写入数据差值（按目标频率点过滤）");
 
-            var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-            var workbook = excelApp.ActiveWorkbook;
-            Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
+            dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+            dynamic workbook = excelApp.ActiveWorkbook;
+            dynamic phaseSheet = workbook.Sheets[sheetName];
 
             int startCol = 2;
             int endCol = 65;
@@ -3312,9 +3319,9 @@ namespace DbfTest
         public void SubtractStandardAndWriteResult_Jieshou(string sheetName)
         {
             LogToConsole("开始写入数据差值");
-            var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-            var workbook = excelApp.ActiveWorkbook;
-            Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
+            dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+            dynamic workbook = excelApp.ActiveWorkbook;
+            dynamic phaseSheet = workbook.Sheets[sheetName];
 
             int startCol = 2;  // 从第2列开始
             int endCol = 65;
@@ -3347,10 +3354,10 @@ namespace DbfTest
             try
             {
                 LogToConsole("开始计算精度...");
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                var workbook = excelApp.ActiveWorkbook; ;
-                Excel.Worksheet phaseSheet = workbook.Sheets[sheetName];
-                Excel.Worksheet resultSheet = workbook.Sheets[$"测试结果{chNum}"];
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp.ActiveWorkbook;
+                dynamic phaseSheet = workbook.Sheets[sheetName];
+                dynamic resultSheet = workbook.Sheets[$"测试结果{chNum}"];
 
                 // 获取频率点行数
                 int startRow = 211;
@@ -3358,7 +3365,7 @@ namespace DbfTest
 
                 while (true)
                 {
-                    Excel.Range freqCell = phaseSheet.Cells[currentRow, 1]; // A列
+                    dynamic freqCell = phaseSheet.Cells[currentRow, 1]; // A列
                     if (freqCell == null || freqCell.Value == null)
                         break;
 
@@ -3370,9 +3377,10 @@ namespace DbfTest
                     List<double> phaseValues = new List<double>();
                     for (int col = 3; col <= 65; col++) // C = 3, BM = 65
                     {
-                        var cell = phaseSheet.Cells[currentRow, col];
+                        dynamic cell = phaseSheet.Cells[currentRow, col];
                         double val = 0; // 先初始化
-                        if (cell != null && double.TryParse(cell.Value?.ToString(), out val))
+                        object cellValue = cell?.Value;
+                        if (cell != null && cellValue != null && double.TryParse(cellValue.ToString(), out val))
                         {
                             phaseValues.Add(val);
                         }
@@ -3410,12 +3418,12 @@ namespace DbfTest
                 MessageBox.Show("处理移相精度时出错：" + ex.Message);
             }
         }
-        private int FindRowByFrequency(Excel.Worksheet sheet, double freqGHz)
+        private int FindRowByFrequency(dynamic sheet, double freqGHz)
         {
             int row = 8; // 从第8行开始查找
             while (true)
             {
-                var cell = sheet.Cells[row, 1]; // A列
+                dynamic cell = sheet.Cells[row, 1]; // A列
                 if (cell == null || cell.Value == null)
                     break;
 
@@ -4249,8 +4257,8 @@ namespace DbfTest
             try
             {
                 // 获取当前 Excel 应用程序实例
-                var excelApp = (Excel.Application)System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
-                Excel.Workbook workbook = excelApp?.ActiveWorkbook;
+                dynamic excelApp = System.Runtime.InteropServices.Marshal.GetActiveObject("Excel.Application");
+                dynamic workbook = excelApp?.ActiveWorkbook;
 
                 if (workbook == null)
                 {
@@ -4296,7 +4304,7 @@ namespace DbfTest
                     else
                     {
                         // 如果 FullName 为空，可以尝试根据 FileFormat 推测（可选）
-                        // ext = workbook.FileFormat == (int)Excel.XlFileFormat.xlExcel8 ? ".xls" : ".xlsx";
+                        // ext = workbook.FileFormat == 56 ? ".xls" : ".xlsx"; // xlExcel8 = 56
                     }
                 }
                 catch
@@ -4334,8 +4342,8 @@ namespace DbfTest
                 return;
             }
 
-            Excel.Workbook workbook = (Excel.Workbook)document;
-            Excel.Application excelApp = workbook.Application;
+            dynamic workbook = document;
+            dynamic excelApp = workbook.Application;
 
             if (excelApp == null || excelApp.ActiveWindow == null)
             {
@@ -4361,36 +4369,36 @@ namespace DbfTest
             try
             {
                 // ---------- 1️⃣ 清空第一个sheet ----------
-                Excel.Worksheet sheet1 = (Excel.Worksheet)workbook.Worksheets[1];
-                Excel.Range range1 = sheet1.Range["B8", "Q" + sheet1.Rows.Count]; // 从第9行到最后一行
+                dynamic sheet1 = workbook.Worksheets[1];
+                dynamic range1 = sheet1.Range["B8", "Q" + sheet1.Rows.Count]; // 从第9行到最后一行
                 range1.ClearContents(); // 清空文本内容
 
                 // ---------- 2️⃣ 第二个sheet ----------
-                Excel.Worksheet sheet2 = (Excel.Worksheet)workbook.Worksheets[2];
-                Excel.Range range2a = sheet2.Range["B4", "BM24"];
-                Excel.Range range2b = sheet2.Range["B31", "BM51"];
+                dynamic sheet2 = workbook.Worksheets[2];
+                dynamic range2a = sheet2.Range["B4", "BM24"];
+                dynamic range2b = sheet2.Range["B31", "BM51"];
                 range2a.Value2 = 0;
                 range2b.Value2 = 0;
 
                 // ---------- 3️⃣ 第三个sheet ----------
-                Excel.Worksheet sheet3 = (Excel.Worksheet)workbook.Worksheets[3];
-                Excel.Range range3a = sheet3.Range["B4", "BM204"];
-                Excel.Range range3b = sheet3.Range["B211", "BM411"];
+                dynamic sheet3 = workbook.Worksheets[3];
+                dynamic range3a = sheet3.Range["B4", "BM204"];
+                dynamic range3b = sheet3.Range["B211", "BM411"];
                 range3a.Value2 = 0;
                 range3b.Value2 = 0;
                 for (int i = 4; i <= 17; i++)
                 {
                     if (i % 2 == 0)
                     {
-                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
-                        Excel.Range range = sheet.Range["B8", "Q" + sheet.Rows.Count]; // 从第9行到最后一行
+                        dynamic sheet = workbook.Worksheets[i];
+                        dynamic range = sheet.Range["B8", "Q" + sheet.Rows.Count]; // 从第9行到最后一行
                         range.ClearContents(); // 清空文本内容
                     }
                     else
                     {
-                        Excel.Worksheet sheet = (Excel.Worksheet)workbook.Worksheets[i];
-                        Excel.Range rangea = sheet.Range["B4", "BM24"];
-                        Excel.Range rangeb = sheet.Range["B31", "BM51"];
+                        dynamic sheet = workbook.Worksheets[i];
+                        dynamic rangea = sheet.Range["B4", "BM24"];
+                        dynamic rangeb = sheet.Range["B31", "BM51"];
                         rangea.Value2 = 0;
                         rangeb.Value2 = 0;
                     }
@@ -4474,8 +4482,14 @@ namespace DbfTest
                     return;
                 }
 
-                // 创建 Excel 应用程序实例
-                var excelApp = new Excel.Application();
+                // 通过 ProgID 创建 Excel 应用程序实例（无需 Interop 程序集）
+                Type excelType = Type.GetTypeFromProgID("Excel.Application");
+                if (excelType == null)
+                {
+                    MessageBox.Show("未安装 Microsoft Excel，无法打开文件。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                dynamic excelApp = Activator.CreateInstance(excelType);
                 excelApp.Visible = true; // 显示 Excel 窗口
 
                 // 打开指定工作簿

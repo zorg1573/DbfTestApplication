@@ -334,28 +334,28 @@
             // 仪表地址设置ToolStripMenuItem
             // 
             this.仪表地址设置ToolStripMenuItem.Name = "仪表地址设置ToolStripMenuItem";
-            this.仪表地址设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.仪表地址设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.仪表地址设置ToolStripMenuItem.Text = "仪表地址设置";
             this.仪表地址设置ToolStripMenuItem.Click += new System.EventHandler(this.仪表地址设置ToolStripMenuItem_Click);
             // 
             // 调用文件设置ToolStripMenuItem
             // 
             this.调用文件设置ToolStripMenuItem.Name = "调用文件设置ToolStripMenuItem";
-            this.调用文件设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.调用文件设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.调用文件设置ToolStripMenuItem.Text = "调用文件设置";
             this.调用文件设置ToolStripMenuItem.Click += new System.EventHandler(this.调用文件设置ToolStripMenuItem_Click);
             // 
             // 测试设置ToolStripMenuItem
             // 
             this.测试设置ToolStripMenuItem.Name = "测试设置ToolStripMenuItem";
-            this.测试设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.测试设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.测试设置ToolStripMenuItem.Text = "测试设置";
             this.测试设置ToolStripMenuItem.Click += new System.EventHandler(this.测试设置ToolStripMenuItem_Click);
             // 
             // 数据库设置ToolStripMenuItem
             // 
             this.数据库设置ToolStripMenuItem.Name = "数据库设置ToolStripMenuItem";
-            this.数据库设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.数据库设置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.数据库设置ToolStripMenuItem.Text = "数据库设置";
             this.数据库设置ToolStripMenuItem.Visible = false;
             this.数据库设置ToolStripMenuItem.Click += new System.EventHandler(this.数据库设置ToolStripMenuItem_Click);
@@ -363,7 +363,7 @@
             // 配置刷新ToolStripMenuItem
             // 
             this.配置刷新ToolStripMenuItem.Name = "配置刷新ToolStripMenuItem";
-            this.配置刷新ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.配置刷新ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.配置刷新ToolStripMenuItem.Text = "配置刷新";
             this.配置刷新ToolStripMenuItem.Click += new System.EventHandler(this.配置刷新ToolStripMenuItem_Click);
             // 
@@ -975,7 +975,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_Form";
             this.Padding = new System.Windows.Forms.Padding(23, 75, 23, 25);
-            this.Text = "DBF测试";
+            this.Text = "KUDBF20W测试";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
