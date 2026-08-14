@@ -83,10 +83,10 @@ namespace DbfTest
         {
             testType_comboBox.SelectedIndex = 0;
             operator_textBox.Text = "操作员";
-            componentName_textBox.Text = "KUDBF40W";
-            jsbc_textBox.Text = "56";
-            textBox_rf_power.Text = "-56";
-            textBox_benzhen_power.Text = "3.7";
+            componentName_textBox.Text = "KUDBF20W";
+            jsbc_textBox.Text = "60";
+            textBox_rf_power.Text = "-60";
+            textBox_benzhen_power.Text = "2.5";
             GetAddress();
             GetDeviceFilesJson();
             GetTestSetNewJson();
