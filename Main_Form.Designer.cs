@@ -80,6 +80,8 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label30 = new System.Windows.Forms.Label();
+            this.textBox_benzhen_power_fs = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.textBox172 = new System.Windows.Forms.TextBox();
             this.label23 = new System.Windows.Forms.Label();
@@ -742,6 +744,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label30);
+            this.panel1.Controls.Add(this.textBox_benzhen_power_fs);
             this.panel1.Controls.Add(this.label20);
             this.panel1.Controls.Add(this.textBox172);
             this.panel1.Controls.Add(this.label23);
@@ -814,6 +818,24 @@
             this.panel1.Size = new System.Drawing.Size(1139, 194);
             this.panel1.TabIndex = 1;
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label30.Location = new System.Drawing.Point(219, 82);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(122, 21);
+            this.label30.TabIndex = 160;
+            this.label30.Text = "发射本振功率：";
+            // 
+            // textBox_benzhen_power_fs
+            // 
+            this.textBox_benzhen_power_fs.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBox_benzhen_power_fs.Location = new System.Drawing.Point(347, 79);
+            this.textBox_benzhen_power_fs.Name = "textBox_benzhen_power_fs";
+            this.textBox_benzhen_power_fs.Size = new System.Drawing.Size(88, 29);
+            this.textBox_benzhen_power_fs.TabIndex = 161;
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
@@ -823,6 +845,7 @@
             this.label20.Size = new System.Drawing.Size(57, 21);
             this.label20.TabIndex = 159;
             this.label20.Text = "17.2：";
+            this.label20.Visible = false;
             // 
             // textBox172
             // 
@@ -831,7 +854,8 @@
             this.textBox172.Name = "textBox172";
             this.textBox172.Size = new System.Drawing.Size(48, 29);
             this.textBox172.TabIndex = 158;
-            this.textBox172.Text = "1.96";
+            this.textBox172.Text = "0";
+            this.textBox172.Visible = false;
             // 
             // label23
             // 
@@ -842,6 +866,7 @@
             this.label23.Size = new System.Drawing.Size(57, 21);
             this.label23.TabIndex = 157;
             this.label23.Text = "17.1：";
+            this.label23.Visible = false;
             // 
             // textBox171
             // 
@@ -850,7 +875,8 @@
             this.textBox171.Name = "textBox171";
             this.textBox171.Size = new System.Drawing.Size(48, 29);
             this.textBox171.TabIndex = 156;
-            this.textBox171.Text = "1.93";
+            this.textBox171.Text = "0";
+            this.textBox171.Visible = false;
             // 
             // label24
             // 
@@ -861,6 +887,7 @@
             this.label24.Size = new System.Drawing.Size(57, 21);
             this.label24.TabIndex = 155;
             this.label24.Text = "17.0：";
+            this.label24.Visible = false;
             // 
             // textBox170
             // 
@@ -869,7 +896,8 @@
             this.textBox170.Name = "textBox170";
             this.textBox170.Size = new System.Drawing.Size(48, 29);
             this.textBox170.TabIndex = 154;
-            this.textBox170.Text = "1.86";
+            this.textBox170.Text = "0";
+            this.textBox170.Visible = false;
             // 
             // label25
             // 
@@ -879,7 +907,7 @@
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(57, 21);
             this.label25.TabIndex = 153;
-            this.label25.Text = "16.9：";
+            this.label25.Text = "10.2：";
             // 
             // textBox169
             // 
@@ -888,7 +916,7 @@
             this.textBox169.Name = "textBox169";
             this.textBox169.Size = new System.Drawing.Size(48, 29);
             this.textBox169.TabIndex = 152;
-            this.textBox169.Text = "1.85";
+            this.textBox169.Text = "0";
             // 
             // label26
             // 
@@ -898,7 +926,7 @@
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(57, 21);
             this.label26.TabIndex = 151;
-            this.label26.Text = "16.8：";
+            this.label26.Text = "10.1：";
             // 
             // textBox168
             // 
@@ -907,7 +935,7 @@
             this.textBox168.Name = "textBox168";
             this.textBox168.Size = new System.Drawing.Size(48, 29);
             this.textBox168.TabIndex = 150;
-            this.textBox168.Text = "1.87";
+            this.textBox168.Text = "0";
             // 
             // label27
             // 
@@ -917,7 +945,7 @@
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(57, 21);
             this.label27.TabIndex = 149;
-            this.label27.Text = "16.7：";
+            this.label27.Text = "10.0：";
             // 
             // textBox167
             // 
@@ -926,7 +954,7 @@
             this.textBox167.Name = "textBox167";
             this.textBox167.Size = new System.Drawing.Size(48, 29);
             this.textBox167.TabIndex = 148;
-            this.textBox167.Text = "1.77";
+            this.textBox167.Text = "0";
             // 
             // label28
             // 
@@ -934,9 +962,9 @@
             this.label28.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label28.Location = new System.Drawing.Point(251, 153);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(57, 21);
+            this.label28.Size = new System.Drawing.Size(48, 21);
             this.label28.TabIndex = 147;
-            this.label28.Text = "16.6：";
+            this.label28.Text = "9.9：";
             // 
             // textBox166
             // 
@@ -945,7 +973,7 @@
             this.textBox166.Name = "textBox166";
             this.textBox166.Size = new System.Drawing.Size(48, 29);
             this.textBox166.TabIndex = 146;
-            this.textBox166.Text = "1.85";
+            this.textBox166.Text = "0";
             // 
             // label29
             // 
@@ -953,9 +981,9 @@
             this.label29.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label29.Location = new System.Drawing.Point(132, 153);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(57, 21);
+            this.label29.Size = new System.Drawing.Size(48, 21);
             this.label29.TabIndex = 145;
-            this.label29.Text = "16.5：";
+            this.label29.Text = "9.8：";
             // 
             // textBox165
             // 
@@ -964,7 +992,7 @@
             this.textBox165.Name = "textBox165";
             this.textBox165.Size = new System.Drawing.Size(48, 29);
             this.textBox165.TabIndex = 144;
-            this.textBox165.Text = "1.74";
+            this.textBox165.Text = "0";
             // 
             // label21
             // 
@@ -972,9 +1000,9 @@
             this.label21.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label21.Location = new System.Drawing.Point(957, 118);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(57, 21);
+            this.label21.Size = new System.Drawing.Size(48, 21);
             this.label21.TabIndex = 143;
-            this.label21.Text = "16.4：";
+            this.label21.Text = "9.7：";
             // 
             // textBox164
             // 
@@ -983,7 +1011,7 @@
             this.textBox164.Name = "textBox164";
             this.textBox164.Size = new System.Drawing.Size(48, 29);
             this.textBox164.TabIndex = 142;
-            this.textBox164.Text = "1.76";
+            this.textBox164.Text = "0";
             // 
             // label22
             // 
@@ -991,9 +1019,9 @@
             this.label22.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label22.Location = new System.Drawing.Point(838, 118);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(57, 21);
+            this.label22.Size = new System.Drawing.Size(48, 21);
             this.label22.TabIndex = 141;
-            this.label22.Text = "16.3：";
+            this.label22.Text = "9.6：";
             // 
             // textBox163
             // 
@@ -1002,7 +1030,7 @@
             this.textBox163.Name = "textBox163";
             this.textBox163.Size = new System.Drawing.Size(48, 29);
             this.textBox163.TabIndex = 140;
-            this.textBox163.Text = "1.64";
+            this.textBox163.Text = "0";
             // 
             // label17
             // 
@@ -1010,9 +1038,9 @@
             this.label17.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label17.Location = new System.Drawing.Point(721, 118);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(57, 21);
+            this.label17.Size = new System.Drawing.Size(48, 21);
             this.label17.TabIndex = 139;
-            this.label17.Text = "16.2：";
+            this.label17.Text = "9.5：";
             // 
             // textBox162
             // 
@@ -1021,7 +1049,7 @@
             this.textBox162.Name = "textBox162";
             this.textBox162.Size = new System.Drawing.Size(48, 29);
             this.textBox162.TabIndex = 138;
-            this.textBox162.Text = "1.74";
+            this.textBox162.Text = "0";
             // 
             // label18
             // 
@@ -1029,9 +1057,9 @@
             this.label18.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label18.Location = new System.Drawing.Point(604, 118);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(57, 21);
+            this.label18.Size = new System.Drawing.Size(48, 21);
             this.label18.TabIndex = 137;
-            this.label18.Text = "16.1：";
+            this.label18.Text = "9.4：";
             // 
             // textBox161
             // 
@@ -1040,7 +1068,7 @@
             this.textBox161.Name = "textBox161";
             this.textBox161.Size = new System.Drawing.Size(48, 29);
             this.textBox161.TabIndex = 136;
-            this.textBox161.Text = "1.62";
+            this.textBox161.Text = "0";
             // 
             // label19
             // 
@@ -1048,9 +1076,9 @@
             this.label19.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label19.Location = new System.Drawing.Point(485, 118);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(57, 21);
+            this.label19.Size = new System.Drawing.Size(48, 21);
             this.label19.TabIndex = 135;
-            this.label19.Text = "16.0：";
+            this.label19.Text = "9.3：";
             // 
             // textBox160
             // 
@@ -1059,7 +1087,7 @@
             this.textBox160.Name = "textBox160";
             this.textBox160.Size = new System.Drawing.Size(48, 29);
             this.textBox160.TabIndex = 134;
-            this.textBox160.Text = "1.57";
+            this.textBox160.Text = "0";
             // 
             // label16
             // 
@@ -1067,9 +1095,9 @@
             this.label16.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label16.Location = new System.Drawing.Point(368, 118);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(57, 21);
+            this.label16.Size = new System.Drawing.Size(48, 21);
             this.label16.TabIndex = 133;
-            this.label16.Text = "15.9：";
+            this.label16.Text = "9.2：";
             // 
             // textBox159
             // 
@@ -1078,7 +1106,7 @@
             this.textBox159.Name = "textBox159";
             this.textBox159.Size = new System.Drawing.Size(48, 29);
             this.textBox159.TabIndex = 132;
-            this.textBox159.Text = "1.56";
+            this.textBox159.Text = "0";
             // 
             // label15
             // 
@@ -1086,9 +1114,9 @@
             this.label15.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label15.Location = new System.Drawing.Point(251, 118);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(57, 21);
+            this.label15.Size = new System.Drawing.Size(48, 21);
             this.label15.TabIndex = 131;
-            this.label15.Text = "15.8：";
+            this.label15.Text = "9.1：";
             // 
             // textBox158
             // 
@@ -1097,7 +1125,7 @@
             this.textBox158.Name = "textBox158";
             this.textBox158.Size = new System.Drawing.Size(48, 29);
             this.textBox158.TabIndex = 130;
-            this.textBox158.Text = "1.55";
+            this.textBox158.Text = "0";
             // 
             // label14
             // 
@@ -1105,9 +1133,9 @@
             this.label14.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label14.Location = new System.Drawing.Point(132, 118);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(57, 21);
+            this.label14.Size = new System.Drawing.Size(48, 21);
             this.label14.TabIndex = 129;
-            this.label14.Text = "15.7：";
+            this.label14.Text = "9.0：";
             // 
             // label13
             // 
@@ -1126,7 +1154,7 @@
             this.textBox157.Name = "textBox157";
             this.textBox157.Size = new System.Drawing.Size(48, 29);
             this.textBox157.TabIndex = 128;
-            this.textBox157.Text = "1.47";
+            this.textBox157.Text = "0";
             // 
             // label12
             // 
@@ -1185,11 +1213,11 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label11.Location = new System.Drawing.Point(251, 40);
+            this.label11.Location = new System.Drawing.Point(219, 46);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(90, 21);
+            this.label11.Size = new System.Drawing.Size(122, 21);
             this.label11.TabIndex = 120;
-            this.label11.Text = "本振功率：";
+            this.label11.Text = "接收本振功率：";
             // 
             // textBox_benzhen_power
             // 
@@ -1520,7 +1548,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Main_Form";
             this.Padding = new System.Windows.Forms.Padding(23, 75, 23, 25);
-            this.Text = "KuDBF20W测试";
+            this.Text = "XDBF20W测试";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.flowLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -1663,5 +1691,7 @@
         private System.Windows.Forms.TextBox textBox157;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.ToolStripButton toolStripButton7;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox textBox_benzhen_power_fs;
     }
 }

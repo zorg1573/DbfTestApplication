@@ -69,9 +69,18 @@ namespace DbfTest
         /// <summary>发射移相仅测 7 个基态（经 ToSixBitBinaryString 反转后对应发码索引）。</summary>
         static readonly int[] TxPhaseBaseStateIndices = { 0, 1, 2, 4, 8, 16, 32 };
 
+        // XDBF：9.0~10.2GHz；矢网约 10MHz 步进 → 121 点；测试频点 0.1GHz 步进 → 13 点
+        const double RfBandStartGHz = 9.0;
+        const double RfBandStopGHz = 10.2;
+
         const int TxPhaseMeasureStartRow = 4;
-        const int TxPhaseMeasureEndRow = 154; // 与模板 B4:BM154 对齐
-        const int TxPhaseDifferenceStartRow = 161; // 与模板 B161:BM311 对齐
+        const int TxPhaseMeasureEndRow = 124; // 与模板 B4:BM124 对齐（121 点）
+        const int TxPhaseDifferenceStartRow = 131; // 与模板 B131:BM251 对齐
+
+        const int RxAttenMeasureStartRow = 4;
+        const int RxAttenMeasureEndRow = 16; // 与模板 B4:BM16 对齐（13 点）
+        const int RxAttenDifferenceStartRow = 23; // 与模板 B23:BM35 对齐
+        const int RxAttenDifferenceEndRow = 35;
         #endregion
 
         public Main_Form()
@@ -83,10 +92,11 @@ namespace DbfTest
         {
             testType_comboBox.SelectedIndex = 0;
             operator_textBox.Text = "操作员";
-            componentName_textBox.Text = "KUDBF20W";
+            componentName_textBox.Text = "XDBF20W";
             jsbc_textBox.Text = "60";
             textBox_rf_power.Text = "-60";
             textBox_benzhen_power.Text = "2.5";
+            textBox_benzhen_power_fs.Text = "1";
             GetAddress();
             GetDeviceFilesJson();
             GetTestSetNewJson();
@@ -406,16 +416,17 @@ namespace DbfTest
 
             try
             {
-                await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
+                await powerMeter.LoadGonglvState();
+                await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb_FS());
                 await xinhaoBenzhenDevice.EnableRfOutput();
                 LogToConsole("获取功率计数据");
                 freqArray = GetFilterFreqArray(_pointCount);
-                // textBox157~textBox172 对应 15.7GHz~17.2GHz（步进0.1GHz）共16个点的发射功率补偿
+                // textBox157~textBox169 对应 9.0GHz~10.2GHz（步进0.1GHz）共13个点的发射功率补偿
                 System.Windows.Forms.TextBox[] txPowerCompBoxes = {
                     textBox157, textBox158, textBox159, textBox160,
                     textBox161, textBox162, textBox163, textBox164,
                     textBox165, textBox166, textBox167, textBox168,
-                    textBox169, textBox170, textBox171, textBox172
+                    textBox169
                 };
                 double step = (_stopFreq - _startFreq) / (_pointCount - 1);
                 for (int i = 0; i < _pointCount; i++)
@@ -439,7 +450,7 @@ namespace DbfTest
                     shangshengyan[i] = positiveDur.ToString();
                     xiajiangyan[i] = negativeDur.ToString();
 
-                    int compIndex = (int)Math.Round((freqGHz - 15.7) / 0.1);
+                    int compIndex = (int)Math.Round((freqGHz - RfBandStartGHz) / 0.1);
                     double compensation = 0;
                     if (compIndex >= 0 && compIndex < txPowerCompBoxes.Length)
                         compensation = double.Parse(txPowerCompBoxes[compIndex].Text);
@@ -468,8 +479,8 @@ namespace DbfTest
                 //WriteArrayToExcelColumn(freqArray, 7, ch);
                 //WriteArrayToExcelColumn(compensatedPowerString, 8, ch);
                 WritePeakPowerToMatchingFrequencyRows_New(freqArray, compensatedPowerString, xiaolvString, dingJiang, sheetName);
-                WriteArrayToExcelColumn(shangshengyan, 15, sheetName);
-                WriteArrayToExcelColumn(xiajiangyan, 16, sheetName);
+                WriteArrayToExcelColumn(shangshengyan, 19, sheetName);
+                WriteArrayToExcelColumn(xiajiangyan, 20, sheetName);
 
                 LogToConsole("Excel写入完成");
             }
@@ -604,22 +615,22 @@ namespace DbfTest
 
             try
             {
-                await scpiDevice.LoadStateFile("401.csa");
+                await scpiDevice.LoadStateFile("501.csa");
                 await scpiDevice.EnableOutput();
                 await SendTestUDP(0, "移相"); // FPGA发码
                 await Task.Delay(1000);
 
                 await scpiDevice.TriggerSingleSweepAfterHoldAsync();
-                string[] initial = await scpiDevice.GetPhase_Send();    // 151点初相（°），对应15.7~17.2GHz
+                string[] initial = await scpiDevice.GetPhase_Send();    // 121点初相（°），对应9.0~10.2GHz
                 if (initial == null || initial.Length == 0)
                 {
                     LogToConsole("未获取到初相数据");
                     return;
                 }
 
-                // 矢网扫频：15.7GHz~17.2GHz，共151点，步进约10MHz
-                const double vnaStartHz = 15.7e9;
-                const double vnaStopHz = 17.2e9;
+                // 矢网扫频：9.0GHz~10.2GHz，共121点，步进约10MHz
+                const double vnaStartHz = RfBandStartGHz * 1e9;
+                const double vnaStopHz = RfBandStopGHz * 1e9;
                 int vnaPoints = initial.Length;
                 double vnaStepHz = (vnaPoints > 1) ? (vnaStopHz - vnaStartHz) / (vnaPoints - 1) : 0;
 
@@ -726,7 +737,7 @@ namespace DbfTest
                     LogToConsole("连接失败：信号源或频谱无法连接");
                     return;
                 }
-                await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
+                await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb_FS());
                 await xinhaoBenzhenDevice.EnableRfOutput();
 
                 const double markerStepHz = 0.1e9;   // 0.1 GHz
@@ -734,7 +745,7 @@ namespace DbfTest
                 const double outerOffsetHz = 1.5e9;  // 距中心 1.5 GHz
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL SA");
-                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbfzasan.state");
+                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbfzasan.state");
                 await Task.Delay(500);
                 await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
 
@@ -764,7 +775,7 @@ namespace DbfTest
                         centerPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                         if (!double.IsNaN(centerPower) && centerPower > -10 && centerPower < 10)
                             break;
-                        await Task.Delay(200);
+                        await Task.Delay(300);
                     }
 
                     if (double.IsNaN(centerPower))
@@ -828,7 +839,7 @@ namespace DbfTest
         /// <summary>
         /// 合并接收指标测试：弹窗勾选后，每个射频频点共用一次 RF/本振设置，
         /// 按勾选依次完成 增益 → 平坦度 → 带外抑制 → -1dB带宽 → 镜频抑制；
-        /// 最后（需切换矢网状态文件 402.csa）完成驻波。
+        /// 最后（需切换矢网状态文件 502.csa）完成驻波。
         /// </summary>
         private async Task RunCombinedReceiveTestsAsync()
         {
@@ -917,9 +928,10 @@ namespace DbfTest
 
                 const double centerIfHz = 175e6;
                 const double markerStepHz = 0.1e6;
-                const double flatSpanHalfHz = 10e6;
-                const double lowBandMinHz = 140e6;
-                const double lowBandMaxHz = 150e6;
+                const double flatSpanHalfHz1 = 10e6;
+                const double flatSpanHalfHz2 = 20e6;
+                const double lowBandMinHz = 130e6;
+                const double lowBandMaxHz = 160e6;
                 const double highBandMinHz = 200e6;
                 const double highBandMaxHz = 210e6;
                 double saMinHz = centerIfHz - 100e6;
@@ -931,7 +943,8 @@ namespace DbfTest
                 string[] bandwidthMHz = new string[_pointCount];
                 string[] jpyz = new string[_pointCount];
                 string[] outOfBand = new string[_pointCount];
-                string[] flatness = new string[_pointCount];
+                string[] flatness1 = new string[_pointCount];
+                string[] flatness2 = new string[_pointCount];
                 string[] inputVswr = new string[_pointCount];
 
                 double step = (_pointCount > 1) ? (_stopFreq - _startFreq) / (_pointCount - 1) : 0;
@@ -942,14 +955,14 @@ namespace DbfTest
                 if (needSpectrumTests)
                 {
                     await pinpuDevice.SendCommandAsync(":INST:SEL SA");
-                    await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
-                    await pinpuDevice.SetStartFrequencyAsync(saMinHz);
-                    await pinpuDevice.SetStopFrequencyAsync(saMaxHz);
-                    await pinpuDevice.SetCenterFrequencyAsync(centerIfHz);
+                    await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
+                    //await pinpuDevice.SetStartFrequencyAsync(saMinHz);
+                    //await pinpuDevice.SetStopFrequencyAsync(saMaxHz);
+                    //await pinpuDevice.SetCenterFrequencyAsync(centerIfHz);
                     await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
                     await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {centerIfHz}");
 
-                    await xinhaoDevice.LoadStateFile("40.csa");
+                    await xinhaoDevice.LoadStateFile("50.csa");
                     await xinhaoDevice.SetPower(rfPower, _vnaRfPortNum);
                     await xinhaoDevice.EnableOutput();
                     await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -960,7 +973,7 @@ namespace DbfTest
                         double freqHz = _startFreq + step * i;
                         double freqGHz = Math.Round(freqHz / 1e9, 3);
                         freqArray[i] = freqGHz.ToString();
-                        gain[i] = bandwidthMHz[i] = jpyz[i] = outOfBand[i] = flatness[i] = "";
+                        gain[i] = bandwidthMHz[i] = jpyz[i] = outOfBand[i] = flatness1[i] = "";
 
                         await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
                         await Task.Delay(200);
@@ -988,11 +1001,21 @@ namespace DbfTest
                             if (testFlatness)
                             {
                                 // 平坦度：Marker 与本振同步 0.1 MHz 步进（±10 MHz），含杂峰过滤
-                                double flatDiff = await MeasureFlatnessWithLoStepAsync(
+                                double flatDiff1 = await MeasureFlatnessWithLoStepAsync(
                                     pinpuDevice, xinhaoBenzhenDevice, freqHz, centerIfHz, centerPower,
-                                    markerStepHz, centerIfHz - flatSpanHalfHz, centerIfHz + flatSpanHalfHz);
-                                flatness[i] = flatDiff.ToString("F2");
-                                pointLog.Add($"平坦度={flatness[i]}");
+                                    markerStepHz, centerIfHz - flatSpanHalfHz1, centerIfHz + flatSpanHalfHz1);
+                                flatness1[i] = flatDiff1.ToString("F2");
+                                pointLog.Add($"平坦度={flatness1[i]}");
+                            }
+
+                            if (testFlatness)
+                            {
+                                // 平坦度：Marker 与本振同步 0.1 MHz 步进（±20 MHz），含杂峰过滤
+                                double flatDiff2 = await MeasureFlatnessWithLoStepAsync(
+                                    pinpuDevice, xinhaoBenzhenDevice, freqHz, centerIfHz, centerPower,
+                                    markerStepHz, centerIfHz - flatSpanHalfHz2, centerIfHz + flatSpanHalfHz2);
+                                flatness2[i] = flatDiff2.ToString("F2");
+                                pointLog.Add($"平坦度={flatness2[i]}");
                             }
 
                             if (testOutOfBand)
@@ -1061,8 +1084,8 @@ namespace DbfTest
                 // 驻波需切换矢网状态文件，放在最后单独扫频
                 if (testVswr)
                 {
-                    LogToConsole("开始驻波测试（加载 402.csa）...");
-                    await xinhaoDevice.LoadStateFile("402.csa");
+                    LogToConsole("开始驻波测试（加载 502.csa）...");
+                    await xinhaoDevice.LoadStateFile("502.csa");
                     await xinhaoDevice.SetPower(rfPower, _vnaRfPortNum);
                     await xinhaoDevice.EnableOutput();
                     await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -1096,11 +1119,12 @@ namespace DbfTest
                 // 仅写入勾选的列，避免覆盖 Excel 中未测项的旧数据
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);
                 if (testGain) WriteArrayToExcelColumn(gain, 2, sheetName);
-                if (testBandwidth) WriteArrayToExcelColumn(bandwidthMHz, 6, sheetName);
-                if (testImage) WriteArrayToExcelColumn(jpyz, 7, sheetName);
-                if (testOutOfBand) WriteArrayToExcelColumn(outOfBand, 8, sheetName);
-                if (testFlatness) WriteArrayToExcelColumn(flatness, 9, sheetName);
-                if (testVswr) WriteArrayToExcelColumn(inputVswr, 10, sheetName);
+                if (testBandwidth) WriteArrayToExcelColumn(bandwidthMHz, 10, sheetName);
+                if (testImage) WriteArrayToExcelColumn(jpyz, 11, sheetName);
+                if (testOutOfBand) WriteArrayToExcelColumn(outOfBand, 12, sheetName);
+                if (testFlatness) WriteArrayToExcelColumn(flatness1, 13, sheetName);
+                if (testFlatness) WriteArrayToExcelColumn(flatness2, 14, sheetName);
+                if (testVswr) WriteArrayToExcelColumn(inputVswr, 15, sheetName);
                 LogToConsole("接收综合测试完成，已写入Excel");
             }
             catch (Exception ex)
@@ -1179,30 +1203,7 @@ namespace DbfTest
 
                 await ChargeRecievePowerON(); // 接收加电
                 await Task.Delay(500);     // 延时保证设备稳定
-                                           //await RecieveTestUDP();       // FPGA发包
-                string ch1recive = ch1_checkBox.Checked ? "1" : "0";
-                string ch2recive = ch2_checkBox.Checked ? "1" : "0";
-                string ch3recive = ch3_checkBox.Checked ? "1" : "0";
-                string ch4recive = ch4_checkBox.Checked ? "1" : "0";
-                string ch5recive = ch5_checkBox.Checked ? "1" : "0";
-                string ch6recive = ch6_checkBox.Checked ? "1" : "0";
-                string ch7recive = ch7_checkBox.Checked ? "1" : "0";
-                string ch8recive = ch8_checkBox.Checked ? "1" : "0";
-                string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
-                string model = "10";
-                string model_stc = model + "01011" + "0";
-                string buling = new string('0', 59);
-                modelValue = StringToByteArray("01 03 02 00");
-                var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
-
-                SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+                RecieveTestUDP();
                 await Task.Delay(500);     // 延时保证设备稳定
 
                 ScpiDevice pinpuDevice = new ScpiDevice();
@@ -1216,7 +1217,7 @@ namespace DbfTest
                 }
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL NFIGURE");
-                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/kudbfzs.sta'");
+                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/xdbfzs.sta'");
 
                 LogToConsole("噪声采集");
                 pinpuDevice.Disconnect();
@@ -1245,9 +1246,9 @@ namespace DbfTest
                 string testType = testType_comboBox.Text;
                 int chNum = 0;
 
-                //进度条
+                //进度条：三衰减态 × 频点数
                 int num = 0;
-                SafeSetProgressBarMaximum(_pointCount, 0);
+                SafeSetProgressBarMaximum(_pointCount * 3, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -1293,16 +1294,17 @@ namespace DbfTest
 
                 await ChargeRecievePowerON(); // 接收加电
                 await Task.Delay(500);     // 延时保证设备稳定
-                await RecieveTestUDPFullAtt();       // FPGA发包
-                await Task.Delay(500);     // 延时保证设备稳定
-                //await WriteFreqArray();
 
                 string[] p_1input = new string[_pointCount];
                 string[] p_1output = new string[_pointCount];
-                string[] pset = new string[_pointCount];
+                string[] p_1input2 = new string[_pointCount];
+                string[] p_1output2 = new string[_pointCount];
+                string[] p_1input3 = new string[_pointCount];
+                string[] p_1output3 = new string[_pointCount];
                 string[] freqArray = GetFilterFreqArray(_pointCount);
                 double p1bc = double.Parse(p1bc_textBox.Text);
-                LogToConsole("压缩点测试");
+                double jsbc = double.Parse(jsbc_textBox.Text);
+                LogToConsole("压缩点测试（三衰减态）");
                 ScpiDevice xinhaoBenzhenDevice = new ScpiDevice();
                 ScpiDevice xinhaoDevice = new ScpiDevice();
                 ScpiDevice pinpuDevice = new ScpiDevice();
@@ -1316,98 +1318,102 @@ namespace DbfTest
                     return;
                 }
 
-                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
+                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
                 double center = 175 * 1e6;
                 await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
                 double markPower = double.NaN;
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-                double startPower = -30;
-                double stopPower = -10;
+                // 三衰减态对应不同发码与功率扫描区间
+                double[] startPowers = { -75, -55, -35 };
+                double[] stopPowers = { -55, -35, -15 };
+                string[][] inputResults = { p_1input, p_1input2, p_1input3 };
+                string[][] outputResults = { p_1output, p_1output2, p_1output3 };
+                string[] stateNames = { "衰减态1(RecieveTestUDP)", "衰减态2(RecieveTestUDPFullAtt2)", "衰减态3(RecieveTestUDPFullAtt3)" };
                 double stepPower = 0.5;
 
-                await xinhaoDevice.LoadStateFile("40.csa");
-                await xinhaoDevice.SetPower(startPower, _vnaRfPortNum);
+                await xinhaoDevice.LoadStateFile("50.csa");
                 await xinhaoDevice.EnableOutput();
                 await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
                 await xinhaoBenzhenDevice.EnableRfOutput();
 
-                double[] refGains = new double[_pointCount];
-                bool[] found = new bool[_pointCount];
-
                 double step = (_stopFreq - _startFreq) / (_pointCount - 1);
-                for (int i = 0; i < _pointCount; i++)
-                {
-                    double freqHz = _startFreq + step * i;
-                    double freqGHz = Math.Round(freqHz / 1e9, 3);
-                    freqArray[i] = freqGHz.ToString(); // 保留6位小数（GHz）
-                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
-                    await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
 
-                    //await Task.Delay(1000); // 让设备处理
-                                            
-                    markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN; // 读取 Marker 的功率值
-                    refGains[i] = markPower;
-                    found[i] = false;
-                }
-                // 2. 增加功率，查找压缩点
-                for (int i = 0; i < _pointCount; i++)
+                for (int state = 0; state < 3; state++)
                 {
-                    double freqHz = _startFreq + step * i;
-                    double freqGHz = Math.Round(freqHz / 1e9, 3);
-                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
-                    await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
+                    LogToConsole($"开始{stateNames[state]}，功率扫描 {startPowers[state]}~{stopPowers[state]} dBm");
+                    if (state == 0)
+                        await RecieveTestUDP();
+                    else if (state == 1)
+                        await RecieveTestUDPFullAtt2();
+                    else
+                        await RecieveTestUDPFullAtt3();
+                    await Task.Delay(500);
 
-                    for (double power = startPower + stepPower; power <= stopPower && !found[i]; power += stepPower)
+                    double startPower = startPowers[state];
+                    double stopPower = stopPowers[state];
+                    string[] inputArr = inputResults[state];
+                    string[] outputArr = outputResults[state];
+
+                    await xinhaoDevice.SetPower(startPower, _vnaRfPortNum);
+                    await Task.Delay(500);
+
+                    double[] refGains = new double[_pointCount];
+                    bool[] found = new bool[_pointCount];
+
+                    // 1. 各频点在起始功率下测参考功率
+                    for (int i = 0; i < _pointCount; i++)
                     {
-                        await xinhaoDevice.SetPower(power, _vnaRfPortNum);
-                        await Task.Delay(800);
+                        double freqHz = _startFreq + step * i;
+                        double freqGHz = Math.Round(freqHz / 1e9, 3);
+                        if (state == 0)
+                            freqArray[i] = freqGHz.ToString();
+                        await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
+                        await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
                         markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-                        markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-                        LogToConsole($"" +  ((power + double.Parse(jsbc_textBox.Text) - 31.5) - (markPower - refGains[i]) ) );
-                        if ((power + double.Parse(jsbc_textBox.Text) - 31.5) - (markPower - refGains[i]) > 1)
+                        refGains[i] = markPower;
+                        found[i] = false;
+                    }
+
+                    // 2. 升功率查找 1dB 压缩点
+                    for (int i = 0; i < _pointCount; i++)
+                    {
+                        double freqHz = _startFreq + step * i;
+                        double freqGHz = Math.Round(freqHz / 1e9, 3);
+                        await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
+                        await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
+
+                        for (double power = startPower + stepPower; power <= stopPower && !found[i]; power += stepPower)
                         {
-                            p_1input[i] = (power).ToString("F2");
-                            p_1output[i] = (p1bc + markPower).ToString("F2");
-                            found[i] = true;
-                            LogToConsole("p_1input = "+ p_1input[i] + ", p_1output[i] = "+ p_1output[i]);
+                            await xinhaoDevice.SetPower(power, _vnaRfPortNum);
+                            await Task.Delay(800);
+                            markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+                            markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
+                            double delta = (power + jsbc - 31.5) - (markPower - refGains[i]);
+                            LogToConsole($"{stateNames[state]} {freqGHz}GHz @ {power:F1}dBm: Δ={delta:F3}");
+                            if (delta > 1)
+                            {
+                                inputArr[i] = power.ToString("F2");
+                                outputArr[i] = (p1bc + markPower).ToString("F2");
+                                found[i] = true;
+                                LogToConsole($"压缩点: Pin={inputArr[i]}, Pout={outputArr[i]}");
+                            }
                         }
-                    }
 
-                    // 未找到压缩点时保持空字符串，避免写入 Excel 时对 null 调用 Replace 空引用
-                    if (!found[i])
-                    {
-                        p_1input[i] = "";
-                        p_1output[i] = "";
-                        LogToConsole($"频点 {freqGHz} GHz 未找到压缩点");
-                    }
+                        if (!found[i])
+                        {
+                            inputArr[i] = "";
+                            outputArr[i] = "";
+                            LogToConsole($"{stateNames[state]} 频点 {freqGHz} GHz 未找到压缩点");
+                        }
 
-                    num++;
-                    SafeIncrementProgressBar();
-                    label6.Text = ((double)num / (_pointCount) * 100).ToString("f2") + "%";
-                    label6.Refresh();
+                        num++;
+                        SafeIncrementProgressBar();
+                        label6.Text = ((double)num / (_pointCount * 3) * 100).ToString("f2") + "%";
+                        label6.Refresh();
+                    }
                 }
 
-                /*                for (int i = 0; i < _pointCount; i++)
-                                {
-                                    double freqHz = _startFreq + step * i;
-                                    double freqGHz = Math.Round(freqHz / 1e9, 3);
-                                    freqArray[i] = freqGHz.ToString(); // 保留6位小数（GHz）
-                                    await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
-                                    await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
-                                    await xinhaoDevice.SetPower(double.Parse(yasuodian[i]), _vnaRfPortNum);
-                                    await Task.Delay(1000); // 让设备处理
-                                                            // 读取 Marker 的功率值
-                                    markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-                                    markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-
-                                    pset[i] = markPower.ToString("F2");
-
-                                    num++;
-                                    SafeIncrementProgressBar();
-                                    label6.Text = ((double)num / (_pointCount * 3) * 100).ToString("f2") + "%";
-                                    label6.Refresh();
-                                }*/
                 await xinhaoBenzhenDevice.DisableRfOutput();
                 await xinhaoDevice.DisableOutput();
                 xinhaoDevice.Disconnect();
@@ -1415,10 +1421,13 @@ namespace DbfTest
                 pinpuDevice.Disconnect();
                 await CloseCharge();
                 await CloseFPGA();
-                //WriteYasuodianToMatchingFrequencyRows(freqArray, yasuodian, "测试结果");
-                WriteArrayToExcelColumn(p_1input, 4, sheetName);  // B列，从第9行开始
+                WriteArrayToExcelColumn(p_1input, 4, sheetName);
                 WriteArrayToExcelColumn(p_1output, 5, sheetName);
-                LogToConsole("压缩点测试完成");
+                WriteArrayToExcelColumn(p_1input2, 6, sheetName);
+                WriteArrayToExcelColumn(p_1output2, 7, sheetName);
+                WriteArrayToExcelColumn(p_1input3, 8, sheetName);
+                WriteArrayToExcelColumn(p_1output3, 9, sheetName);
+                LogToConsole("压缩点测试完成（三衰减态）");
             }
             catch (Exception ex)
             {
@@ -1526,7 +1535,7 @@ namespace DbfTest
             double[] phaseOffset = null;
             double[] zeroPhase = null;
 
-            await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
+            await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
             double center = 175 * 1e6;
             double start = center - (100 * 1e6);
             double stop = center + (100 * 1e6);
@@ -1537,7 +1546,7 @@ namespace DbfTest
             double markPower = double.NaN;
             await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
-            await xinhaoDevice.LoadStateFile("40.csa");
+            await xinhaoDevice.LoadStateFile("50.csa");
             await xinhaoDevice.SetPower(GetRfPowerDb(), _vnaRfPortNum);
             await xinhaoDevice.EnableOutput();
             await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -1558,7 +1567,7 @@ namespace DbfTest
                 }
                 else
                 {
-                    string numToString = ToSixBitBinaryString2(idx);
+                    string numToString = ToSixBitBinaryString(idx);
 
                     LogToConsole("idx:" + idx + ",bitString:" + numToString);
                     string ch1recive = ch1_checkBox.Checked ? "1" : "0";
@@ -2384,9 +2393,22 @@ namespace DbfTest
 
             //return Convert.ToString(number, 2).PadLeft(6, '0');
             string binary = Convert.ToString(number, 2).PadLeft(6, '0');
+            //char[] reversed = binary.ToCharArray();
+            //Array.Reverse(reversed);
+            //return new string(reversed);
+            return binary;
+        }
+        public string ToSixBitBinaryString3(int number)
+        {
+            if (number < 0 || number > 63)
+                throw new ArgumentOutOfRangeException(nameof(number), "输入必须在 0 到 63 之间。");
+
+            //return Convert.ToString(number, 2).PadLeft(6, '0');
+            string binary = Convert.ToString(number, 2).PadLeft(6, '0');
             char[] reversed = binary.ToCharArray();
             Array.Reverse(reversed);
             return new string(reversed);
+            //return binary;
         }
         /*        public string ToSixBitBinaryString2(int number)
                 {
@@ -2724,6 +2746,13 @@ namespace DbfTest
                 throw new InvalidOperationException("请输入有效的本振功率（textBox_benzhen_power）");
             return power;
         }
+        private double GetBenzhenPowerDb_FS()
+        {
+            if (string.IsNullOrWhiteSpace(textBox_benzhen_power_fs.Text) ||
+                !double.TryParse(textBox_benzhen_power_fs.Text.Trim(), out double power))
+                throw new InvalidOperationException("请输入有效的本振功率（textBox_benzhen_power）");
+            return power;
+        }
 
         /// <summary>优先使用 InitializeDSO 打开的工作簿，避免 GetActiveObject 拿到其它 Excel 实例。</summary>
         private dynamic GetExcelWorkbook()
@@ -2871,9 +2900,9 @@ namespace DbfTest
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
-                int powerColumn = 14;
+                int powerColumn = 18;
                 //int xiaolvColumn = 13;
-                int dingJiangColumn = 17;
+                int dingJiangColumn = 21;
 
                 int usedRowCount = (int)worksheet.UsedRange.Rows.Count;
 
@@ -2981,7 +3010,7 @@ namespace DbfTest
 
                 int startRow = 8;
                 int freqColumn = 1;   // A列
-                int fasheYizhiColumn = 18;
+                int fasheYizhiColumn = 22;
 
                 int usedRowCount = (int)worksheet.UsedRange.Rows.Count;
 
@@ -3312,7 +3341,7 @@ namespace DbfTest
 
                     double rms = Math.Sqrt(rowSqSum[r] / rowSqCount[r]);
                     if (freqToResultRow.TryGetValue(freqGHz.ToString("F3"), out int resultRow))
-                        resultSheet.Cells[resultRow, 12].Value2 = rms.ToString();
+                        resultSheet.Cells[resultRow, 17].Value2 = rms.ToString();
                 }
 
                 workbook.Save();
@@ -3500,7 +3529,7 @@ namespace DbfTest
 
                     double rms = Math.Sqrt(rowSqSum[r] / rowSqCount[r]);
                     if (freqToResultRow.TryGetValue(freqGHz.ToString("F3"), out int resultRow))
-                        resultSheet.Cells[resultRow, 19].Value2 = rms.ToString();
+                        resultSheet.Cells[resultRow, 23].Value2 = rms.ToString();
                 }
 
                 workbook.Save();
@@ -3753,9 +3782,9 @@ namespace DbfTest
                 return;
             }
 
-            const int measureStartRow = 4;
-            const int measureEndRow = 19;
-            const int diffStartRow = 26;
+            const int measureStartRow = RxAttenMeasureStartRow;
+            const int measureEndRow = RxAttenMeasureEndRow;
+            const int diffStartRow = RxAttenDifferenceStartRow;
             int rowCount = measureEndRow - measureStartRow + 1;
 
             for (int col = 2; col <= 65; col++)
@@ -3781,7 +3810,7 @@ namespace DbfTest
 
         /// <summary>
         /// 接收衰减精度：批量 Range 读写 + 仅 Save 一次。
-        /// 测量区 B4:BM19，差值区从第 26 行起；对 1～63 态算 RMS，写入测试结果第 11 列。
+        /// 测量区 B4:BM16，差值区从第 23 行起；对 1～63 态算 RMS，写入测试结果第 11 列。
         /// </summary>
         private void ProcessRxAttenuationAccuracyExcelFast(List<double[]> unwrappedPhases, int chNum)
         {
@@ -3807,10 +3836,10 @@ namespace DbfTest
                 return;
             }
 
-            const int measureStartRow = 4;
-            const int measureEndRow = 19;
-            const int diffStartRow = 26;
-            const int diffEndRow = 46; // 与清空模板 B26:BM46 对齐
+            const int measureStartRow = RxAttenMeasureStartRow;
+            const int measureEndRow = RxAttenMeasureEndRow;
+            const int diffStartRow = RxAttenDifferenceStartRow;
+            const int diffEndRow = RxAttenDifferenceEndRow;
             int maxRows = measureEndRow - measureStartRow + 1;
 
             dynamic excelApp = null;
@@ -3888,7 +3917,7 @@ namespace DbfTest
         /// 基于已写入的测量区数据重算衰减精度：减标准值写差值区，对 1～63 态算 RMS，写入测试结果第 11 列。
         /// 不重新采集，可直接用于验证计算。
         /// </summary>
-        /// <param name="rowCount">测量行数；≤0 时自动按第 4～19 行有频率的行数检测</param>
+        /// <param name="rowCount">测量行数；≤0 时自动按第 4～16 行有频率的行数检测</param>
         private void CalculateRxAttenuationAccuracyFromExcel(
             int chNum,
             int rowCount = 0,
@@ -3897,10 +3926,10 @@ namespace DbfTest
             dynamic resultSheet = null,
             dynamic workbook = null)
         {
-            const int measureStartRow = 4;
-            const int measureEndRow = 19;
-            const int diffStartRow = 26;
-            const int resultRmsColumn = 11;
+            const int measureStartRow = RxAttenMeasureStartRow;
+            const int measureEndRow = RxAttenMeasureEndRow;
+            const int diffStartRow = RxAttenDifferenceStartRow;
+            const int resultRmsColumn = 16;
 
             if (!skipSheetLookup)
             {
@@ -4073,9 +4102,9 @@ namespace DbfTest
                     return;
                 }
 
-                // 差值区起始行：发射移相 161，接收衰减 26
+                // 差值区起始行：发射移相 131，接收衰减 23
                 int startRow = sheetName.StartsWith("接收通道衰减精度测试结果")
-                    ? 26
+                    ? RxAttenDifferenceStartRow
                     : TxPhaseDifferenceStartRow;
                 int currentRow = startRow;
                 // 发射移相：仅基态列；接收衰减等：列 3～65（态 1～63）
@@ -4234,9 +4263,6 @@ namespace DbfTest
                 await charge.SelectChannel(2);
                 await charge.DisableOutput();
 
-                await charge.SelectChannel(3);
-                await charge.DisableOutput();
-
                 LogToConsole("关电");
 
                 charge.Disconnect();
@@ -4261,13 +4287,8 @@ namespace DbfTest
                     LogToConsole("连接失败");
                     return;
                 }
-                await charge.SelectChannel(3);
-                await charge.SetVoltage(5);
-                await charge.SetCurrent(0.5);
-                await charge.EnableOutput();
-
                 await charge.SelectChannel(2);
-                await charge.SetVoltage(5);
+                await charge.SetVoltage(5.5);
                 await charge.SetCurrent(2);
                 await charge.EnableOutput();
 
@@ -4293,18 +4314,13 @@ namespace DbfTest
                     LogToConsole("连接失败");
                     return;
                 }
-                await charge.SelectChannel(3);
-                await charge.SetVoltage(5);
-                await charge.SetCurrent(0.5);
-                await charge.EnableOutput();
-
                 await charge.SelectChannel(1);
                 await charge.SetVoltage(28);
                 await charge.SetCurrent(2);
                 await charge.EnableOutput();
 
                 await charge.SelectChannel(2);
-                await charge.SetVoltage(5);
+                await charge.SetVoltage(5.5);
                 await charge.SetCurrent(2);
                 await charge.EnableOutput();
                 LogToConsole("发射加电");
@@ -4359,13 +4375,8 @@ namespace DbfTest
                     return;
                 }
                 await charge.SelectChannel(2);
-                await charge.SetVoltage(5);
+                await charge.SetVoltage(5.5);
                 await charge.SetCurrent(2);
-                await charge.EnableOutput();
-
-                await charge.SelectChannel(3);
-                await charge.SetVoltage(5);
-                await charge.SetCurrent(0.5);
                 await charge.EnableOutput();
 
                 LogToConsole("接收加电");
@@ -4391,18 +4402,13 @@ namespace DbfTest
                     LogToConsole("连接失败");
                     return;
                 }
-                await charge.SelectChannel(3);
-                await charge.SetVoltage(5);
-                await charge.SetCurrent(0.5);
-                await charge.EnableOutput();
-
                 await charge.SelectChannel(1);
                 await charge.SetVoltage(28);
                 await charge.SetCurrent(2);
                 await charge.EnableOutput();
 
                 await charge.SelectChannel(2);
-                await charge.SetVoltage(5);
+                await charge.SetVoltage(5.5);
                 await charge.SetCurrent(2);
                 await charge.EnableOutput();
                 LogToConsole("发射加电");
@@ -4435,9 +4441,6 @@ namespace DbfTest
                 await charge.SelectChannel(2);
                 await charge.DisableOutput();
 
-                await charge.SelectChannel(3);
-                await charge.DisableOutput();
-
                 LogToConsole("关电");
 
                 charge.Disconnect();
@@ -4467,7 +4470,7 @@ namespace DbfTest
         const int ApplicationHeaderLength = 40;
         const int ModelValueLength = 4;
         const int ReservedValueLength = 8;
-        const int CodeValueLength = 41;
+        const int CodeValueLength = 40;
         const int ControlCodeByteLength = 28;
         const int TableHeaderBitCount = 6;           // 表头[5:0]
         const int IfAttenuationBitCount = 10;        // ATT[9:0]
@@ -4589,7 +4592,7 @@ namespace DbfTest
             if (emptyValue == null || emptyValue.Length != ReservedValueLength)
                 throw new ArgumentException($"保留字段应为 {ReservedValueLength} 字节。");
             if (codeValue == null || codeValue.Length != CodeValueLength)
-                throw new ArgumentException($"codeValue 应为 {CodeValueLength} 字节。");
+                throw new ArgumentException($"codeValue 应为 {CodeValueLength} 字节。" + codeValue.Length);
         }
 
         private bool[] GetChannelCheckedStates()
@@ -4616,7 +4619,7 @@ namespace DbfTest
             return normalized.PadRight(IfAttenuationBitCount, '0');
         }
 
-        byte[] GenerateCodeValueFromBits(string[] bitStrings)
+        static byte[] GenerateCodeValueFromBits(string[] bitStrings)
         {
             /*            if (bitStrings.Length != 10)
                             throw new ArgumentException("应包含10个通道的比特串");*/
@@ -4721,7 +4724,7 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4772,7 +4775,7 @@ namespace DbfTest
                 }
             });
         }
-        private async Task RecieveTestUDPFullAtt()
+        private async Task RecieveTestUDPFullAtt2()
         {
             await Task.Run(() =>
             {
@@ -4795,7 +4798,81 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "000000" + "0";
+                    string model_stc = model + "000000" + "1";
+                    string buling = new string('0', 59);
+                    modelValue = StringToByteArray("01 03 02 00");
+                    var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
+                    string chSum = "";
+                    if (ch1_checkBox.Checked)
+                    {
+                        chSum += "通道1 ";
+                    }
+                    if (ch2_checkBox.Checked)
+                    {
+                        chSum += " 通道2 ";
+                    }
+                    if (ch3_checkBox.Checked)
+                    {
+                        chSum += " 通道3 ";
+                    }
+                    if (ch4_checkBox.Checked)
+                    {
+                        chSum += " 通道4 ";
+                    }
+                    if (ch5_checkBox.Checked)
+                    {
+                        chSum += "通道5 ";
+                    }
+                    if (ch6_checkBox.Checked)
+                    {
+                        chSum += " 通道6 ";
+                    }
+                    if (ch7_checkBox.Checked)
+                    {
+                        chSum += " 通道7 ";
+                    }
+                    if (ch8_checkBox.Checked)
+                    {
+                        chSum += " 通道8 ";
+                    }
+
+                    LogToConsole("FPGA发包:" + chSum);
+
+                    SendCustomPacket(headValue, modelValue, emptyValue, codeValue);
+
+                    operateLog_DAL.InsertOperateLog_DT("接收测试", $"{ch1recive},{ch2recive},{ch3recive},{ch4recive}", operator_textBox.Text);
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole("接收测试失败: " + ex);
+                    operateLog_DAL.InsertOperateLog_DT("接收测试失败", ex.ToString(), operator_textBox.Text);
+                }
+            });
+        }
+        private async Task RecieveTestUDPFullAtt3()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    string ch1recive = ch1_checkBox.Checked ? "1" : "0";
+                    string ch2recive = ch2_checkBox.Checked ? "1" : "0";
+                    string ch3recive = ch3_checkBox.Checked ? "1" : "0";
+                    string ch4recive = ch4_checkBox.Checked ? "1" : "0";
+                    string ch5recive = ch5_checkBox.Checked ? "1" : "0";
+                    string ch6recive = ch6_checkBox.Checked ? "1" : "0";
+                    string ch7recive = ch7_checkBox.Checked ? "1" : "0";
+                    string ch8recive = ch8_checkBox.Checked ? "1" : "0";
+                    string ch1 = new string('0', 28) + "00" + ch1recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch2 = "00" + ch2recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch3 = "00" + ch3recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch4 = "00" + ch4recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch5 = "00" + ch5recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch6 = "00" + ch6recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
+                    string model = "10";
+                    string model_stc = model + "111111" + "1";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4869,7 +4946,7 @@ namespace DbfTest
                     string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch7send;
                     string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4948,7 +5025,7 @@ namespace DbfTest
                         MessageBox.Show("请只选择一个接收通道！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return; // 终止方法
                     }
-                    string numToString = ToSixBitBinaryString(num);
+                    string numToString = ToSixBitBinaryString3(num);
                     // 分别设置通道值
                     string ch1send = ch1_checkBox.Checked ? "1" : "0";
                     string ch2send = ch2_checkBox.Checked ? "1" : "0";
@@ -4958,16 +5035,16 @@ namespace DbfTest
                     string ch6send = ch6_checkBox.Checked ? "1" : "0";
                     string ch7send = ch7_checkBox.Checked ? "1" : "0";
                     string ch8send = ch8_checkBox.Checked ? "1" : "0";
-                    string ch1 = new string('0', 28) + "00" + "0" + "000000" + "000000" + numToString + "000000" + ch1send;
-                    string ch2 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch2send;
-                    string ch3 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch3send;
-                    string ch4 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch4send;
-                    string ch5 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch5send;
-                    string ch6 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch6send;
-                    string ch7 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch7send;
-                    string ch8 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch8send;
+                    string ch1 = new string('0', 28) + "00" + "0" + numToString + "000000" + "000000" + "000000" + ch1send;
+                    string ch2 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch2send;
+                    string ch3 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch3send;
+                    string ch4 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch4send;
+                    string ch5 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch5send;
+                    string ch6 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch6send;
+                    string ch7 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch7send;
+                    string ch8 = "00" + "0" + numToString + "000000" + "000000" + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -5401,16 +5478,16 @@ namespace DbfTest
                 }
                 // ---------- 2️⃣ 发射移相sheet ----------
                 dynamic sheet3 = workbook.Worksheets[10];
-                dynamic range3a = sheet3.Range["B4", "BM154"];
-                dynamic range3b = sheet3.Range["B161", "BM311"];
+                dynamic range3a = sheet3.Range["B4", "BM124"];
+                dynamic range3b = sheet3.Range["B131", "BM251"];
                 range3a.Value2 = 0;
                 range3b.Value2 = 0;
                 // ---------- 3️⃣ 接收衰减sheet ----------
                 for (int i = 11; i <= 18; i++)
                 {
                     dynamic sheet = workbook.Worksheets[i];
-                    dynamic rangea = sheet.Range["B4", "BM19"];
-                    dynamic rangeb = sheet.Range["B26", "BM46"];
+                    dynamic rangea = sheet.Range["B4", "BM16"];
+                    dynamic rangeb = sheet.Range["B23", "BM35"];
                     rangea.Value2 = 0;
                     rangeb.Value2 = 0;
                 }
@@ -5595,7 +5672,7 @@ namespace DbfTest
 
         #endregion
 
-        #region KUDBF40W
+        #region XDBF20W
 
         private async void LoadPinpuState()
         {
@@ -5636,7 +5713,7 @@ namespace DbfTest
                     LogToConsole("连接失败");
                     return;
                 }
-                await vna.LoadStateFile("40.csa");
+                await vna.LoadStateFile("50.csa");
                 LogToConsole("加载矢网状态");
                 vna.Disconnect();
             }
@@ -5671,8 +5748,8 @@ namespace DbfTest
                 dynamic workbook = _workbook;
                 dynamic recordSheet = workbook.Sheets["测试记录表"];
 
-                // 源行：8/11/14/17/20/23 → 目标列：F~K（第6~11列）
-                int[] sourceRows = { 8, 11, 14, 17, 20, 23 };
+                // 源行：8/10/13/15/18/20 → 对应 9.0/9.2/9.5/9.7/10.0/10.2，目标列：F~K（第6~11列）
+                int[] sourceRows = { 8, 10, 13, 15, 18, 20 };
                 // 源列 L/N/O/P/Q/K，对应测试记录表通道1起始行（通道n = 起始行 + n - 1）
                 int[] sourceCols = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17 };
                 int[] targetBaseRows = { 74, 66, 90, 204, 180, 99, 188, 196, 265, 223, 13, 29, 37, 45, 53 };
@@ -5737,11 +5814,11 @@ namespace DbfTest
                     MessageBox.Show("设备连接失败，请检查地址。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-                await scpiDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
+                await scpiDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
                 await Task.Delay(500); // 延时保证设备稳定
-                await scpiDevice.SetStartFrequencyAsync(15.7*1e9 - 500 * 1e6);
-                await scpiDevice.SetStopFrequencyAsync(15.7 * 1e9 + 500 * 1e6);
-                await scpiDevice.SetCenterFrequencyAsync(15.7 * 1e9);
+                await scpiDevice.SetStartFrequencyAsync(RfBandStartGHz * 1e9 - 500 * 1e6);
+                await scpiDevice.SetStopFrequencyAsync(RfBandStartGHz * 1e9 + 500 * 1e6);
+                await scpiDevice.SetCenterFrequencyAsync(RfBandStartGHz * 1e9);
                 //LogToConsole(result);
                 scpiDevice.Disconnect();
                 
@@ -5817,7 +5894,7 @@ namespace DbfTest
 
                 const double centerIfHz = 175e6;
 
-                await xinhaoDevice.LoadStateFile("402.csa");
+                await xinhaoDevice.LoadStateFile("502.csa");
                 await xinhaoDevice.SetPower(rfPower, _vnaRfPortNum);
                 await xinhaoDevice.EnableOutput();
                 await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -5854,7 +5931,7 @@ namespace DbfTest
                 }
 
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);
-                WriteArrayToExcelColumn(inputVswr, 10, sheetName);
+                WriteArrayToExcelColumn(inputVswr, 15, sheetName);
                 LogToConsole("接收驻波测试完成，已写入Excel");
             }
             catch (Exception ex)
@@ -5949,12 +6026,12 @@ namespace DbfTest
                 double flatMaxHz = centerIfHz + flatSpanHalfHz; // 185 MHz
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL SA");
-                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
+                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
                 await pinpuDevice.SetCenterFrequencyAsync(centerIfHz);
                 await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {centerIfHz}");
 
-                await xinhaoDevice.LoadStateFile("40.csa");
+                await xinhaoDevice.LoadStateFile("50.csa");
                 await xinhaoDevice.SetPower(rfPower, _vnaRfPortNum);
                 await xinhaoDevice.EnableOutput();
                 await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -6098,14 +6175,14 @@ namespace DbfTest
                 double saMaxHz = centerIfHz + 100e6; // 275 MHz
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL SA");
-                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf40w.state");
+                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/xdbf20w.state");
                 await pinpuDevice.SetStartFrequencyAsync(saMinHz);
                 await pinpuDevice.SetStopFrequencyAsync(saMaxHz);
                 await pinpuDevice.SetCenterFrequencyAsync(centerIfHz);
                 await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {centerIfHz}");
 
-                await xinhaoDevice.LoadStateFile("40.csa");
+                await xinhaoDevice.LoadStateFile("50.csa");
                 await xinhaoDevice.SetPower(rfPower, _vnaRfPortNum);
                 await xinhaoDevice.EnableOutput();
                 await xinhaoBenzhenDevice.SetAmplitude(GetBenzhenPowerDb());
@@ -6367,7 +6444,7 @@ namespace DbfTest
                 LogToConsole("矢网连接失败");
                 return;
             }
-            await scpiDevice.LoadStateFile("401.csa");
+            await scpiDevice.LoadStateFile("501.csa");
             await scpiDevice.EnableOutput();
             await SendTestUDP(0, "移相"); // FPGA发码
             await Task.Delay(1000);           // 等待设备稳定
