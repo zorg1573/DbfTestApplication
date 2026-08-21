@@ -885,7 +885,7 @@ namespace DbfTest
             LogToConsole($"开始接收综合测试（{string.Join("/", selectedNames)}）...");
             WritePersonToAllSheets();
             await ChargeRecievePowerON();
-            await Task.Delay(500);
+            await Task.Delay(1000);
             await RecieveTestUDP();
             await Task.Delay(500);
 
