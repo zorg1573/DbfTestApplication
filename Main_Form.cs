@@ -747,7 +747,7 @@ namespace DbfTest
                 const double outerOffsetHz = 1.5e9;  // 距中心 1.5 GHz
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL SA");
-                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbfzasan.state");
+                await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf20wzasan.state");
                 await Task.Delay(500);
                 await pinpuDevice.SendCommandAsync(":CALC:MARK1:STATE ON");
 
@@ -1219,7 +1219,7 @@ namespace DbfTest
                 }
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL NFIGURE");
-                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/kudbfzs.sta'");
+                await pinpuDevice.SendCommandAsync(":MMEM:LOAD:STATe '/usrdata/Data/kudbf20wzs.sta'");
 
                 LogToConsole("噪声采集");
                 pinpuDevice.Disconnect();
