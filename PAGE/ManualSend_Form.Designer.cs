@@ -69,6 +69,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.ch1_shuaijian_textBox = new System.Windows.Forms.TextBox();
             this.comboBox_mode = new System.Windows.Forms.ComboBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -208,7 +211,7 @@
             this.flowLayoutPanel1.Controls.Add(this.pictureBox2);
             this.flowLayoutPanel1.Controls.Add(this.pictureBox3);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(315, 4);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(386, 4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(128, 32);
             this.flowLayoutPanel1.TabIndex = 28;
@@ -484,12 +487,51 @@
             this.comboBox_mode.Size = new System.Drawing.Size(100, 20);
             this.comboBox_mode.TabIndex = 49;
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.White;
+            this.button1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Location = new System.Drawing.Point(415, 120);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(87, 39);
+            this.button1.TabIndex = 50;
+            this.button1.Text = "接收上电";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.White;
+            this.button2.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button2.Location = new System.Drawing.Point(415, 172);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(87, 39);
+            this.button2.TabIndex = 51;
+            this.button2.Text = "发射上电";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.White;
+            this.button3.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button3.Location = new System.Drawing.Point(415, 224);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(87, 39);
+            this.button3.TabIndex = 52;
+            this.button3.Text = "下电";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // ManualSend_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(443, 605);
+            this.ClientSize = new System.Drawing.Size(514, 605);
             this.ControlBox = false;
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.comboBox_mode);
             this.Controls.Add(this.ch8_shuaijian_textBox);
             this.Controls.Add(this.ch7_shuaijian_textBox);
@@ -577,5 +619,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox ch1_shuaijian_textBox;
         private System.Windows.Forms.ComboBox comboBox_mode;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

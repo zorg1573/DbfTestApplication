@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DbfTest.DAL;
 using System.Runtime.CompilerServices;
+using DbfTest.FUNCTION;
 
 namespace DbfTest.PAGE
 {
@@ -651,5 +652,99 @@ namespace DbfTest.PAGE
             this.Close();
         }
 
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string chargeAddr = "TCPIP0::192.168.0.100::inst0::INSTR";
+
+                ScpiDevice charge = new ScpiDevice();
+
+                bool connected = await charge.ConnectAsync(chargeAddr);
+                if (!connected)
+                {
+                    return;
+                }
+                await charge.SelectChannel(2);
+                await charge.SetVoltage(5);
+                await charge.SetCurrent(2);
+                await charge.EnableOutput();
+
+                await charge.SelectChannel(3);
+                await charge.SetVoltage(5);
+                await charge.SetCurrent(0.5);
+                await charge.EnableOutput();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"接收加电失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string chargeAddr = "TCPIP0::192.168.0.100::inst0::INSTR";
+
+                ScpiDevice charge = new ScpiDevice();
+
+                bool connected = await charge.ConnectAsync(chargeAddr);
+                if (!connected)
+                {
+                    return;
+                }
+                await charge.SelectChannel(3);
+                await charge.SetVoltage(5);
+                await charge.SetCurrent(0.5);
+                await charge.EnableOutput();
+
+                await charge.SelectChannel(1);
+                await charge.SetVoltage(28);
+                await charge.SetCurrent(2);
+                await charge.EnableOutput();
+
+                await charge.SelectChannel(2);
+                await charge.SetVoltage(5);
+                await charge.SetCurrent(2);
+                await charge.EnableOutput();
+                charge.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"发射加电失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string chargeAddr = "TCPIP0::192.168.0.100::inst0::INSTR";
+
+                ScpiDevice charge = new ScpiDevice();
+
+                bool connected = await charge.ConnectAsync(chargeAddr);
+                if (!connected)
+                {
+                    return;
+                }
+                await charge.SelectChannel(1);
+                await charge.DisableOutput();
+
+                await charge.SelectChannel(2);
+                await charge.DisableOutput();
+
+                await charge.SelectChannel(3);
+                await charge.DisableOutput();
+
+                charge.Disconnect();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"关电失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
