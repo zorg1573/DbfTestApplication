@@ -6535,5 +6535,71 @@ namespace DbfTest
             VNASetting form = new VNASetting(_vnaAddress);
             form.ShowDialog();
         }
+
+        private async void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LogToConsole("开始读取示数...");
+
+                // 矢网：功率 + 功率开关
+                var vna = new ScpiDevice();
+                if (await vna.ConnectAsync(_vnaAddress))
+                {
+                    double? vnaPower = await vna.ReadPower(1);
+                    bool? vnaOut = await vna.QueryOutputState();
+                    LogToConsole($"矢网功率: {(vnaPower.HasValue ? $"{vnaPower.Value:F3} dBm" : "读取失败")}, " +
+                        $"功率开关: {(vnaOut.HasValue ? (vnaOut.Value ? "ON" : "OFF") : "读取失败")}");
+                    vna.Disconnect();
+                }
+                else
+                {
+                    LogToConsole("矢网连接失败");
+                }
+
+                // 信号发生器：功率 + 功率开关
+                var sg = new ScpiDevice();
+                if (await sg.ConnectAsync(_xinhaoAddress))
+                {
+                    double? sgPower = await sg.ReadAmplitude();
+                    bool? sgOut = await sg.QueryRfState();
+                    LogToConsole($"信号发生器功率: {(sgPower.HasValue ? $"{sgPower.Value:F3} dBm" : "读取失败")}, " +
+                        $"功率开关: {(sgOut.HasValue ? (sgOut.Value ? "ON" : "OFF") : "读取失败")}");
+                    sg.Disconnect();
+                }
+                else
+                {
+                    LogToConsole("信号发生器连接失败");
+                }
+
+                // 电源：两通道电压、电流
+                var charge = new ScpiDevice();
+                if (await charge.ConnectAsync(_chargeAddress))
+                {
+                    await charge.SelectChannel(1);
+                    double? ch1V = await charge.ReadVoltage();
+                    double? ch1I = await charge.ReadCurrent();
+                    await charge.SelectChannel(2);
+                    double? ch2V = await charge.ReadVoltage();
+                    double? ch2I = await charge.ReadCurrent();
+                    LogToConsole($"电源 CH1: 电压={(ch1V.HasValue ? $"{ch1V.Value:F3} V" : "读取失败")}, " +
+                        $"电流={(ch1I.HasValue ? $"{ch1I.Value:F3} A" : "读取失败")}");
+                    LogToConsole($"电源 CH2: 电压={(ch2V.HasValue ? $"{ch2V.Value:F3} V" : "读取失败")}, " +
+                        $"电流={(ch2I.HasValue ? $"{ch2I.Value:F3} A" : "读取失败")}");
+                    charge.Disconnect();
+                }
+                else
+                {
+                    LogToConsole("电源连接失败");
+                }
+
+                LogToConsole("读取示数完成");
+            }
+            catch (Exception ex)
+            {
+                LogToConsole($"读取示数失败：{ex.Message}");
+                MessageBox.Show($"读取示数失败：{ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

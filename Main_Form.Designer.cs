@@ -150,6 +150,7 @@
             this.chasun_checkBox = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.console_textBox = new System.Windows.Forms.TextBox();
+            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -223,7 +224,8 @@
             this.toolStripButton4,
             this.toolStripButton5,
             this.toolStripButton6,
-            this.toolStripButton7});
+            this.toolStripButton7,
+            this.toolStripButton8});
             this.toolStrip1.Location = new System.Drawing.Point(23, 75);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1275, 25);
@@ -1536,6 +1538,16 @@
             this.console_textBox.Size = new System.Drawing.Size(1139, 60);
             this.console_textBox.TabIndex = 0;
             // 
+            // toolStripButton8
+            // 
+            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton8.Name = "toolStripButton8";
+            this.toolStripButton8.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButton8.Text = "读取示数";
+            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click);
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1693,5 +1705,6 @@
         private System.Windows.Forms.ToolStripButton toolStripButton7;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.TextBox textBox_benzhen_power_fs;
+        private System.Windows.Forms.ToolStripButton toolStripButton8;
     }
 }

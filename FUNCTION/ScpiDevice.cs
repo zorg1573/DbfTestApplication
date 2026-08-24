@@ -133,6 +133,18 @@ namespace DbfTest.FUNCTION
         public async Task DisableOutput() => await SendCommandAsync(":OUTP OFF");
         public async Task ModON() => await SendCommandAsync(":OUTP:MOD ON");
         public async Task ModOFF() => await SendCommandAsync(":OUTP:MOD OFF");
+        /// <summary>查询输出开关状态。指令：OUTP?，返回 true=ON / false=OFF。</summary>
+        public async Task<bool?> QueryOutputState()
+        {
+            string resp = (await QueryAsync("OUTP?"))?.Trim();
+            if (string.IsNullOrEmpty(resp))
+                return null;
+            if (resp == "1" || resp.Equals("ON", StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (resp == "0" || resp.Equals("OFF", StringComparison.OrdinalIgnoreCase))
+                return false;
+            return null;
+        }
 
         #region 信号源（_xinhaoAddress）专用：AMPL / RF:STAT
         /// <summary>设置功率（dBm）。指令：AMPL &lt;amplitude&gt;，范围约 -120～+20/+18 dBm。</summary>
@@ -547,6 +559,12 @@ namespace DbfTest.FUNCTION
         public async Task SetPower(double power,int portNum)
         {
             await SendCommandAsync($"SOUR:POW{portNum} {power}");
+        }
+        /// <summary>查询矢网指定端口功率（dBm）。指令：SOUR:POW&lt;n&gt;?</summary>
+        public async Task<double?> ReadPower(int portNum)
+        {
+            string resp = await QueryAsync($"SOUR:POW{portNum}?");
+            return double.TryParse(resp?.Trim(), out double val) ? (double?)val : null;
         }
         public async Task SetNormalize()
         {
