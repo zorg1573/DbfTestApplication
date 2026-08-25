@@ -885,7 +885,7 @@ namespace DbfTest
             LogToConsole($"开始接收综合测试（{string.Join("/", selectedNames)}）...");
             WritePersonToAllSheets();
             await ChargeRecievePowerON();
-            await Task.Delay(1000);
+            await Task.Delay(2000);
             await RecieveTestUDP();
             await Task.Delay(500);
 
@@ -1300,7 +1300,7 @@ namespace DbfTest
                 }
 
                 await ChargeRecievePowerON(); // 接收加电
-                await Task.Delay(500);     // 延时保证设备稳定
+                await Task.Delay(2000);     // 延时保证设备稳定
                                            //await RecieveTestUDP();       // FPGA发包
                 bool[] rxEnable = GetChannelCheckedStates();
                 string[] zeroBits = Enumerable.Repeat("000000", 8).ToArray();
@@ -1400,7 +1400,7 @@ namespace DbfTest
                 string sheetName = $"测试结果{chNum}";
 
                 await ChargeRecievePowerON(); // 接收加电
-                await Task.Delay(500);     // 延时保证设备稳定
+                await Task.Delay(2000);     // 延时保证设备稳定
                 await RecieveTestUDPFullAtt();       // FPGA发包
                 await Task.Delay(500);     // 延时保证设备稳定
                 //await WriteFreqArray();
@@ -1568,7 +1568,7 @@ namespace DbfTest
             WritePersonToAllSheets();
             //LoadVNAState(); // 调用矢网文件
             await ChargeRecievePowerON(); // 加电
-            await Task.Delay(500);
+            await Task.Delay(2000);
             await RecieveTestUDP();
             await Task.Delay(500);
             string ch = "";
@@ -2004,6 +2004,7 @@ namespace DbfTest
                 string sheetName = $"测试结果{chNum}";
 
                 await ChargeRecievePowerON(); // 接收加电
+                await Task.Delay(2000);     // 延时保证设备稳定
                 await RecieveTestUDP();       // FPGA发包
                 await Task.Delay(500);     // 延时保证设备稳定
                 //await WriteFreqArray();
@@ -5700,7 +5701,7 @@ namespace DbfTest
             LogToConsole("开始接收驻波测试");
             WritePersonToAllSheets();
             await ChargeRecievePowerON();
-            await Task.Delay(500);
+            await Task.Delay(2000);
             await RecieveTestUDP();
             await Task.Delay(500);
 
@@ -5825,7 +5826,7 @@ namespace DbfTest
             LogToConsole("开始接收平坦度测试");
             WritePersonToAllSheets();
             await ChargeRecievePowerON();
-            await Task.Delay(500);
+            await Task.Delay(2000);
             await RecieveTestUDP();
             await Task.Delay(500);
 
@@ -5976,7 +5977,7 @@ namespace DbfTest
             LogToConsole("开始-1dB带宽测试");
             WritePersonToAllSheets();
             await ChargeRecievePowerON();
-            await Task.Delay(500);
+            await Task.Delay(2000);
             await RecieveTestUDP();
             await Task.Delay(500);
 
