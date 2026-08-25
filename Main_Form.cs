@@ -4726,7 +4726,7 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4800,7 +4800,7 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "111111" + "1";
+                    string model_stc = model + "000000" + "1";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -4948,7 +4948,7 @@ namespace DbfTest
                     string ch7 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch7send;
                     string ch8 = "00" + "0" + "000000" + "000000" + "000000" + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -5046,7 +5046,7 @@ namespace DbfTest
                     string ch7 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch7send;
                     string ch8 = "00" + "0" + "000000" + "000000" + numToString + "000000" + ch8send;
                     string model = "00";
-                    string model_stc = model + "111111" + "0";
+                    string model_stc = model + "000000" + "0";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 01 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
