@@ -744,7 +744,7 @@ namespace DbfTest
 
                 const double markerStepHz = 0.1e9;   // 0.1 GHz
                 const double innerOffsetHz = 0.3e9;  // 距中心 0.3 GHz
-                const double outerOffsetHz = 1.5e9;  // 距中心 1.5 GHz
+                const double outerOffsetHz = 1e9;  // 距中心 1.5 GHz
 
                 await pinpuDevice.SendCommandAsync(":INST:SEL SA");
                 await pinpuDevice.LoadPinpuStateAsync("/usrdata/Data/kudbf20wzasan.state");
@@ -760,13 +760,13 @@ namespace DbfTest
                     double freqGHz = double.Parse(freqArray[i]);
 
                     await xinhaoBenzhenDevice.SetFrequency(freqHz);
-                    await Task.Delay(500);
+                    //await Task.Delay(500);
 
                     // 频谱扫宽覆盖两侧扫描区间 [fc-1.5G, fc+1.5G]
                     await pinpuDevice.SetStartFrequencyAsync(freqHz - outerOffsetHz);
                     await pinpuDevice.SetStopFrequencyAsync(freqHz + outerOffsetHz);
                     await pinpuDevice.SetCenterFrequencyAsync(freqHz);
-                    await Task.Delay(500);
+                    await Task.Delay(10000);
 
                     // 主谱功率：Marker 寻峰
                     double centerPower = double.NaN;
@@ -1295,7 +1295,7 @@ namespace DbfTest
                 string sheetName = $"测试结果{chNum}";
 
                 await ChargeRecievePowerON(); // 接收加电
-                await Task.Delay(500);     // 延时保证设备稳定
+                await Task.Delay(1000);     // 延时保证设备稳定
 
                 string[] p_1input = new string[_pointCount];
                 string[] p_1output = new string[_pointCount];
@@ -1327,8 +1327,8 @@ namespace DbfTest
                 await pinpuDevice.SendCommandAsync($":CALC:MARK1:X {center}");
 
                 // 三衰减态对应不同发码与功率扫描区间
-                double[] startPowers = { -75, -55, -35 };
-                double[] stopPowers = { -55, -35, -15 };
+                double[] startPowers = { -65, -45, -25 };
+                double[] stopPowers = { -45, -25, -5 };
                 string[][] inputResults = { p_1input, p_1input2, p_1input3 };
                 string[][] outputResults = { p_1output, p_1output2, p_1output3 };
                 string[] stateNames = { "衰减态1(RecieveTestUDP)", "衰减态2(RecieveTestUDPFullAtt2)", "衰减态3(RecieveTestUDPFullAtt3)" };
@@ -1357,7 +1357,7 @@ namespace DbfTest
                     string[] inputArr = inputResults[state];
                     string[] outputArr = outputResults[state];
 
-                    await xinhaoDevice.SetPower(startPower, _vnaRfPortNum);
+                    await xinhaoDevice.SetPower(GetRfPowerDb(), _vnaRfPortNum);
                     await Task.Delay(500);
 
                     double[] refGains = new double[_pointCount];
@@ -1372,6 +1372,7 @@ namespace DbfTest
                             freqArray[i] = freqGHz.ToString();
                         await xinhaoBenzhenDevice.SetFrequency(freqHz - 175 * 1e6);
                         await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
+                        await Task.Delay(500);
                         markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                         refGains[i] = markPower;
                         found[i] = false;
@@ -1388,10 +1389,11 @@ namespace DbfTest
                         for (double power = startPower + stepPower; power <= stopPower && !found[i]; power += stepPower)
                         {
                             await xinhaoDevice.SetPower(power, _vnaRfPortNum);
-                            await Task.Delay(800);
+                            await Task.Delay(1000);
                             markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
                             markPower = await pinpuDevice.ReadMarkerPowerAsync() ?? double.NaN;
-                            double delta = (power + jsbc - 31.5) - (markPower - refGains[i]);
+                            double delta = (power + jsbc) - (markPower - refGains[i]);
+                            LogToConsole($"delta = power{power} + jsbc{jsbc} - (markPower{markPower} - refGains[i]{refGains[i]}))");
                             LogToConsole($"{stateNames[state]} {freqGHz}GHz @ {power:F1}dBm: Δ={delta:F3}");
                             if (delta > 1)
                             {
@@ -1569,7 +1571,7 @@ namespace DbfTest
                 }
                 else
                 {
-                    string numToString = ToSixBitBinaryString(idx);
+                    string numToString = ToSixBitBinaryString3(idx);
 
                     LogToConsole("idx:" + idx + ",bitString:" + numToString);
                     string ch1recive = ch1_checkBox.Checked ? "1" : "0";
@@ -4874,7 +4876,7 @@ namespace DbfTest
                     string ch7 = "00" + ch7recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string ch8 = "00" + ch8recive + "000000" + "000000" + "000000" + "000000" + "0";
                     string model = "10";
-                    string model_stc = model + "000000" + "1";
+                    string model_stc = model + "111111" + "1";
                     string buling = new string('0', 59);
                     modelValue = StringToByteArray("01 03 02 00");
                     var codeValue = GenerateCodeValueFromBits(new[] { ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, model_stc, buling });
@@ -5027,7 +5029,7 @@ namespace DbfTest
                         MessageBox.Show("请只选择一个接收通道！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return; // 终止方法
                     }
-                    string numToString = ToSixBitBinaryString(num);
+                    string numToString = ToSixBitBinaryString3(num);
                     // 分别设置通道值
                     string ch1send = ch1_checkBox.Checked ? "1" : "0";
                     string ch2send = ch2_checkBox.Checked ? "1" : "0";
