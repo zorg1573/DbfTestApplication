@@ -64,6 +64,7 @@
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.button10 = new System.Windows.Forms.Button();
@@ -80,6 +81,7 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.simplifiedTest_checkBox = new System.Windows.Forms.CheckBox();
             this.label30 = new System.Windows.Forms.Label();
             this.textBox_benzhen_power_fs = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
@@ -150,7 +152,6 @@
             this.chasun_checkBox = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.console_textBox = new System.Windows.Forms.TextBox();
-            this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -252,7 +253,7 @@
             // 手动发码ToolStripMenuItem
             // 
             this.手动发码ToolStripMenuItem.Name = "手动发码ToolStripMenuItem";
-            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.手动发码ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.手动发码ToolStripMenuItem.Text = "手动发码";
             this.手动发码ToolStripMenuItem.Click += new System.EventHandler(this.手动发码ToolStripMenuItem_Click);
             // 
@@ -264,7 +265,7 @@
             this.发射加电ToolStripMenuItem,
             this.关电ToolStripMenuItem});
             this.电源设置ToolStripMenuItem.Name = "电源设置ToolStripMenuItem";
-            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.电源设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.电源设置ToolStripMenuItem.Text = "电源设置";
             // 
             // 参数设置ToolStripMenuItem
@@ -303,7 +304,7 @@
             this.调用矢网移相状态文件ToolStripMenuItem,
             this.打开矢网差损文件ToolStripMenuItem});
             this.矢网设置ToolStripMenuItem.Name = "矢网设置ToolStripMenuItem";
-            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.矢网设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.矢网设置ToolStripMenuItem.Text = "矢网设置";
             this.矢网设置ToolStripMenuItem.Visible = false;
             // 
@@ -334,7 +335,7 @@
             this.参数设置ToolStripMenuItem1,
             this.调用主谱状态文件ToolStripMenuItem});
             this.频谱分析仪设置ToolStripMenuItem.Name = "频谱分析仪设置ToolStripMenuItem";
-            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.频谱分析仪设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.频谱分析仪设置ToolStripMenuItem.Text = "频谱分析仪设置";
             this.频谱分析仪设置ToolStripMenuItem.Visible = false;
             // 
@@ -357,7 +358,7 @@
             this.功率计设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.调用功率计状态文件ToolStripMenuItem});
             this.功率计设置ToolStripMenuItem.Name = "功率计设置ToolStripMenuItem";
-            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.功率计设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.功率计设置ToolStripMenuItem.Text = "功率计设置";
             this.功率计设置ToolStripMenuItem.Visible = false;
             // 
@@ -371,7 +372,7 @@
             // 信号发生器设置ToolStripMenuItem
             // 
             this.信号发生器设置ToolStripMenuItem.Name = "信号发生器设置ToolStripMenuItem";
-            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.信号发生器设置ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.信号发生器设置ToolStripMenuItem.Text = "信号发生器设置";
             this.信号发生器设置ToolStripMenuItem.Visible = false;
             // 
@@ -502,6 +503,16 @@
             this.toolStripButton7.Size = new System.Drawing.Size(60, 22);
             this.toolStripButton7.Text = "矢网调试";
             this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
+            // 
+            // toolStripButton8
+            // 
+            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton8.Name = "toolStripButton8";
+            this.toolStripButton8.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButton8.Text = "读取示数";
+            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -746,6 +757,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.simplifiedTest_checkBox);
             this.panel1.Controls.Add(this.label30);
             this.panel1.Controls.Add(this.textBox_benzhen_power_fs);
             this.panel1.Controls.Add(this.label20);
@@ -819,6 +831,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1139, 194);
             this.panel1.TabIndex = 1;
+            // 
+            // simplifiedTest_checkBox
+            // 
+            this.simplifiedTest_checkBox.AutoSize = true;
+            this.simplifiedTest_checkBox.Checked = true;
+            this.simplifiedTest_checkBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.simplifiedTest_checkBox.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.simplifiedTest_checkBox.Location = new System.Drawing.Point(1091, 69);
+            this.simplifiedTest_checkBox.Name = "simplifiedTest_checkBox";
+            this.simplifiedTest_checkBox.Size = new System.Drawing.Size(75, 21);
+            this.simplifiedTest_checkBox.TabIndex = 0;
+            this.simplifiedTest_checkBox.Text = "精简测试";
+            this.simplifiedTest_checkBox.UseVisualStyleBackColor = true;
             // 
             // label30
             // 
@@ -1538,16 +1563,6 @@
             this.console_textBox.Size = new System.Drawing.Size(1139, 60);
             this.console_textBox.TabIndex = 0;
             // 
-            // toolStripButton8
-            // 
-            this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
-            this.toolStripButton8.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton8.Name = "toolStripButton8";
-            this.toolStripButton8.Size = new System.Drawing.Size(60, 22);
-            this.toolStripButton8.Text = "读取示数";
-            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click);
-            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1634,6 +1649,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.CheckBox simplifiedTest_checkBox;
         private System.Windows.Forms.CheckBox chasun_checkBox;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.RadioButton ch8_checkBox;

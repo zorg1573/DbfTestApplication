@@ -83,6 +83,15 @@ namespace DbfTest
         const int RxAttenDifferenceEndRow = 35;
         #endregion
 
+        // 保留原频点索引，使精简结果仍写入 Excel 对应频率行。
+        private int[] GetTestFrequencyIndices(bool simplified)
+        {
+            double step = _pointCount > 1 ? (_stopFreq - _startFreq) / (_pointCount - 1) : 0;
+            return Enumerable.Range(0, _pointCount).Where(i => !simplified ||
+                new[] { 9.0, 9.6, 10.2 }.Any(f =>
+                    Math.Abs((_startFreq + step * i) / 1e9 - f) < 0.000001)).ToArray();
+        }
+
         public Main_Form()
         {
             InitializeComponent();
@@ -843,6 +852,7 @@ namespace DbfTest
         /// </summary>
         private async Task RunCombinedReceiveTestsAsync()
         {
+            int[] flatnessIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (testType_comboBox.SelectedIndex == -1)
             {
                 MessageBox.Show("请选择测试类型", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -927,7 +937,7 @@ namespace DbfTest
                 }
 
                 const double centerIfHz = 175e6;
-                const double markerStepHz = 0.1e6;
+                const double markerStepHz = 0.5e6;
                 const double flatSpanHalfHz1 = 10e6;
                 const double flatSpanHalfHz2 = 20e6;
                 const double lowBandMinHz = 130e6;
@@ -975,6 +985,13 @@ namespace DbfTest
                         freqArray[i] = freqGHz.ToString();
                         gain[i] = bandwidthMHz[i] = jpyz[i] = outOfBand[i] = flatness1[i] = "";
 
+                        if (!testGain && !testOutOfBand && !testBandwidth && !testImage && !flatnessIndices.Contains(i))
+                        {
+                            num++;
+                            SafeIncrementProgressBar();
+                            continue;
+                        }
+
                         await xinhaoDevice.SetCenterFrequencyAsync(freqHz);
                         await Task.Delay(200);
                         await xinhaoBenzhenDevice.SetFrequency(freqHz - centerIfHz);
@@ -998,24 +1015,20 @@ namespace DbfTest
                                 pointLog.Add($"增益={gain[i]}");
                             }
 
-                            if (testFlatness)
+                            if (testFlatness && flatnessIndices.Contains(i))
                             {
-                                // 平坦度：Marker 与本振同步 0.1 MHz 步进（±10 MHz），含杂峰过滤
-                                double flatDiff1 = await MeasureFlatnessWithLoStepAsync(
-                                    pinpuDevice, xinhaoBenzhenDevice, freqHz, centerIfHz, centerPower,
-                                    markerStepHz, centerIfHz - flatSpanHalfHz1, centerIfHz + flatSpanHalfHz1);
-                                flatness1[i] = flatDiff1.ToString("F2");
-                                pointLog.Add($"平坦度={flatness1[i]}");
-                            }
-
-                            if (testFlatness)
-                            {
-                                // 平坦度：Marker 与本振同步 0.1 MHz 步进（±20 MHz），含杂峰过滤
+                                // 只扫 ±20 MHz，复用其中 ±10 MHz 的采样；两个带宽分别做离群过滤。
+                                var innerDiffs = new List<double>();
                                 double flatDiff2 = await MeasureFlatnessWithLoStepAsync(
                                     pinpuDevice, xinhaoBenzhenDevice, freqHz, centerIfHz, centerPower,
-                                    markerStepHz, centerIfHz - flatSpanHalfHz2, centerIfHz + flatSpanHalfHz2);
+                                    markerStepHz, centerIfHz - flatSpanHalfHz2, centerIfHz + flatSpanHalfHz2,
+                                    innerDiffs: innerDiffs, innerHalfSpanHz: flatSpanHalfHz1);
+                                double flatDiff1 = FilterSpuriousDiffMax(innerDiffs, 5.0, out int innerRejected);
+                                flatness1[i] = flatDiff1.ToString("F2");
                                 flatness2[i] = flatDiff2.ToString("F2");
-                                pointLog.Add($"平坦度={flatness2[i]}");
+                                pointLog.Add($"平坦度(±10 MHz)={flatness1[i]}, 平坦度(±20 MHz)={flatness2[i]}");
+                                if (innerRejected > 0)
+                                    LogToConsole($"平坦度 ±10 MHz 离群剔除={innerRejected}");
                             }
 
                             if (testOutOfBand)
@@ -1235,6 +1248,7 @@ namespace DbfTest
         /// <param name="e"></param>
         private async void button5_Click(object sender, EventArgs e)
         {
+            int[] frequencyIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             try
             {
                 if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
@@ -1248,7 +1262,7 @@ namespace DbfTest
 
                 //进度条：三衰减态 × 频点数
                 int num = 0;
-                SafeSetProgressBarMaximum(_pointCount * 3, 0);
+                SafeSetProgressBarMaximum(frequencyIndices.Length * 3, 0);
 
                 if (ch1_checkBox.Checked)
                 {
@@ -1362,7 +1376,7 @@ namespace DbfTest
                     bool[] found = new bool[_pointCount];
 
                     // 1. 各频点在起始功率下测参考功率
-                    for (int i = 0; i < _pointCount; i++)
+                    foreach (int i in frequencyIndices)
                     {
                         double freqHz = _startFreq + step * i;
                         double freqGHz = Math.Round(freqHz / 1e9, 3);
@@ -1376,7 +1390,7 @@ namespace DbfTest
                     }
 
                     // 2. 升功率查找 1dB 压缩点
-                    for (int i = 0; i < _pointCount; i++)
+                    foreach (int i in frequencyIndices)
                     {
                         double freqHz = _startFreq + step * i;
                         double freqGHz = Math.Round(freqHz / 1e9, 3);
@@ -1409,7 +1423,7 @@ namespace DbfTest
 
                         num++;
                         SafeIncrementProgressBar();
-                        label6.Text = ((double)num / (_pointCount * 3) * 100).ToString("f2") + "%";
+                        label6.Text = ((double)num / (frequencyIndices.Length * 3) * 100).ToString("f2") + "%";
                         label6.Refresh();
                     }
                 }
@@ -1460,6 +1474,7 @@ namespace DbfTest
         /// <param name="e"></param>
         private async void button6_Click(object sender, EventArgs e)
         {
+            int[] frequencyIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
             {
                 MessageBox.Show("请选择一个通道", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1554,7 +1569,7 @@ namespace DbfTest
 
             //进度条
             int num = 0;
-            SafeSetProgressBarMaximum(_pointCount * 64, 0);
+            SafeSetProgressBarMaximum(frequencyIndices.Length * 64, 0);
 
             double step = (_stopFreq - _startFreq) / (_pointCount - 1);
             //string[] freqArray = new string[_pointCount];
@@ -1596,9 +1611,9 @@ namespace DbfTest
                 }
 
                 await Task.Delay(500); // 让设备处理
-                double[] gain = new double[_pointCount];
+                double[] gain = Enumerable.Repeat(double.NaN, _pointCount).ToArray();
                 double lastPower = double.NaN;
-                for (int i = 0; i < _pointCount; i++)
+                foreach (int i in frequencyIndices)
                 {
                     double freqHz = _startFreq + step * i;
                     double freqGHz = Math.Round(freqHz / 1e9, 3);
@@ -1627,7 +1642,7 @@ namespace DbfTest
                     LogToConsole(freqGHz + ": " + gain[i].ToString());
                     num++;
                     SafeIncrementProgressBar();
-                    label6.Text = ((double)num / (_pointCount * 64) * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / (frequencyIndices.Length * 64) * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 unwrappedPhases.Add(gain);
@@ -1744,6 +1759,8 @@ namespace DbfTest
         /// </summary>
         /// <param name="spurDropRejectDb">相对 P0 功率跌落超过该值视为杂峰/无效，不参与统计（默认 15 dB）</param>
         /// <param name="outlierMarginDb">相对差值中位数的离群裕量（默认 5 dB）</param>
+        /// <param name="innerDiffs">可选：收集内侧带宽的有效差值，供独立过滤统计，无需再次扫描。</param>
+        /// <param name="innerHalfSpanHz">内侧带宽相对中心的半宽（Hz）。</param>
         private async Task<double> MeasureFlatnessWithLoStepAsync(
             ScpiDevice pinpuDevice,
             ScpiDevice loDevice,
@@ -1754,7 +1771,9 @@ namespace DbfTest
             double scanMinIfHz,
             double scanMaxIfHz,
             double spurDropRejectDb = 15.0,
-            double outlierMarginDb = 5.0)
+            double outlierMarginDb = 5.0,
+            List<double> innerDiffs = null,
+            double innerHalfSpanHz = 0)
         {
             var diffs = new List<double>();
             int spurRejected = 0;
@@ -1780,7 +1799,10 @@ namespace DbfTest
                     continue;
                 }
 
-                diffs.Add(Math.Abs(centerPowerDb - power));
+                double diff = Math.Abs(centerPowerDb - power);
+                diffs.Add(diff);
+                if (innerDiffs != null && Math.Abs(ifFreq - centerIfHz) <= innerHalfSpanHz + stepHz * 0.000001)
+                    innerDiffs.Add(diff);
             }
 
             // 恢复中心本振与 Marker
@@ -3672,7 +3694,7 @@ namespace DbfTest
                     if (!TryGetArrayDouble(freqArr, r, out double freqGHz))
                         continue;
 
-                    double rms = Math.Sqrt(rowSqSum[r] / rowSqCount[r]);
+                    double rms = rowSqCount[r] > 0 ? Math.Sqrt(rowSqSum[r] / rowSqCount[r]) : 0;
                     if (freqToResultRow.TryGetValue(freqGHz.ToString("F3"), out int resultRow))
                     {
                         resultSheet.Cells[resultRow, resultRmsColumn].Value2 = rms.ToString();
@@ -3880,6 +3902,8 @@ namespace DbfTest
                     int n = Math.Min(rowCount, gain.Length);
                     for (int r = 0; r < n; r++)
                     {
+                        if (double.IsNaN(gain[r]) || double.IsNaN(baseGain[Math.Min(r, baseGain.Length - 1)]))
+                            continue;
                         if (col == 2)
                             colData[r, 0] = gain[r];
                         else
@@ -4036,15 +4060,13 @@ namespace DbfTest
                 int written = 0;
                 for (int r = 0; r < rowCount; r++)
                 {
-                    if (rowSqCount[r] <= 0)
-                        continue;
                     if (!TryGetArrayDouble(freqArr, r, out double freqGHz))
                         continue;
 
-                    double rms = Math.Sqrt(rowSqSum[r] / rowSqCount[r]);
+                    double rms = rowSqCount[r] > 0 ? Math.Sqrt(rowSqSum[r] / rowSqCount[r]) : 0;
                     if (freqToResultRow.TryGetValue(freqGHz.ToString("F3"), out int resultRow))
                     {
-                        resultSheet.Cells[resultRow, resultRmsColumn].Value2 = rms.ToString();
+                        resultSheet.Cells[resultRow, resultRmsColumn].Value2 = rowSqCount[r] > 0 ? (object)rms.ToString() : null;
                         written++;
                     }
                 }
@@ -5957,6 +5979,7 @@ namespace DbfTest
 
         private async void button2_Click_1(object sender, EventArgs e)
         {
+            int[] frequencyIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (testType_comboBox.SelectedIndex == -1)
             {
                 MessageBox.Show("请选择测试类型", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -6042,9 +6065,9 @@ namespace DbfTest
 
                 double step = (_pointCount > 1) ? (_stopFreq - _startFreq) / (_pointCount - 1) : 0;
                 int num = 0;
-                SafeSetProgressBarMaximum(_pointCount, 0);
+                SafeSetProgressBarMaximum(frequencyIndices.Length, 0);
 
-                for (int i = 0; i < _pointCount; i++)
+                foreach (int i in frequencyIndices)
                 {
                     double freqHz = _startFreq + step * i;
                     double freqGHz = Math.Round(freqHz / 1e9, 3);
@@ -6077,7 +6100,7 @@ namespace DbfTest
 
                     num++;
                     SafeIncrementProgressBar();
-                    label6.Text = ((double)num / _pointCount * 100).ToString("f2") + "%";
+                    label6.Text = ((double)num / frequencyIndices.Length * 100).ToString("f2") + "%";
                     label6.Refresh();
                 }
                 WriteArrayToExcelColumn(freqArray, 1, sheetName);
