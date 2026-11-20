@@ -1,4 +1,4 @@
-﻿using DbfTest.DAL;
+using DbfTest.DAL;
 using DbfTest.FUNCTION;
 using DbfTest.PAGE;
 using Excel;
@@ -90,6 +90,16 @@ namespace DbfTest
             return Enumerable.Range(0, _pointCount).Where(i => !simplified ||
                 new[] { 9.0, 9.6, 10.2 }.Any(f =>
                     Math.Abs((_startFreq + step * i) / 1e9 - f) < 0.000001)).ToArray();
+        }
+
+        private bool ValidateTestFrequencySettings()
+        {
+            if (_pointCount >= 2 && _startFreq > 0 && _stopFreq > _startFreq)
+                return true;
+
+            MessageBox.Show("测试频率配置无效。请在“测试设置”中填写起始频率、终止频率和至少 2 个测试点，保存后点击“配置刷新”。",
+                "测试设置错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
         }
 
         public Main_Form()
@@ -767,6 +777,8 @@ namespace DbfTest
         /// </summary>
         private async Task RunCombinedReceiveTestsAsync()
         {
+            if (!ValidateTestFrequencySettings())
+                return;
             int[] flatnessIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (testType_comboBox.SelectedIndex == -1)
             {
@@ -1406,6 +1418,8 @@ namespace DbfTest
         /// <param name="e"></param>
         private async void button6_Click(object sender, EventArgs e)
         {
+            if (!ValidateTestFrequencySettings())
+                return;
             int[] frequencyIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (!ch1_checkBox.Checked && !ch2_checkBox.Checked && !ch3_checkBox.Checked && !ch4_checkBox.Checked && !ch5_checkBox.Checked && !ch6_checkBox.Checked && !ch7_checkBox.Checked && !ch8_checkBox.Checked)
             {
@@ -1514,7 +1528,15 @@ namespace DbfTest
                 }
                 else
                 {
-                    string numToString = ToSixBitBinaryString(idx);
+                    string numToString = "";
+                    if (checkBox1.Checked)
+                    {
+                        numToString = ToSixBitBinaryString3(idx);
+                    }
+                    else
+                    {
+                        numToString = ToSixBitBinaryString(idx);
+                    }
 
                     LogToConsole("idx:" + idx + ",bitString:" + numToString);
                     string ch1recive = ch1_checkBox.Checked ? "1" : "0";
@@ -5776,71 +5798,150 @@ namespace DbfTest
 
         private void button13_Click(object sender, EventArgs e)
         {
-            try
+            if (_workbook == null)
             {
-                if (_workbook == null)
+                MessageBox.Show("请先打开测试数据工作簿。", "生成报告");
+                return;
+            }
+            if (testType_comboBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("请选择测试温度类型。", "生成报告");
+                return;
+            }
+            string template = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                "Templates", "组件测试记录表_DBF20W.xls");
+            if (!File.Exists(template))
+            {
+                MessageBox.Show("找不到报告模板：" + template, "生成报告");
+                return;
+            }
+            using (var dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "Excel 97-2003 工作簿 (*.xls)|*.xls";
+                dialog.FileName = "组件测试记录表_DBF20W_" + testType_comboBox.Text + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xls";
+                if (dialog.ShowDialog(this) != DialogResult.OK) return;
+                if (string.Equals(Path.GetFullPath(dialog.FileName), Path.GetFullPath(template), StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(Path.GetFullPath(dialog.FileName), (string)_workbook.FullName, StringComparison.OrdinalIgnoreCase))
                 {
-                    MessageBox.Show("Excel 尚未初始化（InitializeDSO 未打开工作簿）。", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("请选择新的报告文件路径，避免覆盖模板或测试数据。", "生成报告");
                     return;
                 }
-
-                dynamic workbook = _workbook;
-                dynamic recordSheet = workbook.Sheets["测试记录表"];
-
-                // 源行：8/10/13/15/18/20 → 对应 9.0/9.2/9.5/9.7/10.0/10.2，目标列：F~K（第6~11列）
-                int[] sourceRows = { 8, 10, 13, 15, 18, 20 };
-                // 源列 L/N/O/P/Q/K，对应测试记录表通道1起始行（通道n = 起始行 + n - 1）
-                int[] sourceCols = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17 };
-                int[] targetBaseRows = { 74, 66, 90, 204, 180, 99, 188, 196, 265, 223, 13, 29, 37, 45, 53 };
-
-                for (int ch = 1; ch <= 8; ch++)
+                dynamic report = null;
+                try
                 {
-                    dynamic resultSheet = workbook.Sheets[$"测试结果{ch}"];
-                    for (int m = 0; m < sourceCols.Length; m++)
-                    {
-                        int targetRow = targetBaseRows[m] + (ch - 1);
-                        for (int i = 0; i < sourceRows.Length; i++)
-                        {
-                            object value = resultSheet.Cells[sourceRows[i], sourceCols[m]].Value2;
-                            recordSheet.Cells[targetRow, 6 + i].Value2 = value;
-                        }
-                    }
-                }
-                #region 通道间同频点幅度一致性
-                // B列各频点行：测试结果1~8 的最大值减最小值 → 测试记录表第61行 F~K
-                for (int i = 0; i < sourceRows.Length; i++)
-                {
-                    double maxVal = double.MinValue;
-                    double minVal = double.MaxValue;
-                    bool hasValue = false;
-
+                    // 以只读方式打开模板，再另存报告，保留合并单元格、样式和打印设置。
+                    report = _excelApp.Workbooks.Open(template, 0, true);
+                    dynamic sheet = report.Worksheets[1];
+                    ClearReportExampleData(sheet);
+                    sheet.Cells[2, 12].Value2 = DateTime.Now.ToString("yyyy.MM.dd");
+                    sheet.Cells[248, 2].Value2 = operator_textBox.Text.Trim();
+                    int temperature = testType_comboBox.SelectedIndex;
+                    int[] powerRows = { 9, 17, 25 };
+                    int[] compressionRows = { 135, 143, 151 };
+                    int[] saturationRows = { 159, 167, 175 };
+                    int[] gainRippleRows = { 215, 223, 231 };
+                    int[] txConsistencyRows = { 65, 66, 67 };
+                    int[] rxConsistencyRows = { 239, 240, 241 };
+                    // 源列 / 模板通道1起始行；K列写入移相精度，噪声系数固定写常温区。
+                    int[] sourceColumns = { 12, 14, 15, 16, 17, 3, 2, 7, 8, 4, 5, 6, 9, 10, 11 };
+                    int[] targetRows = { powerRows[temperature], 49, 57, 41, 76, 95,
+                        111, 119, 127, compressionRows[temperature], saturationRows[temperature], 183, 191, 207, 68 };
+                    double?[,] tx = new double?[8, 13];
+                    double?[,] rx = new double?[8, 13];
+                    int written = 0;
+                    int channels = 0;
                     for (int ch = 1; ch <= 8; ch++)
                     {
-                        dynamic resultSheet = workbook.Sheets[$"测试结果{ch}"];
-                        object cellVal = resultSheet.Cells[sourceRows[i], 2].Value2;
-                        if (cellVal == null)
-                            continue;
-
-                        if (double.TryParse(cellVal.ToString(), out double num))
+                        dynamic source = FindWorksheet(_workbook, "测试结果" + ch);
+                        if (source == null) continue;
+                        channels++;
+                        object[,] values = source.Range["A8:Q20"].Value2;
+                        for (int i = 1; i <= values.GetLength(0); i++)
                         {
-                            if (num > maxVal) maxVal = num;
-                            if (num < minVal) minVal = num;
-                            hasValue = true;
+                            double frequency;
+                            if (!TryReportNumber(values[i, 1], out frequency)) continue;
+                            int index = (int)Math.Round((frequency - 9.0) * 10);
+                            if (index < 0 || index > 12 || Math.Abs(frequency - (9.0 + index * 0.1)) > 0.0005) continue;
+                            int column = 6 + index;
+                            for (int m = 0; m < sourceColumns.Length; m++)
+                            {
+                                if (targetRows[m] == 0) continue;
+                                double number;
+                                if (!TryReportNumber(values[i, sourceColumns[m]], out number)) continue;
+                                sheet.Cells[targetRows[m] + ch - 1, column].Value2 = number;
+                                written++;
+                            }
+                            double power, gain;
+                            if (TryReportNumber(values[i, 12], out power)) tx[ch - 1, index] = power;
+                            if (TryReportNumber(values[i, 2], out gain)) rx[ch - 1, index] = gain;
                         }
+                        // 仅完整13频点才计算全带起伏，避免把精简测试当作全带数据。
+                        WriteReportRipple(sheet, tx, ch - 1, 33 + ch - 1);
+                        WriteReportRipple(sheet, rx, ch - 1, gainRippleRows[temperature] + ch - 1);
                     }
-
-                    recordSheet.Cells[61, 6 + i].Value2 = hasValue ? (object)(maxVal - minVal) : null;
+                    if (channels == 0 || written == 0)
+                        throw new InvalidOperationException("测试结果1～8中没有可写入的数值数据。");
+                    for (int i = 0; i < 13; i++)
+                    {
+                        WriteReportConsistency(sheet, tx, i, txConsistencyRows[temperature]);
+                        WriteReportConsistency(sheet, rx, i, rxConsistencyRows[temperature]);
+                    }
+                    report.SaveAs(dialog.FileName, 56); // xlExcel8，保留原 .xls 格式
+                    LogToConsole("报告已生成：" + dialog.FileName + "，写入测量值 " + written + " 个。");
+                    MessageBox.Show("报告已生成：" + dialog.FileName + "\n未测项目留空。", "生成报告");
                 }
-                #endregion
-                workbook.Save();
-                MessageBox.Show("测试记录表更新成功！", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("更新测试记录表失败：" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                catch (Exception ex)
+                {
+                    MessageBox.Show("生成报告失败：" + ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    if (report != null)
+                    {
+                        try { report.Close(false); }
+                        finally { Marshal.FinalReleaseComObject(report); }
+                    }
+                }
             }
         }
 
+        private static bool TryReportNumber(object value, out double number)
+        {
+            return double.TryParse(Convert.ToString(value), out number) &&
+                !double.IsNaN(number) && !double.IsInfinity(number);
+        }
+
+        private void ClearReportExampleData(dynamic sheet)
+        {
+            // 只清除模板的数据区，保留表头、技术要求、频率和通道标签。
+            int[] starts = { 8, 9, 17, 25, 33, 41, 49, 57, 65, 66, 67, 68, 76, 84,
+                93, 94, 95, 103, 111, 119, 127, 135, 143, 151, 159, 167, 175,
+                183, 191, 199, 207, 215, 223, 231, 239, 240, 241 };
+            foreach (int row in starts)
+            {
+                bool single = row == 8 || row == 65 || row == 66 || row == 67 || row == 93 || row == 94 || row >= 239;
+                sheet.Range["F" + row, "R" + (single ? row : row + 7)].ClearContents();
+            }
+            sheet.Range["E243:R247"].ClearContents();
+            sheet.Cells[2, 7].MergeArea.ClearContents(); // 原样例产品编号
+            sheet.Cells[2, 12].MergeArea.ClearContents();
+            sheet.Cells[2, 16].MergeArea.ClearContents(); // 测试地点由用户填写
+            sheet.Cells[2, 20].MergeArea.ClearContents(); // 不自动判定整机合格
+        }
+
+        private void WriteReportRipple(dynamic sheet, double?[,] data, int channel, int row)
+        {
+            var values = Enumerable.Range(0, 13).Select(i => data[channel, i]).ToArray();
+            if (values.All(v => v.HasValue))
+                sheet.Cells[row, 6].Value2 = values.Max(v => v.Value) - values.Min(v => v.Value);
+        }
+
+        private void WriteReportConsistency(dynamic sheet, double?[,] data, int frequency, int row)
+        {
+            var values = Enumerable.Range(0, 8).Select(ch => data[ch, frequency]).ToArray();
+            if (values.All(v => v.HasValue))
+                sheet.Cells[row, 6 + frequency].Value2 = values.Max(v => v.Value) - values.Min(v => v.Value);
+        }
         private async void toolStripButton5_Click(object sender, EventArgs e)
         {
             try
@@ -5882,6 +5983,8 @@ namespace DbfTest
 
         private async void button2_Click_1(object sender, EventArgs e)
         {
+            if (!ValidateTestFrequencySettings())
+                return;
             int[] frequencyIndices = GetTestFrequencyIndices(simplifiedTest_checkBox.Checked);
             if (testType_comboBox.SelectedIndex == -1)
             {

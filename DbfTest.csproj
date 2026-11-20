@@ -104,9 +104,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\IVI Foundation\VISA\Microsoft.NET\Framework32\v4.0.30319\VISA.NET Shared Components 8.0.1\Ivi.Visa.dll</HintPath>
     </Reference>
-    <Reference Include="Keysight.KtNA.Fx45, Version=3.0.8.0, Culture=neutral, PublicKeyToken=fc9cf488cabdabaa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files (x86)\IVI Foundation\IVI\Microsoft.NET\Framework32\v4.5.50709\Keysight.KtNA 3.0.8\Keysight.KtNA.Fx45.dll</HintPath>
+    <Reference Include="Keysight.KtNA.Fx45">
+      <HintPath>C:\Program Files (x86)\IVI Foundation\IVI\Microsoft.NET\Framework32\v4.5.50709\Keysight.KtNA 3.0.8\Keysight.KtNA.Fx45.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL">
       <HintPath>packages\MathNet.Numerics.Signed.5.0.0\lib\net461\MathNet.Numerics.dll</HintPath>
@@ -498,6 +497,9 @@
     <Content Include="IMAGES\savefile.png" />
     <Content Include="IMAGES\search.png" />
     <Content Include="MetroFramework.txt" />
+    <Content Include="Templates\组件测试记录表_DBF20W.xls">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="WGBTIHUC206L4O7J4.ico" />
   </ItemGroup>
   <ItemGroup>
