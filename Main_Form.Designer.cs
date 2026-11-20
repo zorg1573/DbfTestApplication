@@ -488,11 +488,12 @@
             this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton6.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton6.Image")));
             this.toolStripButton6.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton6.Enabled = false;
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(84, 22);
             this.toolStripButton6.Text = "重算寄生调幅";
             this.toolStripButton6.Visible = false;
-            this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
+            // 当前模板未使用：this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // toolStripButton7
             // 
@@ -629,10 +630,10 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(111, 37);
             this.button3.TabIndex = 89;
-            this.button3.Text = "-1dB带宽";
+            this.button3.Text = "MGC误差";
             this.button3.UseVisualStyleBackColor = false;
-            this.button3.Visible = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            this.button3.Visible = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button5
             // 
@@ -654,12 +655,14 @@
             this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(4, 136);
+            this.button1.Enabled = false;
+            this.button1.Visible = false;
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(111, 37);
             this.button1.TabIndex = 87;
             this.button1.Text = "驻波";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 当前模板未使用：this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button6
             // 
@@ -748,12 +751,14 @@
             this.button15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button15.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button15.Location = new System.Drawing.Point(4, 488);
+            this.button15.Enabled = false;
+            this.button15.Visible = false;
             this.button15.Name = "button15";
             this.button15.Size = new System.Drawing.Size(111, 37);
             this.button15.TabIndex = 90;
             this.button15.Text = "发射初相";
             this.button15.UseVisualStyleBackColor = false;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 当前模板未使用：this.button15.Click += new System.EventHandler(this.button15_Click);
             // 
             // panel1
             // 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,9 +19,9 @@ namespace DbfTest.PAGE
         public bool TestGain => _chkGain.Checked;
         public bool TestImage => _chkImage.Checked;
         public bool TestOutOfBand => _chkOutOfBand.Checked;
-        public bool TestBandwidth => _chkBandwidth.Checked;
+        public bool TestBandwidth => false;
         public bool TestFlatness => _chkFlatness.Checked;
-        public bool TestVswr => _chkVswr.Checked;
+        public bool TestVswr => false;
 
         public ReceiveTestSelect_Form()
         {
@@ -85,9 +85,9 @@ namespace DbfTest.PAGE
             Controls.Add(_chkGain);
             Controls.Add(_chkImage);
             Controls.Add(_chkOutOfBand);
-            Controls.Add(_chkBandwidth);
+            // 当前模板不测试 1dB 带宽：Controls.Add(_chkBandwidth);
             Controls.Add(_chkFlatness);
-            Controls.Add(_chkVswr);
+            // 当前模板不测试驻波：Controls.Add(_chkVswr);
             Controls.Add(btnSelectAll);
             Controls.Add(btnClear);
             Controls.Add(btnOk);
